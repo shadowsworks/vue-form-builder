@@ -2,26 +2,41 @@
   <div id="app">
     <b-container>
       <label for="select-1">Choose Component</label>
-      <b-form-select v-model="selected" :options="options"></b-form-select>
+      <div class="mx-1 mb-2">
+        <b-form-select v-model="selected" :options="options"></b-form-select>
+      </div>
 
       <div v-if='selected==="sw-column-editor"'>
-        <sw-column-editor max_column="10" :column_data="bind_data.sw_column_editor_item_options" v-model="bind_data.sw_column_editor_item_options" />
+        <sw-column-editor max_column="10" 
+          :column_data="bind_data.sw_column_editor.item_options" 
+          v-model="bind_data.sw_column_editor.item_options" />
       </div>
+
+      <div v-if='selected==="sw-markdown-editor"'>
+        <sw-markdown-editor :md_text="bind_data.sw_markdown_editor.item_data" 
+          :rows="bind_data.sw_markdown_editor.item_rows"
+          :max_length="bind_data.sw_markdown_editor.item_length" 
+          :must="bind_data.sw_markdown_editor.item_must"
+          :placeholder="bind_data.sw_markdown_editor.item_placeholder" 
+          v-model="bind_data.sw_markdown_editor.item_data" />
+      </div>
+
     </b-container>
   </div>
 </template>
 
 <script>
   import swColumnEditor from '@/components/sw-column-editor';
+  import swMarkdownEditor from '@/components/sw-markdown-editor';
 
   export default {
     name: 'ItemEditor',
     components: {
-      swColumnEditor
+      swColumnEditor,swMarkdownEditor
     },
     data() {
       return {
-        selected: 'sw-column-editor',
+        selected: 'sw-markdown-editor',
         options: [
           { value: 'sw-form-editor', text: 'sw-form-editor' },
           { value: 'sw-form-inputter', text: 'sw-form-inputter' },
@@ -37,7 +52,18 @@
         ],
         // バインドデータ
         bind_data: {
-          sw_column_editor_item_options: [],
+          //
+          sw_column_editor: {
+            item_options: [],
+          },
+          //
+          sw_markdown_editor: {
+            item_data: "",
+            item_rows: 4,
+            item_length: 100,
+            item_must: false, 
+            placeholder: "",
+          }
         }
       }
     }

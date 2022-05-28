@@ -2,11 +2,15 @@
   "ja": {
     "item1": "項目1",
     "item2": "項目2",
-    "enter_your_choice":"選択肢を入力してください"
+    "enter_your_choice":"選択肢を入力してください",
+    "preview": "プレビュー",
+    "back": "戻る"
   },
   "en": {
     "item1": "item1",
     "item2": "item2",
-    "enter_your_choice":"Please enter your choice"
+    "enter_your_choice":"Please enter your choice",
+    "preview": "preview",
+    "back": "back"
   }
 }
