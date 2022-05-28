@@ -1,0 +1,549 @@
+<template>
+  <div class="item-inputter" v-if="state_data.loaded && state_data.state">
+    <template v-if='bind_data.item_info.item_type=="text" || 
+      bind_data.item_info.item_type=="texts" || 
+      bind_data.item_info.item_type=="number" || 
+      bind_data.item_info.item_type=="radio" || 
+      bind_data.item_info.item_type=="checkbox" ||
+      bind_data.item_info.item_type=="boolean" || 
+      bind_data.item_info.item_type=="telephone" || 
+      bind_data.item_info.item_type=="date" ||
+      bind_data.item_info.item_type=="time" || 
+      bind_data.item_info.item_type=="datetime" ||
+      bind_data.item_info.item_type=="table" || 
+      bind_data.item_info.item_type=="markdown" ||
+      bind_data.item_info.item_type=="image"' >
+      <label class="text-secondary mt-2 mb-0 small" >{{ bind_data.item_info.item_name }}</label>
+    </template>
+
+    <!-- 短文テキスト -->
+    <template v-if='bind_data.item_info.item_type=="text"' >
+      <b-form-input type="text" v-model="bind_data.item_data" class="mt-0 mb-0" 
+        :placeholder="bind_data.item_info.item_placeholder" 
+        :maxlength="bind_data.item_info.item_length" 
+        :state="state_item(bind_data.item_data,bind_data.item_info)" />
+      <div class="text-secondary mt-1 mb-0 small">{{ bind_data.item_info.item_placeholder }}</div>
+    </template>
+
+    <!-- 長文テキスト -->
+    <template v-if='bind_data.item_info.item_type=="texts"'>
+      <b-form-textarea type="text" v-model="bind_data.item_data" class="mt-0 mb-0" 
+        :placeholder="bind_data.item_info.item_placeholder" 
+        :rows="bind_data.item_info.item_rows" 
+        :maxlength="bind_data.item_info.item_length" 
+        :state="state_item(bind_data.item_data,bind_data.item_info)" />
+      <div class="text-secondary mt-1 mb-0 small">{{ bind_data.item_info.item_placeholder }}</div>
+    </template>
+
+    <!-- 数値 -->
+    <template v-if='bind_data.item_info.item_type=="number"'>
+      <b-input-group>
+        <b-form-input type="number" v-model="bind_data.item_data" class="mt-0 mb-0" 
+          :placeholder="bind_data.item_info.item_placeholder" 
+          :min="bind_data.item_info.item_limit_min" :max="bind_data.item_info.item_limit_max" 
+          :state="state_item(bind_data.item_data,bind_data.item_info.item_must)" />
+        <b-input-group-append v-if='bind_data.item_info.item_unit_name!==""'>
+          <b-input-group-text>{{ bind_data.item_info.item_unit_name }}</b-input-group-text>
+        </b-input-group-append>
+      </b-input-group>
+      <div class="text-secondary mt-1 mb-0 small">{{ bind_data.item_info.item_placeholder }}</div>
+    </template>
+
+    <!-- ラジオボタン -->
+    <template v-if='bind_data.item_info.item_type=="radio"'>
+      <b-form-radio-group v-model="bind_data.item_data" :options="bind_data.item_info.item_options" />
+      <div class="text-secondary mt-1 mb-0 small">{{ bind_data.item_info.item_placeholder }}</div>
+    </template>
+
+    <!-- チェックボックス -->
+    <template v-if='bind_data.item_info.item_type=="checkbox"'>
+      <b-form-checkbox-group v-model="bind_data.item_data" :options="bind_data.item_info.item_options" />
+      <div class="text-secondary mt-1 mb-0 small">{{ bind_data.item_info.item_placeholder }}</div>
+    </template>
+
+    <!-- スイッチ -->
+    <template v-if='bind_data.item_info.item_type=="boolean"'>
+      <b-form-checkbox v-model="bind_data.item_data" switch size="lg"
+        :value="bind_data.item_info.item_checked_value" 
+        :unchecked-value="bind_data.item_info.item_unchecked_value">
+        <span class="small">{{ bind_data.item_info.item_placeholder }}</span>
+      </b-form-checkbox>
+    </template>
+
+    <!-- 氏名 -->
+    <template v-if='bind_data.item_info.item_type=="name"' >
+      <b-row>
+        <b-col v-for="n in 2" :key="n" cols="6">
+          <label class="text-secondary mt-2 mb-0 small" >{{ bind_data.item_info.item_name[n-1] }}</label>
+          <b-form-input type="text" v-model="bind_data.item_data[n-1]" class="mt-0 mb-0" 
+            :placeholder="bind_data.item_info.item_placeholder[n-1]" 
+            :maxlength="bind_data.item_info.item_length"
+            :state="state_item(bind_data.item_data[n-1],bind_data.item_info)" />
+        </b-col>
+      </b-row>
+    </template>
+
+    <!-- 電話番号 -->
+    <template v-if='bind_data.item_info.item_type=="telephone"' >
+      <b-row>
+        <b-col v-for="n in 3" :key="n" cols="4">
+          <b-form-input type="text" v-model="bind_data.item_data[n-1]" class="mt-0 mb-0" 
+            :placeholder="bind_data.item_info.item_placeholder[n-1]" 
+            :maxlength="bind_data.item_info.item_length"
+            :state="state_item(bind_data.item_data[n-1],bind_data.item_info)" />
+        </b-col>
+      </b-row>
+    </template>
+
+    <!-- 日付 -->
+    <template v-if='bind_data.item_info.item_type=="date"'>
+      <b-input-group>
+        <b-form-datepicker v-model="bind_data.item_data" class="mb-2" :placeholder="bind_data.item_info.item_placeholder" locale="ja"
+            :date-format-options="{ year: 'numeric', month: '2-digit', day: '2-digit', weekday: 'short' }" 
+            :state="state_item(bind_data.item_data,bind_data.item_info)" />
+        <b-input-group-append is-text style="height:38px;">
+          <b-icon icon="eraser" class="mt-0" @click="erase_item_data()"></b-icon>
+        </b-input-group-append>
+      </b-input-group>
+    </template>
+
+    <!-- 時刻 -->
+    <template v-if='bind_data.item_info.item_type=="time"'>
+      <b-input-group>
+        <b-form-timepicker v-model="bind_data.item_data" :placeholder="bind_data.item_info.item_placeholder" 
+            now-button label-now-button="現在" now-button-variant="outline-secondary" label-close-button="閉じる" label-no-time-selected="未設定"
+            :state="state_item(bind_data.item_data,bind_data.item_info)" />
+        <b-input-group-append is-text style="height:38px;">
+          <b-icon icon="eraser" class="mt-0 item-curosr" @click="erase_item_data()" ></b-icon>
+        </b-input-group-append>
+      </b-input-group>
+    </template>
+    
+    <!-- 日時 -->
+    <template v-if='bind_data.item_info.item_type=="datetime"' >
+      <b-row>
+        <b-col :cols="bind_data.item_info.item_cols">
+          <b-input-group>
+            <b-form-datepicker v-model="bind_data.item_data[0]" class="mb-2" :placeholder="bind_data.item_info.item_placeholder[0]" locale="ja"
+                :date-format-options="{ year: 'numeric', month: '2-digit', day: '2-digit', weekday: 'short' }" 
+                :state="state_item(bind_data.item_data[0],bind_data.item_info)" />
+            <b-input-group-append is-text style="height:38px;">
+              <b-icon icon="eraser" class="mt-0 item-curosr" @click="erase_item_data(0)" ></b-icon>
+            </b-input-group-append>
+          </b-input-group>
+        </b-col>
+        <b-col :cols="bind_data.item_info.item_cols">
+          <b-input-group>
+            <b-form-timepicker v-model="bind_data.item_data[1]" :placeholder="bind_data.item_info.item_placeholder[1]" 
+                now-button label-now-button="現在" now-button-variant="outline-secondary" label-close-button="閉じる" label-no-time-selected="未設定"
+                :state="state_item(bind_data.item_data[1],bind_data.item_info)" />
+            <b-input-group-append is-text style="height:38px;">
+              <b-icon icon="eraser" class="mt-0 item-curosr" @click="erase_item_data(1)" ></b-icon>
+            </b-input-group-append>
+          </b-input-group>
+        </b-col>
+      </b-row>
+    </template>
+
+    <!-- 表 -->
+    <template v-if='bind_data.item_info.item_type=="table"' >
+      <b-table bordered responsive :items="bind_data.table_items" :fields="bind_data.table_fields" class="mb-0 text-nowrap">
+        <template #cell()="data">
+          <div v-if='data.field.key=="row_name"' class="text-nowrap">{{ data.value }}</div>
+          <div v-else><b-form-input size="sm" v-model="data.value" maxlength="100" @input="table_data_change(data)"></b-form-input></div>
+        </template>
+      </b-table>
+      <div class="text-secondary mt-1 mb-0 small">{{ bind_data.item_info.item_placeholder }}</div>
+    </template>
+
+    <!-- マークダウン -->
+    <template v-if='bind_data.item_info.item_type=="markdown"' >
+      <sw-markdown-editor :md_text="bind_data.item_data" 
+          :rows="bind_data.item_info.item_rows"
+          :max_length="bind_data.item_info.item_length" 
+          :must="bind_data.item_info.item_must"
+          :placeholder="bind_data.item_info.item_placeholder" 
+          v-model="bind_data.item_data" />
+    </template>
+
+    <!-- 写真 -->
+    <template v-if='bind_data.item_info.item_type=="image"' >
+      <div v-if="state_image_preview_show">
+        <b-img :src="bind_data.image_preview_src" class="my-1 p-1 image-shadow" style="max-height:400px;max-width:100%;"></b-img>
+      </div>
+      <b-input-group class="mt-1">
+        <b-form-file v-model="bind_data.image_file" @input="item_image_input"
+          :placeholder="bind_data.item_info.item_placeholder"
+          :drop-placeholder="lang('drop_here')" accept=".jpg,.png,.JPG,.PNG" 
+          :state="state_item(bind_data.item_data,bind_data.item_info)" />
+        <b-input-group-append>
+          <b-button variant="info" @click="item_image_clear">Clear</b-button>
+        </b-input-group-append>
+      </b-input-group>
+    </template>
+
+    <div v-if="state_data.debug" class="text-left">{{ JSON.stringify(bind_data,null,2) }}</div>
+  </div>
+  <div v-else>
+    <div class="text-center">
+      <b-icon icon="three-dots" animation="cylon" font-scale="3" variant="secondary"></b-icon>
+    </div>
+  </div>
+  
+</template>
+
+<script>
+import lang from './lang.json';
+// ブラウザからデフォルトの言語を取得する
+let locale = navigator.language;
+if( locale != "ja" && locale != "en" ) locale = "en";
+
+import validator from 'validator';
+import swMarkdownEditor from '@/components/sw-markdown-editor';
+
+export default {
+  name: 'sw-item-inputter',
+  components: {
+    swMarkdownEditor
+  },
+  props: {
+    // Item情報
+    item_info: Object,
+    item_data: [ String, Array, Object ],
+  },
+  // ローカルデータ変数
+  data () {
+    return {
+      // バインドデータ
+      bind_data: {
+        item_info: null,
+        item_data: null,
+        table_fields: [],
+        table_items: [],
+        image_file: null,
+        image_preview_src: "",
+      },
+      local_data: {
+        table_field: { key: 'row_name', label: '', stickyColumn: true, }, 
+      },
+      state_data: {
+        loaded: false,
+        state: false,
+        preview: false,
+        debug: false,
+      }
+    }
+  },
+  // 既定計算
+  computed: {
+    state_item: function() {
+      return function(item_data,item_info){
+        if( item_info.item_must ){
+          if( item_data === "" || item_data === null ){
+            return false;
+          }
+        }
+        return this.is_allowed_type(item_data,item_info);
+      }
+    },
+    inputedValue: {
+      get() {
+        return this.value;
+      },
+      set(newValue) {
+        this.$emit("input", newValue);
+      },
+    },
+    state_image_preview_show(){
+      if( this.bind_data.image_preview_src == null || this.bind_data.image_preview_src == "" ){
+        return false;
+      } else {
+        return true;
+      }
+    },
+  },
+  // 監視
+  watch: {
+    'item_info': {
+      handler: function(){
+        //console.log("ItemInputter:watch:item_info:"+JSON.stringify(this.item_info,null,2))
+        this.bind_data.item_info = this.item_info;
+        if( this.bind_data.item_info.item_type == "table" ){
+          this.table_data_set();
+        }
+      },
+      deep: true,
+    },
+    'bind_data.item_data': {
+      handler: function(){
+        if( this.bind_data.item_info.item_type == "number" ){
+          this.number_data_set();
+        }
+        let ret = this.get_ret_data();
+        //console.log("ItemInputter:watch"+JSON.stringify(ret));
+        this.$emit('input',ret);
+      },
+      deep: true,
+    },
+    // 'bind_data.table_items': {
+    //   handler: function(){
+    //     let ret = this.get_ret_data();
+    //     console.log("ItemInputter:watch"+JSON.stringify(ret));
+    //     this.$emit('input',ret);
+    //   },
+    //   deep: true,
+    // }
+  },
+  // インスタンス初期化後
+  created(){
+  },
+  // インスタンス破棄後
+  destroyed() {
+  },
+  // インスタンスマウント後
+  mounted(){
+    this.bind_data.item_info = this.item_info;
+    if( this.item_data !== undefined && this.item_data !== null ){
+      //console.log("ItemInputter:mounted:"+JSON.stringify(this.item_data))
+      this.bind_data.item_data = this.item_data;
+    }
+    if( this.bind_data.item_info.item_type == "table" ){
+      this.table_data_set();
+    }
+    this.$nextTick(function() {
+      this.state_data.loaded = true;
+    });
+    this.item_check();
+    this.$emit('input',this.get_ret_data());
+  },
+  // ローカル関数
+  methods: {
+    lang: function( param ){
+      return lang[locale][param];
+    },
+    item_check: function(){
+      if( this.bind_data.item_data === null ){
+        if( this.bind_data.item_info.item_type == "text" || this.bind_data.item_info.item_type == "texts" ||
+            this.bind_data.item_info.item_type == "number" || 
+            this.bind_data.item_info.item_type == "date" || this.bind_data.item_info.item_type == "time" ){
+          this.bind_data.item_data = "";
+        }
+        if( this.bind_data.item_info.item_type == "radio" ){
+          if( this.bind_data.item_info.item_options === undefined ){
+            this.bind_data.item_data = "";
+          } else {
+            if( this.bind_data.item_info.item_options.length ){
+              if( this.bind_data.item_info.item_options[0].value === undefined ){
+                this.bind_data.item_data = "";
+              } else {
+                this.bind_data.item_data = this.bind_data.item_info.item_options[0].value;
+              }
+            } else {
+              this.bind_data.item_data = "";
+            }
+          }
+        }
+        if( this.bind_data.item_info.item_type == "checkbox" ){
+          this.bind_data.item_data = [];
+        }
+        if( this.bind_data.item_info.item_type == "boolean" ){
+          this.bind_data.item_data = "false";
+        }
+        if( this.bind_data.item_info.item_type == "name" || this.bind_data.item_info.item_type == "datetime" ){
+          this.bind_data.item_data = ["",""];
+        }
+        if( this.bind_data.item_info.item_type == "telephone" ){
+          this.bind_data.item_data = ["","",""];
+        }
+      }
+      this.state_data.state = false;
+      this.$nextTick(function() {
+        this.state_data.state = this.bind_data.item_info.item_state;
+      });
+    },
+    get_state_item: function(item_data,item_info){
+      if( item_info.item_must ){
+        if( typeof item_data === "string" ){
+          if( item_data === "" ){
+            return false;
+          }
+        } else {
+          for( let i=0;i<item_data.length;i++ ){
+            if( item_data[i] === "" ){
+              return false;
+            }
+          }
+        }
+      }
+      return this.is_allowed_type(item_data,item_info);
+    },
+    get_ret_data: function(){
+      //console.log("ItemInputter:get_ret_data="+JSON.stringify(this.bind_data.item_info,null,2));
+      let ret = {};
+      ret.item_uuid = this.bind_data.item_info.item_uuid;
+      ret.item_key = this.bind_data.item_info.item_key;
+      ret.item_type = this.bind_data.item_info.item_type;
+      ret.item_name = this.bind_data.item_info.item_name;
+      ret.item_data = this.bind_data.item_data;//// ここを改修すること
+      //console.log("ret.item_data:"+this.bind_data.item_data+"@");
+      if( this.bind_data.item_info.item_type == "number" ){
+        ret.item_unit_name = this.bind_data.item_info.item_unit_name;
+      }
+      if( this.bind_data.item_info.item_type == "table" ){
+        ret.item_data = {};
+        ret.item_data.table_fields = this.bind_data.table_fields;
+        ret.item_data.table_items = this.bind_data.table_items;
+      }
+      ret.item_state = this.get_state_item(this.bind_data.item_data,this.bind_data.item_info);
+      return ret;
+    },
+    erase_item_data: function( index ){
+      if( index === undefined || index === null ){
+        this.bind_data.item_data = "";
+      } else {
+        this.bind_data.item_data[index] = "";
+      }
+      this.state_data.state = false;
+      this.$nextTick(function() {
+        this.state_data.state = this.bind_data.item_info.item_state;
+      });
+    },
+    number_data_set: function(){
+      if( this.bind_data.item_data.length > 0 ){
+        if( Number(this.bind_data.item_data) < Number(this.bind_data.item_info.item_limit_min) ){
+          this.bind_data.item_data = this.bind_data.item_info.item_limit_min;
+        }
+      }
+      if( this.bind_data.item_data.length > 0 ){
+        if( Number(this.bind_data.item_data) > Number(this.bind_data.item_info.item_limit_max) ){
+          this.bind_data.item_data = this.bind_data.item_info.item_limit_max;
+        }
+      }
+    },
+    table_data_set: function(){
+      this.bind_data.table_items = [];
+      this.bind_data.table_fields = [];
+      this.bind_data.table_fields.push(this.local_data.table_field);
+      if( this.bind_data.item_info.table_cols !== undefined ){
+        for( let i=0;i<this.bind_data.item_info.table_cols.length;i++ ){
+          //console.log(this.bind_data.item_info.table_cols[i].text);
+          let field = {};
+          field.key = this.bind_data.item_info.table_cols[i].text;
+          field.label = this.bind_data.item_info.table_cols[i].text;
+          this.bind_data.table_fields.push(field);
+        }
+        for( let j=0;j<this.bind_data.item_info.table_rows.length;j++ ){
+          let row = {}
+          for( let i=0;i<this.bind_data.table_fields.length;i++ ){
+            if( i==0 ){
+              row[this.bind_data.table_fields[i].key] = this.bind_data.item_info.table_rows[j].value;
+            } else {
+              row[this.bind_data.table_fields[i].key] = "";
+            }
+          }
+          this.bind_data.table_items.push(row);
+        }
+      }
+      //console.log(JSON.stringify(this.bind_data.table_items,null,2));
+    },
+    table_data_change: function( data ){
+      //console.log("ItemInputter:table_data_change:bind_data"+JSON.stringify(this.bind_data))
+      //console.log("ItemInputter:table_data_change:data:"+JSON.stringify(data))
+      data.item[data.field.key]=data.value;
+      this.$emit('input',this.get_ret_data());
+    },
+    // 画像の選択
+    async item_image_input(){
+
+      if( this.bind_data.image_file === null ){
+        return;
+      }
+      let image_base64 = await this.get_image_base64(this.bind_data.image_file);
+      let image_data = await this.get_image_data(image_base64);
+      this.bind_data.image_preview_src = this.resize_image(image_data);
+      this.bind_data.item_data = this.bind_data.image_preview_src;
+    },
+    item_image_clear(){
+      this.bind_data.image_file = null;
+      this.bind_data.image_preview_src = null;
+      this.bind_data.item_data = null;
+    },
+    resize_image(image_data){
+      let bounds = {};
+      bounds.width = this.bind_data.item_info.item_width;
+      bounds.height = this.bind_data.item_info.item_height;
+      let rect = this.fit_rect_into_bounds(image_data,bounds)
+      //console.log("rect="+JSON.stringify(rect));
+      //console.log("bounds="+JSON.stringify(bounds));
+      let canvas = document.createElement('canvas');
+      canvas.width = rect.width;
+      canvas.height = rect.height;
+      let ctx = canvas.getContext('2d');
+      ctx.drawImage(image_data, 0, 0, rect.width, rect.height);
+      return canvas.toDataURL('image/png');
+    },
+    get_image_base64(image_file) {
+      return new Promise((resolve, reject) => {
+          let reader = new FileReader();
+          reader.onload = () => { resolve(reader.result); };
+          reader.onerror = () => { reject(reader.error); };
+          reader.readAsDataURL(image_file);
+      });
+    },
+    get_image_data(image_base64){
+      return new Promise((resolve, reject) => {
+          let image = new Image();
+          image.onload = () => { resolve(image); };
+          image.onerror = () => { reject(image); };
+          image.src = image_base64;
+      });
+    },
+    fit_rect_into_bounds(rect, bounds) {
+      let rectRatio = rect.width / rect.height;
+      let boundsRatio = bounds.width / bounds.height;
+      let newDimensions = {};
+      if(rectRatio > boundsRatio) {
+        newDimensions.width = bounds.width;
+        newDimensions.height = rect.height * (bounds.width / rect.width);
+      }
+      else {
+        newDimensions.width = rect.width * (bounds.height / rect.height);
+        newDimensions.height = bounds.height;
+      }
+      return newDimensions;
+    },
+    is_allowed_type( item_data, item_info ){
+      if( item_data === "" || item_data === null ){
+        return null;
+      }
+      if( item_info.item_allowed_type !== undefined ){
+        if( item_info.item_allowed_type.toLowerCase() == "all" ){
+          return true;
+        }
+        if( item_info.item_allowed_type.toLowerCase() == "alpha" ){
+         return validator.isAlpha(item_data);
+        }
+        if( item_info.item_allowed_type.toLowerCase() == "numeric" ){
+          return validator.isNumeric(item_data);
+        }
+        if( item_info.item_allowed_type.toLowerCase() == "alphanumeric" ){
+          return validator.isAlphanumeric(item_data);
+        }
+        if( item_info.item_allowed_type.toLowerCase() == "ascii" ){
+          return validator.isAscii(item_data);
+        }
+        return false;
+      }
+    }
+  }
+};
+</script>
+<style scoped>
+.item-inputter {
+  text-align: left;
+  padding: 4px;
+}
+.item-curosr {
+  cursor:pointer;
+}
+</style>

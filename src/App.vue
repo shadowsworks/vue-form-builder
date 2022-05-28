@@ -6,6 +6,10 @@
         <b-form-select v-model="selected" :options="options"></b-form-select>
       </div>
 
+      <div v-if='selected==="sw-form-editor"'>
+        <sw-form-editor  />
+      </div>
+
       <div v-if='selected==="sw-column-editor"'>
         <sw-column-editor max_column="10" 
           :column_data="bind_data.sw_column_editor.item_options" 
@@ -26,17 +30,18 @@
 </template>
 
 <script>
+  import swFormEditor from '@/components/sw-form-editor';
   import swColumnEditor from '@/components/sw-column-editor';
   import swMarkdownEditor from '@/components/sw-markdown-editor';
 
   export default {
-    name: 'ItemEditor',
+    name: 'App',
     components: {
-      swColumnEditor,swMarkdownEditor
+      swFormEditor,swColumnEditor,swMarkdownEditor
     },
     data() {
       return {
-        selected: 'sw-markdown-editor',
+        selected: 'sw-form-editor',
         options: [
           { value: 'sw-form-editor', text: 'sw-form-editor' },
           { value: 'sw-form-inputter', text: 'sw-form-inputter' },
