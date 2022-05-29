@@ -12,7 +12,7 @@
     </div>
     
     <div v-if='state_preview_mode' class="preview_mode">
-      <div v-html="state_result"></div>
+      <div class="markdown-body" v-html="state_result"></div>
     </div>
     <div v-if='state_preview_mode' class="mt-2 float-right">
       <b-button variant="outline-secondary" size="sm" @click="mode_change">{{ lang('back') }}</b-button>

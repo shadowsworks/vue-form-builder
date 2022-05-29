@@ -18,7 +18,7 @@
 
     <!-- 長文テキスト -->
     <template v-if='bind_data.item_data.item_type=="texts"'>
-      <div class="mx-2">{{ bind_data.item_data.item_data }}</div>
+      <div class="mx-2 long_text">{{ bind_data.item_data.item_data }}</div>
     </template>
 
     <!-- 数値 -->
@@ -184,6 +184,9 @@ export default {
       } catch( ex ){
         return "";
       }
+    },
+    set_br_code( data ){
+      return data.replace(/\r?\n/g, '<br>');
     }
   }
 };
@@ -192,5 +195,8 @@ export default {
 .item-viewr {
   text-align: left;
   padding: 4px;
+}
+.long_text {
+  white-space: break-spaces;
 }
 </style>

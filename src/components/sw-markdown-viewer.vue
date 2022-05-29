@@ -1,7 +1,7 @@
 <template>
   <div class="markdown-viewer">
     <div class="preview_mode">
-      <div v-html="state_md_text"></div>
+      <div class="markdown-body" v-html="state_md_text"></div>
     </div>
   </div>
 </template>
@@ -33,8 +33,10 @@ export default {
   // 監視
   watch: {
     md_text: function(){
-      this.state_md_text = this.bconvert(this.markdownit.render(this.md_text));
-      console.log("md_text="+this.state_md_text)
+      if( this.md_text !== null ){
+        this.state_md_text = this.bconvert(this.markdownit.render(this.md_text));
+        //console.log("md_text="+this.state_md_text)
+      }
     },
   },
   // インスタンス初期化後
@@ -46,14 +48,13 @@ export default {
   },
   // インスタンスマウント後
   mounted(){
-    this.state_md_text = this.bconvert(this.markdownit.render(this.md_text));
+    if( this.md_text !== null ){
+      this.state_md_text = this.bconvert(this.markdownit.render(this.md_text));
+    }
   },
   // ローカル関数
   methods: {
     bconvert: function( data ){
-      //<p><img src="../assets/shadows-works_32x32.png" alt="test"></p>
-      //<b-img :src="require('../assets/shadows-works_32x32.png')" ></b-img>
-      //data = data + '<b-img :src="require(\'./assets/shadows-works_32x32.png\')" ></b-img>';
       return data;
     }
   }

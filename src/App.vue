@@ -1,13 +1,27 @@
 <template>
   <div id="app">
     <b-container>
-      <label for="select-1">Choose Component</label>
-      <div class="mx-1 mb-2">
-        <b-form-select v-model="selected" :options="options"></b-form-select>
+      <div class="mx-1 mt-3 mb-2">
+        <b-row>
+          <b-col cols="3">
+            <b-button block :variant="state_editor" @click='button_click("sw-form-editor")'>sw-form-editor</b-button>
+          </b-col>
+          <b-col cols="1">
+            <b-icon class="mt-2" icon="arrow-right" />
+          </b-col>
+          <b-col cols="3">
+            <b-button block :variant="state_inputter" @click='button_click("sw-form-inputter")'>sw-form-inputter</b-button>
+          </b-col>
+          <b-col cols="1">
+            <b-icon class="mt-2" icon="arrow-right" />
+          </b-col>
+          <b-col cols="3">
+            <b-button block :variant="state_viewer" @click='button_click("sw-form-viewer")'>sw-form-viewer</b-button>
+          </b-col>
+        </b-row>
       </div>
 
       <div v-if='selected==="sw-form-editor"'>
-        <!-- <sw-form-editor  /> -->
         <sw-form-editor 
           :form_info="bind_data.sw_form_editor.init_info" 
           :type_info="bind_data.sw_form_editor.type_info" 
@@ -44,11 +58,6 @@
     data() {
       return {
         selected: 'sw-form-editor',
-        options: [
-          { value: 'sw-form-editor', text: 'sw-form-editor' },
-          { value: 'sw-form-inputter', text: 'sw-form-inputter' },
-          { value: 'sw-form-viewer', text: 'sw-form-viewer' },
-        ],
         // バインドデータ
         bind_data: {
           sw_form_editor: {
@@ -82,6 +91,34 @@
         deep: true,
       }
     },
+    computed: {
+      state_editor(){
+        if( this.selected == "sw-form-editor" ){
+          return "primary";
+        } else {
+          return "outline-primary";
+        }
+      },
+      state_inputter(){
+        if( this.selected == "sw-form-inputter" ){
+          return "primary";
+        } else {
+          return "outline-primary";
+        }
+      },
+      state_viewer(){
+        if( this.selected == "sw-form-viewer" ){
+          return "primary";
+        } else {
+          return "outline-primary";
+        }
+      }
+    },
+    methods: {
+      button_click(data){
+        this.selected = data;
+      }
+    }
   }
 </script>
 

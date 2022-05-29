@@ -17,7 +17,7 @@ npm install vue-form-producer
 # Setup
 
 ```
-import swFormBuilder from sw-form-builder
+import swFormProducer from sw-form-producer
 ```
 
 # Usage
