@@ -1,5 +1,7 @@
 # vue-form-builder
 
+業務アプリケーションに必要とされるフォームの作成から、フォームを使った入力画面、データ表示画面までをJSONデータで連携し、Vue.js / Bootstrap-Vue でのフロントエンド開発におけるフォーム開発の生産性を飛躍的に向上するコンポーネントです。
+
 # DEMO
 
 ![vue-form-builder](./vue-form-builder-demo.gif)
