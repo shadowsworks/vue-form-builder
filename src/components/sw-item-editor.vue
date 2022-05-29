@@ -412,26 +412,26 @@ export default {
         collapse_visible: true,
         item_key_option: false,
         item_must_options: [
-          { text: '任意', value: false },
-          { text: '必須', value: true },
+          { text: lang[locale].any, value: false },
+          { text: lang[locale].mandatory, value: true },
         ],
         item_done_options: [
-          { text: 'する', value: true },
-          { text: 'しない', value: false },
+          { text: lang[locale].yes, value: true },
+          { text: lang[locale].no, value: false },
         ],
         item_allowed_options: [
-          { text: '限定しない', value: 'All' },
-          { text: '半角英大小文字', value: 'Alpha' },
-          { text: '半角数字', value: 'Numeric' },
-          { text: '半角英大小文字数字', value: 'Alphanumeric' },
-          { text: 'アスキー文字', value: 'Ascii' },
+          { text: lang[locale].all, value: 'All' },
+          { text: lang[locale].alpha, value: 'Alpha' },
+          { text: lang[locale].numbers, value: 'Numeric' },
+          { text: lang[locale].alphanumeric, value: 'Alphanumeric' },
+          { text: lang[locale].ascii, value: 'Ascii' },
         ],
         item_options: [
           { 
             item_type: 'text', 
             item_state: false,
-            item_name: "短文テキスト", 
-            item_desc: "短文テキスト", 
+            item_name: lang[locale].short_text, 
+            item_desc: lang[locale].short_text, 
             item_placeholder: "", //説明
             item_key: "", //キー
             item_must: false, 
@@ -444,8 +444,8 @@ export default {
           },{ 
             item_type: 'texts', 
             item_state: false,
-            item_name: "長文テキスト", 
-            item_desc: '長文テキスト',
+            item_name: lang[locale].long_text, 
+            item_desc: lang[locale].long_text,
             item_placeholder: "", //説明
             item_key: "", //キー
             item_must: false,
@@ -460,8 +460,8 @@ export default {
           },{ 
             item_type: 'number', 
             item_state: false,
-            item_name: "数値", 
-            item_desc: '数値', 
+            item_name: lang[locale].numeric, 
+            item_desc: lang[locale].numeric, 
             item_placeholder: "", //説明
             item_key: "", //キー
             item_must: false, 
@@ -473,8 +473,8 @@ export default {
           },{ 
             item_type: 'radio', 
             item_state: false,
-            item_name: "ラジオボタン", 
-            item_desc: 'ラジオボタン', 
+            item_name: lang[locale].radio, 
+            item_desc: lang[locale].radio, 
             item_placeholder: "", //説明
             item_key: "", //キー
             item_must: false,
@@ -484,8 +484,8 @@ export default {
           },{ 
             item_type: 'checkbox', 
             item_state: false,
-            item_name: "チェックボックス", 
-            item_desc: 'チェックボックス', 
+            item_name: lang[locale].checkbox, 
+            item_desc: lang[locale].checkbox, 
             item_placeholder: "", //説明
             item_key: "", //キー
             item_must: false, 
@@ -495,8 +495,8 @@ export default {
           },{ 
             item_type: 'boolean', 
             item_state: false,
-            item_name: "スイッチ", 
-            item_desc: 'スイッチ', 
+            item_name: lang[locale].switch, 
+            item_desc: lang[locale].switch, 
             item_placeholder: "", //説明
             item_key: "", //キー
             item_must: false, 
@@ -507,8 +507,8 @@ export default {
           },{ 
             item_type: 'name', 
             item_state: false,
-            item_name: ["姓","名"],
-            item_desc: '氏名',
+            item_name: [lang[locale].family_name,lang[locale].first_name],
+            item_desc: lang[locale].full_name,
             item_placeholder: ["",""], //説明
             item_key: "", //キー
             item_must: false,
@@ -520,8 +520,8 @@ export default {
           },{ 
             item_type: 'telephone', 
             item_state: false,
-            item_name: '電話番号',
-            item_desc: '電話番号',
+            item_name: lang[locale].phone_number,
+            item_desc: lang[locale].phone_number,
             item_placeholder: ["03","1234","5678"], //説明
             item_key: "", //キー
             item_must: false,
@@ -533,9 +533,9 @@ export default {
           },{ 
             item_type: 'date', 
             item_state: false,
-            item_name: '日付',
-            item_desc: '日付',
-            item_placeholder: '日付を選択', //説明
+            item_name: lang[locale].date,
+            item_desc: lang[locale].date,
+            item_placeholder: lang[locale].select_date, //説明
             item_key: "", //キー
             item_must: false,
             item_uuid: "",
@@ -543,9 +543,9 @@ export default {
           },{ 
             item_type: 'time', 
             item_state: false,
-            item_name: '時刻',
-            item_desc: '時刻',
-            item_placeholder: '時刻を選択', //説明
+            item_name: lang[locale].time,
+            item_desc: lang[locale].time,
+            item_placeholder: lang[locale].select_time, //説明
             item_key: "", //キー
             item_must: false,
             item_uuid: "",
@@ -553,9 +553,9 @@ export default {
           },{ 
             item_type: 'datetime', 
             item_state: false,
-            item_name: '日時',
-            item_desc: '日時',
-            item_placeholder: ["日付を選択","時刻を選択"], //説明
+            item_name: lang[locale].datetime,
+            item_desc: lang[locale].datetime,
+            item_placeholder: [lang[locale].select_date,lang[locale].select_time], //説明
             item_key: "", //キー
             item_cols: "12", //6:縦向き 12:横向き
             item_must: false,
@@ -564,8 +564,8 @@ export default {
           },{ 
             item_type: 'table', 
             item_state: false,
-            item_name: '表',
-            item_desc: '表',
+            item_name: lang[locale].table,
+            item_desc: lang[locale].table,
             item_placeholder: "", //説明
             item_key: "", //キー
             item_must: false, 
@@ -576,8 +576,8 @@ export default {
           },{ 
             item_type: 'markdown', 
             item_state: false,
-            item_name: "マークダウン", 
-            item_desc: 'マークダウン',
+            item_name: lang[locale].markdown, 
+            item_desc: lang[locale].markdown,
             item_placeholder: "", //説明
             item_key: "", //キー
             item_must: false,
@@ -592,8 +592,8 @@ export default {
           },{ 
             item_type: 'image', 
             item_state: false,
-            item_name: "写真", 
-            item_desc: '写真',
+            item_name: lang[locale].image, 
+            item_desc: lang[locale].image,
             item_placeholder: "", //説明
             item_key: "", //キー
             item_must: false,

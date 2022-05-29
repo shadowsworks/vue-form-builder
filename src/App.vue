@@ -7,22 +7,24 @@
       </div>
 
       <div v-if='selected==="sw-form-editor"'>
-        <sw-form-editor  />
+        <!-- <sw-form-editor  /> -->
+        <sw-form-editor 
+          :form_info="bind_data.sw_form_editor.init_info" 
+          :type_info="bind_data.sw_form_editor.type_info" 
+          :item_key_option="bind_data.sw_form_editor.item_key_option" 
+          v-model="bind_data.sw_form_editor.form_info" />
       </div>
 
-      <div v-if='selected==="sw-column-editor"'>
-        <sw-column-editor max_column="10" 
-          :column_data="bind_data.sw_column_editor.item_options" 
-          v-model="bind_data.sw_column_editor.item_options" />
+      <div v-if='selected==="sw-form-inputter"'>
+        <sw-form-inputter 
+          :form_info="bind_data.sw_form_inputter.form_info" 
+          v-model="bind_data.sw_form_inputter.form_data" />
       </div>
 
-      <div v-if='selected==="sw-markdown-editor"'>
-        <sw-markdown-editor :md_text="bind_data.sw_markdown_editor.item_data" 
-          :rows="bind_data.sw_markdown_editor.item_rows"
-          :max_length="bind_data.sw_markdown_editor.item_length" 
-          :must="bind_data.sw_markdown_editor.item_must"
-          :placeholder="bind_data.sw_markdown_editor.item_placeholder" 
-          v-model="bind_data.sw_markdown_editor.item_data" />
+      <div v-if='selected==="sw-form-viewer"'>
+        <sw-form-viewer 
+          :form_data="bind_data.sw_form_viewer.form_data" 
+          pdf_output pdf_output_button="PDF出力" pdf_output_placement="top" />
       </div>
 
     </b-container>
@@ -31,13 +33,13 @@
 
 <script>
   import swFormEditor from '@/components/sw-form-editor';
-  import swColumnEditor from '@/components/sw-column-editor';
-  import swMarkdownEditor from '@/components/sw-markdown-editor';
+  import swFormInputter from '@/components/sw-form-inputter';
+  import swFormViewer from '@/components/sw-form-viewer';
 
   export default {
     name: 'App',
     components: {
-      swFormEditor,swColumnEditor,swMarkdownEditor
+      swFormEditor,swFormInputter,swFormViewer
     },
     data() {
       return {
@@ -46,32 +48,40 @@
           { value: 'sw-form-editor', text: 'sw-form-editor' },
           { value: 'sw-form-inputter', text: 'sw-form-inputter' },
           { value: 'sw-form-viewer', text: 'sw-form-viewer' },
-          { value: 'sw-item-editor', text: 'sw-item-editor' },
-          { value: 'sw-item-inputter', text: 'sw-item-inputter' },
-          { value: 'sw-item-inputter', text: 'sw-item-inputter' },
-          { value: 'sw-item-viewer', text: 'sw-item-viewer' },
-          { value: 'sw-item-type', text: 'sw-item-type' },
-          { value: 'sw-column-editor', text: 'sw-column-editor' },
-          { value: 'sw-markdown-editor', text: 'sw-markdown-editor' },
-          { value: 'sw-markdown-viewer', text: 'sw-markdown-viewer' }
         ],
         // バインドデータ
         bind_data: {
-          //
-          sw_column_editor: {
-            item_options: [],
+          sw_form_editor: {
+            init_info: null,
+            type_info: "ALL",
+            item_key_option: "true",
+            form_info: null,
           },
-          //
-          sw_markdown_editor: {
-            item_data: "",
-            item_rows: 4,
-            item_length: 100,
-            item_must: false, 
-            placeholder: "",
-          }
+          sw_form_inputter: {
+            form_info: null,
+            form_data: null,
+          },
+          sw_form_viewer: {
+            form_data: null,
+          },
         }
       }
-    }
+    },
+    // 監視
+    watch: {
+      'bind_data.sw_form_editor': {
+        handler: function(){
+          this.bind_data.sw_form_inputter.form_info = this.bind_data.sw_form_editor.form_info;
+        },
+        deep: true,
+      },
+      'bind_data.sw_form_inputter': {
+        handler: function(){
+          this.bind_data.sw_form_viewer.form_data = this.bind_data.sw_form_inputter.form_data;
+        },
+        deep: true,
+      }
+    },
   }
 </script>
 

@@ -2,13 +2,13 @@
   <div class="form-editor" v-if="state_data.loaded">
     <b-row>
       <b-col cols="3" class="border-right">
-        <div class="text-secondary mx-1 mt-0 mb-2 small border-bottom" >追加する項目タイプ</div>
+        <div class="text-secondary mx-1 mt-0 mb-2 small border-bottom" >{{ lang('item_type_to_add') }}</div>
         <div class="item" v-for="(type_info) in bind_data.type_info" :key="type_info.item_type">
           <sw-item-type :type_info="type_info" @add_item_method="add_item_method" />
         </div>
       </b-col>
       <b-col cols="5">
-        <div class="text-secondary mx-1 mt-0 mb-2 small border-bottom" >項目設定</div>
+        <div class="text-secondary mx-1 mt-0 mb-2 small border-bottom" >{{ lang('item_setting') }}</div>
         <draggable v-model="bind_data.form_info.item_info" group="myGroup2">
           <div class="item" v-for="(item_info,index) in bind_data.form_info.item_info" :key="item_info.item_uuid">
             <sw-item-editor :item_info="item_info" :item_key_option="bind_data.item_key_option" v-model="bind_data.form_info.item_info[index]" @copy_item_method="copy_item_method" @delete_item_method="delete_item_method" />
@@ -16,7 +16,7 @@
         </draggable>
       </b-col>
       <b-col cols="4" class="border-left">
-        <div class="text-secondary mx-1 mt-0 mb-2 small border-bottom" >プレビュー</div>
+        <div class="text-secondary mx-1 mt-0 mb-2 small border-bottom" >{{ lang('preview') }}</div>
         <div v-for="(item_info,index) in bind_data.form_info.item_info" :key="item_info.item_uuid">
           <sw-item-inputter :item_info="item_info" v-model="local_data.item_data[index]" />
         </div>
@@ -73,21 +73,21 @@ export default {
       },
       local_data: {
         type_info: [
-          { item_type: "text", type_desc: "短文テキスト", icon_name: "type", level: 1 },
-          { item_type: "texts", type_desc: "長文テキスト", icon_name: "pencil", level: 1 },
-          { item_type: "number", type_desc: "数値", icon_name: "dice-6", level: 1 },
-          { item_type: "radio", type_desc: "ラジオボタン", icon_name: "check-circle", level: 1 },
-          { item_type: "checkbox", type_desc: "チェックボックス", icon_name: "check-square", level: 1 },
-          { item_type: "boolean", type_desc: "スイッチ", icon_name: "toggle-on", level: 1 },
-          { item_type: "date", type_desc: "日付", icon_name: "calendar-date", level: 1 },
-          { item_type: "time", type_desc: "時刻", icon_name: "clock", level: 1 },
-          { item_type: "datetime", type_desc: "日時", icon_name: "calendar-plus", level: 1 },
-          { item_type: "image", type_desc: "写真", icon_name: "image", level: 2 },
-          { item_type: "name", type_desc: "氏名", icon_name: "person-square", level: 2 },
-          { item_type: "telephone", type_desc: "電話番号", icon_name: "telephone", level: 2 },
+          { item_type: "text", type_desc: lang[locale].short_text, icon_name: "type", level: 1 },
+          { item_type: "texts", type_desc: lang[locale].long_text, icon_name: "pencil", level: 1 },
+          { item_type: "number", type_desc: lang[locale].numeric, icon_name: "dice-6", level: 1 },
+          { item_type: "radio", type_desc: lang[locale].radio, icon_name: "check-circle", level: 1 },
+          { item_type: "checkbox", type_desc: lang[locale].checkbox, icon_name: "check-square", level: 1 },
+          { item_type: "boolean", type_desc: lang[locale].switch, icon_name: "toggle-on", level: 1 },
+          { item_type: "date", type_desc: lang[locale].date, icon_name: "calendar-date", level: 1 },
+          { item_type: "time", type_desc: lang[locale].time, icon_name: "clock", level: 1 },
+          { item_type: "datetime", type_desc: lang[locale].datetime, icon_name: "calendar-plus", level: 1 },
+          { item_type: "image", type_desc: lang[locale].image, icon_name: "image", level: 2 },
+          { item_type: "name", type_desc: lang[locale].full_name, icon_name: "person-square", level: 2 },
+          { item_type: "telephone", type_desc: lang[locale].phone_number, icon_name: "telephone", level: 2 },
           //{ item_type: "select", type_desc: "プルダウン選択", icon_name: "card-list", level: 2 },
-          { item_type: "table", type_desc: "表", icon_name: "table", level: 3 },
-          { item_type: "markdown", type_desc: "マークダウン", icon_name: "markdown", level: 3 },
+          { item_type: "table", type_desc: lang[locale].table, icon_name: "table", level: 3 },
+          { item_type: "markdown", type_desc: lang[locale].markdown, icon_name: "markdown", level: 3 },
         ],
         item_data: [],
       }
