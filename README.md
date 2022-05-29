@@ -1,17 +1,17 @@
-# vue-form-builder
+# vue-form-producer
 
 業務アプリケーションに必要とされるフォームの作成から、フォームを使った入力画面、データ表示画面までをJSONデータで連携し、Vue.js / Bootstrap-Vue でのフロントエンド開発におけるフォーム開発の生産性を飛躍的に向上するコンポーネントです。
 
 # DEMO
 
-![vue-form-builder](./vue-form-builder-demo.gif)
+![vue-form-producer](./vue-form-producer-demo.gif)
 
 デモサイトは<a href="#nogo">こちら</a>から
 
 # Install
 
 ```
-npm install vue-form-builder
+npm install vue-form-producer
 ```
 
 # Setup
@@ -22,7 +22,7 @@ import swFormBuilder from sw-form-builder
 
 # Usage
 
-vue-form-builder は、以下の3つのコンポーネントで構成されています。
+vue-form-producer は、以下の3つのコンポーネントで構成されています。
 
 * フォーム作成コンポーネント
 * 入力フォームコンポーネント
