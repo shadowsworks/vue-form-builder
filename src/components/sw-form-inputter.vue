@@ -1,5 +1,5 @@
 <template>
-  <div class="form-inputter" v-if="state_data.loaded">
+  <div class="form-inputter text-left" v-if="state_data.loaded">
     <div v-for="(item_info,index) in bind_data.form_info.item_info" :key="item_info.item_uuid">
       <sw-item-inputter :item_info="item_info" :item_data="bind_data.form_data.item_data[index]" v-model="bind_data.form_data.item_data[index]" />
     </div>

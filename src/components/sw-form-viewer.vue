@@ -1,5 +1,5 @@
 <template>
-  <div class="form-viewer" v-if="state_data.loaded">
+  <div class="form-viewer text-left" v-if="state_data.loaded">
     <div v-if='bind_data.pdf_output && bind_data.pdf_output_placement=="top"' class="text-right m-2">
       <b-button size="sm" @click="make_pdf()" variant="outline-success">
         <b-icon icon="file-pdf"></b-icon> {{ bind_data.pdf_output_button }}
