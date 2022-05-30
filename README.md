@@ -4,7 +4,7 @@
 
 # DEMO
 
-![vue-form-producer](./vue-form-producer-demo.gif)
+![vue-form-producer](https://github.com/shadowsworks/vue-form-producer/blob/main/vue-form-producer-demo.gif)
 
 デモサイトは<a href="#nogo">こちら</a>から
 
@@ -27,6 +27,8 @@ vue-form-producer は、以下の3つのコンポーネントで構成されて�
 * フォーム作成コンポーネント
 * 入力フォームコンポーネント
 * データ表示コンポーネント
+
+![vue-form-producer](https://github.com/shadowsworks/vue-form-producer/blob/main//vue-form-builder-usage.png)
 
 ## フォーム作成コンポーネント / sw-form-editor
 
