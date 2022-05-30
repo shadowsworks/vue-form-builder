@@ -1,5 +1,5 @@
 <template>
-  <div class="item-inputter" v-if="state_data.loaded && state_data.state">
+  <div class="item-inputter text-left" v-if="state_data.loaded && state_data.state">
     <template v-if='bind_data.item_info.item_type=="text" || 
       bind_data.item_info.item_type=="texts" || 
       bind_data.item_info.item_type=="number" || 

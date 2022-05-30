@@ -1,5 +1,5 @@
 <template>
-  <div class="item-viewer" v-if="state_data.loaded">
+  <div class="item-viewer text-left" v-if="state_data.loaded">
     <template v-if='bind_data.item_data.item_type=="text" || bind_data.item_data.item_type=="texts" || bind_data.item_data.item_type=="number" || 
       bind_data.item_data.item_type=="radio" || bind_data.item_data.item_type=="checkbox" ||
       bind_data.item_data.item_type=="boolean" || bind_data.item_data.item_type=="telephone" || bind_data.item_data.item_type=="date" ||
@@ -192,7 +192,7 @@ export default {
 };
 </script>
 <style scoped>
-.item-viewr {
+.item-viewer {
   text-align: left;
   padding: 4px;
 }
