@@ -1,16 +1,16 @@
 <template>
   <div class="form-editor" v-if="state_data.loaded">
-    <b-row>
+    <b-row class="text-left">
       <b-col cols="3" class="border-right">
         <div class="text-secondary mx-1 mt-0 mb-2 small border-bottom" >{{ lang('item_type_to_add') }}</div>
-        <div class="item" v-for="(type_info) in bind_data.type_info" :key="type_info.item_type">
+        <div class="item m-1" v-for="(type_info) in bind_data.type_info" :key="type_info.item_type">
           <sw-item-type :type_info="type_info" @add_item_method="add_item_method" />
         </div>
       </b-col>
       <b-col cols="5">
         <div class="text-secondary mx-1 mt-0 mb-2 small border-bottom" >{{ lang('item_setting') }}</div>
         <draggable v-model="bind_data.form_info.item_info" group="myGroup2">
-          <div class="item" v-for="(item_info,index) in bind_data.form_info.item_info" :key="item_info.item_uuid">
+          <div class="item m-1" v-for="(item_info,index) in bind_data.form_info.item_info" :key="item_info.item_uuid">
             <sw-item-editor :item_info="item_info" :item_key_option="bind_data.item_key_option" v-model="bind_data.form_info.item_info[index]" @copy_item_method="copy_item_method" @delete_item_method="delete_item_method" />
           </div>
         </draggable>

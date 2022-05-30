@@ -17,7 +17,7 @@ npm install vue-form-producer
 # Setup
 
 ```
-import swFormProducer from sw-form-producer
+import { swFormEditor, swFormInputter, swFormViewer } from sw-form-producer
 ```
 
 # Usage
@@ -40,6 +40,8 @@ vue-form-producer は、以下の3つのコンポーネントで構成されて�
 </template>
 
 <script>
+  import { swFormEditor } from sw-form-producer
+
   export default {
     data() {
       return {
@@ -74,6 +76,8 @@ vue-form-producer は、以下の3つのコンポーネントで構成されて�
 </template>
 
 <script>
+  import { swFormInputter } from sw-form-producer
+
   export default {
     data() {
       return {
@@ -108,6 +112,8 @@ vue-form-producer は、以下の3つのコンポーネントで構成されて�
 </template>
 
 <script>
+  import { swFormViewer } from sw-form-producer
+  
   export default {
     data() {
       return {
