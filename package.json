@@ -10,7 +10,7 @@
   },
   "license": "MIT",
   "author": "shadowsworks",
-  "homepage": "https://",
+  "homepage": "https://form-producer.demo.shadows-works.com/",
   "files": [
     "dist/*",
     "src/components/*.vue",
@@ -19,7 +19,8 @@
   "keywords": [
     "Vue",
     "Vue.js",
-    "BootstrapVue"
+    "BootstrapVue",
+    "Form"
   ],
   "scripts": {
     "serve": "vue-cli-service serve",
