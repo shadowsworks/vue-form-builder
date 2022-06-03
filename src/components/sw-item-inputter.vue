@@ -12,7 +12,8 @@
       bind_data.item_info.item_type=="datetime" ||
       bind_data.item_info.item_type=="table" || 
       bind_data.item_info.item_type=="markdown" ||
-      bind_data.item_info.item_type=="image"' >
+      bind_data.item_info.item_type=="image" ||
+      bind_data.item_info.item_type=="password"' >
       <label class="text-secondary mt-2 mb-0 small" >{{ bind_data.item_info.item_name }}</label>
     </template>
 
@@ -182,6 +183,20 @@
       </b-input-group>
     </template>
 
+    <!-- パスワード -->
+    <template v-if='bind_data.item_info.item_type=="password"' >
+      <b-input-group>
+        <b-form-input :type="state_data.password_type" v-model="bind_data.item_data" class="mt-0 mb-0" 
+          :placeholder="bind_data.item_info.item_placeholder" 
+          :maxlength="bind_data.item_info.item_length_max" 
+          :state="state_item_password(bind_data.item_data,bind_data.item_info)" />
+        <b-input-group-append is-text>
+          <b-link v-on:click="password_icon"><b-icon :icon="state_data.password_icon"></b-icon></b-link>
+        </b-input-group-append>
+      </b-input-group>
+      <div class="text-secondary mt-1 mb-0 small">{{ bind_data.item_info.item_placeholder }}</div>
+    </template>
+
     <div v-if="state_data.debug" class="text-left">{{ JSON.stringify(bind_data,null,2) }}</div>
   </div>
   <div v-else>
@@ -231,6 +246,8 @@ export default {
         state: false,
         preview: false,
         debug: false,
+        password_type: "password",
+        password_icon: "eye",
       }
     }
   },
@@ -259,6 +276,16 @@ export default {
         return false;
       } else {
         return true;
+      }
+    },
+    state_item_password: function() {
+      return function(item_data,item_info){
+        if( item_info.item_must ){
+          if( item_data === "" || item_data === null ){
+            return false;
+          }
+        }
+        return this.is_password_type(item_data,item_info);
       }
     },
   },
@@ -534,7 +561,46 @@ export default {
         }
         return false;
       }
-    }
+    },
+    is_password_type( item_data, item_info ){
+      if( item_data === "" || item_data === null ){
+        return null;
+      }
+      //item_selected: ["lowercase","uppercase","numbers","symbols"], 
+      let options = {};
+      options.minLength = item_info.item_length;  //最小文字数
+      if( item_info.item_selected.includes("lowercase") ){
+        options.minLowercase = 1;
+      } else {
+        options.minLowercase = 0;
+      }
+      if( item_info.item_selected.includes("uppercase") ){
+        options.minUppercase = 1;
+      } else {
+        options.minUppercase = 0;
+      }
+      if( item_info.item_selected.includes("numbers") ){
+        options.minNumbers = 1;
+      } else {
+        options.minNumbers = 0;
+      }
+      if( item_info.item_selected.includes("symbols") ){
+        options.minSymbols = 1;
+      } else {
+        options.minSymbols = 0;
+      }
+      return validator.isStrongPassword(item_data, options);
+    },
+    // パスワード（eye）アイコン パスワードのマスク有無
+    password_icon(){
+      if( this.state_data.password_type == "password" ){
+        this.state_data.password_type = "text";
+        this.state_data.password_icon = "eye-slash";
+      } else {
+        this.state_data.password_type = "password";
+        this.state_data.password_icon = "eye";
+      }
+    },
   }
 };
 </script>

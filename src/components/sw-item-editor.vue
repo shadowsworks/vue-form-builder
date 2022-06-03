@@ -355,6 +355,39 @@
               :state="state_item_height" :min="bind_data.item_height_min" :max="bind_data.item_height_max" />
           </template>
 
+          <!-- パスワード -->
+          <template v-if='bind_data.item_type=="password"'>
+            <!-- 項目名 -->
+            <label class="text-secondary mt-2 mb-0 small" >{{ lang('item_name') }}</label>
+            <b-form-input type="text" v-model="bind_data.item_name" :state="state_item_name" :placeholder="lang('enter_item_name')" class="mt-0 mb-0" maxlength="100" ></b-form-input>
+            <!-- 説明 -->
+            <label class="text-secondary mt-2 mb-0 small" >{{ lang('description') }}</label>
+            <b-form-input type="text" v-model="bind_data.item_placeholder" :placeholder="lang('enter_description')" class="mt-0 mb-0" maxlength="100" ></b-form-input>
+            <!-- 項目キー -->
+            <div v-if="local_data.item_key_option">
+              <label class="text-secondary mt-2 mb-0 small" >{{ lang('item_key') }}</label>
+              <b-form-input type="text" v-model="bind_data.item_key" :placeholder="lang('enter_item_key')" class="mt-0 mb-0" maxlength="32"
+                :state="state_item_key" />
+            </div>
+            <!-- 必須選択 -->
+            <label class="text-secondary mt-2 mb-0 small">{{ lang('required') }}</label>
+            <b-form-group v-slot="{ ariaDescribedby }" class="mt-0 mb-0">
+              <b-form-radio-group v-model="bind_data.item_must" :options="local_data.item_must_options" :aria-describedby="ariaDescribedby" />
+            </b-form-group>
+            <!-- 最小文字数 -->
+            <label class="text-secondary mt-2 mb-0 small" >{{ lang('min_characters') }} </label>
+            <b-form-input type="number" v-model="bind_data.item_length" :placeholder="lang('enter_min_number_characters')" class="mt-0" 
+              :state="state_item_min_length" :min="bind_data.item_length_min" :max="bind_data.item_length_max" />
+            <!-- 文字種 -->
+            <label class="text-secondary mt-2 mb-0 small" >{{ lang('character_type') }} </label>
+              <b-form-checkbox-group v-model="bind_data.item_selected" :aria-describedby="ariaDescribedby" >
+                <b-form-checkbox value="uppercase">{{ lang('uppercase') }}</b-form-checkbox>
+                <b-form-checkbox value="lowercase">{{ lang('lowercase') }}</b-form-checkbox>
+                <b-form-checkbox value="numbers">{{ lang('numbers') }}</b-form-checkbox>
+                <b-form-checkbox value="symbols">{{ lang('symbols') }}</b-form-checkbox>
+              </b-form-checkbox-group>
+          </template>
+
         </b-card-body>
         <b-card-footer class="px-3 pt-1 py-1">
           <b-button variant="light" size="sm" class="m-0 float-right" v-b-tooltip.hover title="複製する" @click="copy_item()">
@@ -603,6 +636,24 @@ export default {
             item_height: 600,    //高さデフォルト値
             item_height_min: 80,    //高さ最小値
             item_height_max: 1920,    //高さ最大値
+            item_uuid: "",
+            item_seq: 0,
+          },{ 
+            item_type: 'password', 
+            item_state: false,
+            item_name: lang[locale].password, 
+            item_desc: lang[locale].password,
+            item_placeholder: "", //説明
+            item_key: "", //キー
+            item_must: false,
+            item_length: 10,  //最小文字数
+            item_length_min: 8,   //文字数最小値
+            item_length_max: 128, //文字数最大値
+            item_selected: ["lowercase","uppercase","numbers","symbols"], 
+            item_lowercase: true,  //英字（小文字）
+            item_is_uppercase: true,  //英字（大文字） 
+            item_is_numbers: true,  //数字
+            item_is_symbols: false, //記号なし 記号あり
             item_uuid: "",
             item_seq: 0,
           }

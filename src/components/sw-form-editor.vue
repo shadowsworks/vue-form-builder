@@ -83,6 +83,7 @@ export default {
           { item_type: "time", type_desc: lang[locale].time, icon_name: "clock", level: 1 },
           { item_type: "datetime", type_desc: lang[locale].datetime, icon_name: "calendar-plus", level: 1 },
           { item_type: "image", type_desc: lang[locale].image, icon_name: "image", level: 2 },
+          { item_type: "password", type_desc: lang[locale].password, icon_name: "key", level: 2 },
           { item_type: "name", type_desc: lang[locale].full_name, icon_name: "person-square", level: 2 },
           { item_type: "telephone", type_desc: lang[locale].phone_number, icon_name: "telephone", level: 2 },
           //{ item_type: "select", type_desc: "プルダウン選択", icon_name: "card-list", level: 2 },
