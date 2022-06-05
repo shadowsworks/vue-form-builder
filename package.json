@@ -20,7 +20,8 @@
     "Vue",
     "Vue.js",
     "BootstrapVue",
-    "Form"
+    "Form",
+    "フォーム作成"
   ],
   "scripts": {
     "serve": "vue-cli-service serve",

@@ -1,5 +1,8 @@
 # vue-form-producer
 
+By linking form creation required for business applications, input screens using forms, and data display screens with JSON data, Vue.js / Bootstrap-Vue the productivity of form development in front-end development.
+It is a component that improves in terms of productivity.
+
 業務アプリケーションに必要とされるフォームの作成から、フォームを使った入力画面、データ表示画面までをJSONデータで連携し、Vue.js / Bootstrap-Vue でのフロントエンド開発におけるフォーム開発の生産性を飛躍的に向上するコンポーネントです。
 
 # DEMO
@@ -29,6 +32,8 @@ vue-form-producer は、以下の3つのコンポーネントで構成されて�
 * データ表示コンポーネント
 
 ![vue-form-producer](https://github.com/shadowsworks/vue-form-producer/blob/main//vue-form-builder-usage.png)
+
+<br>
 
 ## フォーム作成コンポーネント / sw-form-editor
 
@@ -66,6 +71,8 @@ vue-form-producer は、以下の3つのコンポーネントで構成されて�
 |:--|:--|:--|
 |value|update|フォームの定義されたデータが出力される。|
 
+<br>
+
 ## 入力フォームコンポーネント / sw-form-inputter
 
 ```
@@ -100,6 +107,8 @@ vue-form-producer は、以下の3つのコンポーネントで構成されて�
 |Property|Event|Description|
 |:--|:--|:--|
 |value|update|フォームで入力されたデータが出力される。|
+
+<br>
 
 ## データ表示コンポーネント　 / sw-form-viewer
 
