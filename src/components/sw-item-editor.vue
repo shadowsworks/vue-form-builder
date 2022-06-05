@@ -135,7 +135,7 @@
             </div>
             <!-- 選択肢 -->
             <label class="text-secondary mt-2 mb-0 small" >{{ lang('choices') }}</label>
-            <sw-column-editor max_column="10" :column_data="bind_data.item_options" v-model="bind_data.item_options"></sw-column-editor>
+            <sw-column-editor item_type="radio" max_column="10" :column_data="bind_data.item_options" v-model="bind_data.item_options"></sw-column-editor>
           </template>
 
           <!-- チェックボックス -->

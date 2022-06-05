@@ -1,7 +1,10 @@
 <template>
   <div class="column-editor mx-0" v-if="state_data.loaded">
     <div v-for="n in bind_data.column_data.length" :key="n" class="mb-1">
-      <b-input-group >
+      <b-input-group>
+        <b-input-group-prepend is-text v-if='item_type=="radio"' :title="lang('set_initial_selection')">
+          <b-form-radio v-model="local_data.selected" :name="local_data.radio_name" :value="bind_data.column_data[n-1]"  />
+        </b-input-group-prepend>
         <b-input-group-prepend v-if="n==bind_data.column_data.length && n>2">
           <b-button variant="outline-success" @click="minus_button">
             <span class="font-weight-bold">-</span>
@@ -33,6 +36,10 @@ export default {
   components: {
   },
   props: {
+    item_type: {
+      type:  String,
+      default: "checkbox"
+    },
     max_column: String,
     column_data: [ Array, Object ],
   },
@@ -43,7 +50,11 @@ export default {
       bind_data: {
         max_column: 5,
         column_data: [lang[locale].item1,lang[locale].item2],
-        return_data: [{text:lang[locale].item1,value:lang[locale].item1},{text:lang[locale].item2,value:lang[locale].item2}]
+        return_data: [{text:lang[locale].item1,value:lang[locale].item1,init:true},{text:lang[locale].item2,value:lang[locale].item2,init:false}]
+      },
+      local_data: {
+        selected: "",
+        radio_name: "",
       },
       state_data: {
         loaded: false,
@@ -78,7 +89,25 @@ export default {
           let data = {};
           data.text = this.bind_data.column_data[i];
           data.value = this.bind_data.column_data[i];
+          data.init = false;
+          if( i == 0 ){
+            data.init = true;
+          }
           this.bind_data.return_data.push(data);
+        }
+        this.local_data.selected = this.bind_data.return_data[0].value;
+        this.$emit('input',this.bind_data.return_data);
+      },
+      deep: true,
+    },
+    'local_data.selected': {
+      handler: function(){
+        for( let i=0;i<this.bind_data.return_data.length;i++ ){
+          if( this.bind_data.return_data[i].value == this.local_data.selected ){
+            this.bind_data.return_data[i].init = true;
+          } else {
+            this.bind_data.return_data[i].init = false;
+          }
         }
         this.$emit('input',this.bind_data.return_data);
       },
@@ -92,6 +121,8 @@ export default {
   },
   // インスタンス初期化後
   created(){
+    this.local_data.radio_name = this.get_unique_string();
+    this.local_data.selected = this.bind_data.return_data[0].value;
   },
   // インスタンス破棄後
   destroyed() {
@@ -142,6 +173,11 @@ export default {
           this.state_data.loaded = true;
         })
       }
+    },
+    get_unique_string:function (myStrong){
+      var strong = 1000;
+      if (myStrong) strong = myStrong;
+      return new Date().getTime().toString(16)  + Math.floor(strong*Math.random()).toString(16)
     },
   }
 };

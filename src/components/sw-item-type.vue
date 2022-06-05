@@ -1,6 +1,6 @@
 <template>
   <div class="item-type" v-if="state_data.loaded">
-    <b-button block size="sm" variant="outline-secondary" class="p-2 text-left" v-b-tooltip.hover.left 
+    <b-button block size="sm" variant="outline-secondary" class="p-2 text-left" 
       :title="lang('click_add_item')" @click="onClick()" >
       <b-icon :icon="bind_data.type_info.icon_name" scale="1" aria-hidden="true"></b-icon>
       <span class="ml-3"> {{ bind_data.type_info.type_desc }}</span>

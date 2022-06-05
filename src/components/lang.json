@@ -76,7 +76,8 @@
     "enter_max_value":"最大値を入力してください",
     "enter_unit":"単位を入力してください",
     "enter_max_width":"最大幅（pixel）を入力してください",
-    "enter_max_height":"最大高さ（pixel）を入力してください"
+    "enter_max_height":"最大高さ（pixel）を入力してください",
+    "set_initial_selection":"初期選択を設定する"
   },
   "en": {
     "item1": "item1",
@@ -155,6 +156,7 @@
     "enter_max_value":"Please enter the maximum value",
     "enter_unit":"Please enter the unit",
     "enter_max_width":"Please enter the maximum width (pixel)",
-    "enter_max_height":"Please enter the maximum height (pixel)"
+    "enter_max_height":"Please enter the maximum height (pixel)",
+    "set_initial_selection":"Set initial selection"
   }
 }

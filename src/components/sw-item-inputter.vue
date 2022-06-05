@@ -298,6 +298,12 @@ export default {
         if( this.bind_data.item_info.item_type == "table" ){
           this.table_data_set();
         }
+        // this.item_check();
+        // this.state_data.loaded = false;
+        // this.$nextTick(function() {
+        //   this.state_data.loaded = true;
+        // });
+        // this.$emit('input',this.get_ret_data());
       },
       deep: true,
     },
@@ -337,10 +343,10 @@ export default {
     if( this.bind_data.item_info.item_type == "table" ){
       this.table_data_set();
     }
+    this.item_check();
     this.$nextTick(function() {
       this.state_data.loaded = true;
     });
-    this.item_check();
     this.$emit('input',this.get_ret_data());
   },
   // ローカル関数
@@ -360,10 +366,10 @@ export default {
             this.bind_data.item_data = "";
           } else {
             if( this.bind_data.item_info.item_options.length ){
-              if( this.bind_data.item_info.item_options[0].value === undefined ){
-                this.bind_data.item_data = "";
-              } else {
-                this.bind_data.item_data = this.bind_data.item_info.item_options[0].value;
+              for( let i=0;i<this.bind_data.item_info.item_options.length;i++ ){
+                if( this.bind_data.item_info.item_options[i].init ){
+                  this.bind_data.item_data = this.bind_data.item_info.item_options[i].value;
+                }
               }
             } else {
               this.bind_data.item_data = "";
