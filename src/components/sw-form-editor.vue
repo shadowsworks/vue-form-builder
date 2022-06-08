@@ -61,8 +61,8 @@ export default {
         type_info: [],
         item_data: [],
         form_info: {
-          version: "1.0.0",
-          update: "2022-04-29",
+          version: require('../../package.json').version,
+          update: require('../../package.json').update,
           desc: "",
           item_info: [],
         },

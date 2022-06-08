@@ -34,9 +34,13 @@
             </div>
             <!-- 必須選択 -->
             <label class="text-secondary mt-2 mb-0 small">{{ lang('required') }}</label>
+            <div v-if="bind_data.item_must" class="float-right mt-1">
+              <br><b-form-checkbox v-model="bind_data.item_must_badge" value="checked" unchecked-value="unchecked">{{ lang('badge') }}</b-form-checkbox>
+            </div>
             <b-form-group v-slot="{ ariaDescribedby }" class="mt-0 mb-0">
               <b-form-radio-group v-model="bind_data.item_must" :options="local_data.item_must_options" :aria-describedby="ariaDescribedby" />
             </b-form-group>
+            
             <!-- 最大文字数 -->
             <label class="text-secondary mt-2 mb-0 small" >{{ lang('max_characters') }}</label>
             <b-form-input type="number" v-model="bind_data.item_length" :placeholder="lang('enter_max_number_characters')" class="mt-0" 
@@ -64,6 +68,9 @@
             </div>
             <!-- 必須選択 -->
             <label class="text-secondary mt-2 mb-0 small">{{ lang('required') }}</label>
+            <div v-if="bind_data.item_must" class="float-right mt-1">
+              <br><b-form-checkbox v-model="bind_data.item_must_badge" value="checked" unchecked-value="unchecked">{{ lang('badge') }}</b-form-checkbox>
+            </div>
             <b-form-group v-slot="{ ariaDescribedby }" class="mt-0 mb-0">
               <b-form-radio-group v-model="bind_data.item_must" :options="local_data.item_must_options" :aria-describedby="ariaDescribedby" />
             </b-form-group>
@@ -97,6 +104,9 @@
             </div>
             <!-- 必須選択 -->
             <label class="text-secondary mt-2 mb-0 small">{{ lang('required') }}</label>
+            <div v-if="bind_data.item_must" class="float-right mt-1">
+              <br><b-form-checkbox v-model="bind_data.item_must_badge" value="checked" unchecked-value="unchecked">{{ lang('badge') }}</b-form-checkbox>
+            </div>
             <b-form-group v-slot="{ ariaDescribedby }" class="mt-0 mb-0">
               <b-form-radio-group v-model="bind_data.item_must" :options="local_data.item_must_options" :aria-describedby="ariaDescribedby" />
             </b-form-group>
@@ -197,6 +207,9 @@
             </div>
             <!-- 必須選択 -->
             <label class="text-secondary mt-2 mb-0 small">{{ lang('required') }}</label>
+            <div v-if="bind_data.item_must" class="float-right mt-1">
+              <br><b-form-checkbox v-model="bind_data.item_must_badge" value="checked" unchecked-value="unchecked">{{ lang('badge') }}</b-form-checkbox>
+            </div>
             <b-form-group v-slot="{ ariaDescribedby }" class="mt-0 mb-0">
               <b-form-radio-group v-model="bind_data.item_must" :options="local_data.item_must_options" :aria-describedby="ariaDescribedby" />
             </b-form-group>
@@ -221,6 +234,9 @@
             </div>
             <!-- 必須選択 -->
             <label class="text-secondary mt-2 mb-0 small">{{ lang('required') }}</label>
+            <div v-if="bind_data.item_must" class="float-right mt-1">
+              <br><b-form-checkbox v-model="bind_data.item_must_badge" value="checked" unchecked-value="unchecked">{{ lang('badge') }}</b-form-checkbox>
+            </div>
             <b-form-group v-slot="{ ariaDescribedby }" class="mt-0 mb-0">
               <b-form-radio-group v-model="bind_data.item_must" :options="local_data.item_must_options" :aria-describedby="ariaDescribedby" />
             </b-form-group>
@@ -242,6 +258,9 @@
             </div>
             <!-- 必須選択 -->
             <label class="text-secondary mt-2 mb-0 small">{{ lang('required') }}</label>
+            <div v-if="bind_data.item_must" class="float-right mt-1">
+              <br><b-form-checkbox v-model="bind_data.item_must_badge" value="checked" unchecked-value="unchecked">{{ lang('badge') }}</b-form-checkbox>
+            </div>
             <b-form-group v-slot="{ ariaDescribedby }" class="mt-0 mb-0">
               <b-form-radio-group v-model="bind_data.item_must" :options="local_data.item_must_options" :aria-describedby="ariaDescribedby" />
             </b-form-group>
@@ -266,6 +285,9 @@
             </div>
             <!-- 必須選択 -->
             <label class="text-secondary mt-2 mb-0 small">{{ lang('required') }}</label>
+            <div v-if="bind_data.item_must" class="float-right mt-1">
+              <br><b-form-checkbox v-model="bind_data.item_must_badge" value="checked" unchecked-value="unchecked">{{ lang('badge') }}</b-form-checkbox>
+            </div>
             <b-form-group v-slot="{ ariaDescribedby }" class="mt-0 mb-0">
               <b-form-radio-group v-model="bind_data.item_must" :options="local_data.item_must_options" :aria-describedby="ariaDescribedby" />
             </b-form-group>
@@ -309,6 +331,9 @@
             </div>
             <!-- 必須選択 -->
             <label class="text-secondary mt-2 mb-0 small">{{ lang('required') }}</label>
+            <div v-if="bind_data.item_must" class="float-right mt-1">
+              <br><b-form-checkbox v-model="bind_data.item_must_badge" value="checked" unchecked-value="unchecked">{{ lang('badge') }}</b-form-checkbox>
+            </div>
             <b-form-group v-slot="{ ariaDescribedby }" class="mt-0 mb-0">
               <b-form-radio-group v-model="bind_data.item_must" :options="local_data.item_must_options" :aria-describedby="ariaDescribedby" />
             </b-form-group>
@@ -342,6 +367,9 @@
             </div>
             <!-- 必須選択 -->
             <label class="text-secondary mt-2 mb-0 small">{{ lang('required') }}</label>
+            <div v-if="bind_data.item_must" class="float-right mt-1">
+              <br><b-form-checkbox v-model="bind_data.item_must_badge" value="checked" unchecked-value="unchecked">{{ lang('badge') }}</b-form-checkbox>
+            </div>
             <b-form-group v-slot="{ ariaDescribedby }" class="mt-0 mb-0">
               <b-form-radio-group v-model="bind_data.item_must" :options="local_data.item_must_options" :aria-describedby="ariaDescribedby" />
             </b-form-group>
@@ -371,6 +399,9 @@
             </div>
             <!-- 必須選択 -->
             <label class="text-secondary mt-2 mb-0 small">{{ lang('required') }}</label>
+            <div v-if="bind_data.item_must" class="float-right mt-1">
+              <br><b-form-checkbox v-model="bind_data.item_must_badge" value="checked" unchecked-value="unchecked">{{ lang('badge') }}</b-form-checkbox>
+            </div>
             <b-form-group v-slot="{ ariaDescribedby }" class="mt-0 mb-0">
               <b-form-radio-group v-model="bind_data.item_must" :options="local_data.item_must_options" :aria-describedby="ariaDescribedby" />
             </b-form-group>
@@ -468,6 +499,7 @@ export default {
             item_placeholder: "", //説明
             item_key: "", //キー
             item_must: false, 
+            item_must_badge: false,
             item_length: 20,      //文字数初期値
             item_length_min: 1,   //文字数最小値
             item_length_max: 100, //文字数最大値
@@ -482,6 +514,7 @@ export default {
             item_placeholder: "", //説明
             item_key: "", //キー
             item_must: false,
+            item_must_badge: "unchecked",
             item_length: 100,     //文字数初期値
             item_length_min: 1,   //文字数最小値
             item_length_max: 500, //文字数最大値
@@ -498,6 +531,7 @@ export default {
             item_placeholder: "", //説明
             item_key: "", //キー
             item_must: false, 
+            item_must_badge: "unchecked",
             item_limit_min: 0,    //制限最小値
             item_limit_max: 100,  //制限最大値
             item_unit_name: "",   //単位
@@ -511,6 +545,7 @@ export default {
             item_placeholder: "", //説明
             item_key: "", //キー
             item_must: false,
+            item_must_badge: "unchecked",
             item_options: [],
             item_uuid: "",
             item_seq: 0,
@@ -522,6 +557,7 @@ export default {
             item_placeholder: "", //説明
             item_key: "", //キー
             item_must: false, 
+            item_must_badge: false,
             item_options: [],
             item_uuid: "",
             item_seq: 0,
@@ -533,6 +569,7 @@ export default {
             item_placeholder: "", //説明
             item_key: "", //キー
             item_must: false, 
+            item_must_badge: "unchecked",
             item_checked_value: "true",
             item_unchecked_value: "false",
             item_uuid: "",
@@ -545,6 +582,7 @@ export default {
             item_placeholder: ["",""], //説明
             item_key: "", //キー
             item_must: false,
+            item_must_badge: "unchecked",
             item_length: 10,     //文字数初期値
             item_length_min: 1,   //文字数最小値
             item_length_max: 100, //文字数最大値
@@ -558,6 +596,7 @@ export default {
             item_placeholder: ["03","1234","5678"], //説明
             item_key: "", //キー
             item_must: false,
+            item_must_badge: "unchecked",
             item_length: 4,     //文字数初期値
             item_length_min: 1,   //文字数最小値
             item_length_max: 4, //文字数最大値
@@ -571,6 +610,7 @@ export default {
             item_placeholder: lang[locale].select_date, //説明
             item_key: "", //キー
             item_must: false,
+            item_must_badge: false,
             item_uuid: "",
             item_seq: 0,
           },{ 
@@ -581,6 +621,7 @@ export default {
             item_placeholder: lang[locale].select_time, //説明
             item_key: "", //キー
             item_must: false,
+            item_must_badge: "unchecked",
             item_uuid: "",
             item_seq: 0,
           },{ 
@@ -592,6 +633,7 @@ export default {
             item_key: "", //キー
             item_cols: "12", //6:縦向き 12:横向き
             item_must: false,
+            item_must_badge: false,
             item_uuid: "",
             item_seq: 0,
           },{ 
@@ -601,7 +643,8 @@ export default {
             item_desc: lang[locale].table,
             item_placeholder: "", //説明
             item_key: "", //キー
-            item_must: false, 
+            item_must: false,
+            item_must_badge: "unchecked", 
             table_rows: [],
             table_cols: [],
             item_uuid: "",
@@ -614,6 +657,7 @@ export default {
             item_placeholder: "", //説明
             item_key: "", //キー
             item_must: false,
+            item_must_badge: "unchecked",
             item_length: 100,     //文字数初期値
             item_length_min: 1,   //文字数最小値
             item_length_max: 500, //文字数最大値
@@ -630,6 +674,7 @@ export default {
             item_placeholder: "", //説明
             item_key: "", //キー
             item_must: false,
+            item_must_badge: "unchecked",
             item_width: 800,     //幅デフォルト値
             item_width_min: 80,     //幅最小値
             item_width_max: 1920,     //幅最大値
@@ -646,6 +691,7 @@ export default {
             item_placeholder: "", //説明
             item_key: "", //キー
             item_must: false,
+            item_must_badge: "unchecked",
             item_length: 10,  //最小文字数
             item_length_min: 8,   //文字数最小値
             item_length_max: 128, //文字数最大値

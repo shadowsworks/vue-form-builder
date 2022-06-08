@@ -15,6 +15,7 @@
       bind_data.item_info.item_type=="image" ||
       bind_data.item_info.item_type=="password"' >
       <label class="text-secondary mt-2 mb-0 small" >{{ bind_data.item_info.item_name }}</label>
+      <b-badge v-if='bind_data.item_info.item_must && bind_data.item_info.item_must_badge=="checked"' variant="danger" class="mx-2">{{ lang('mandatory') }}</b-badge>
     </template>
 
     <!-- 短文テキスト -->
@@ -76,6 +77,7 @@
       <b-row>
         <b-col v-for="n in 2" :key="n" cols="6">
           <label class="text-secondary mt-2 mb-0 small" >{{ bind_data.item_info.item_name[n-1] }}</label>
+          <b-badge v-if='bind_data.item_info.item_must && bind_data.item_info.item_must_badge=="checked"' variant="danger" class="mx-2">{{ lang('mandatory') }}</b-badge>
           <b-form-input type="text" v-model="bind_data.item_data[n-1]" class="mt-0 mb-0" 
             :placeholder="bind_data.item_info.item_placeholder[n-1]" 
             :maxlength="bind_data.item_info.item_length"
