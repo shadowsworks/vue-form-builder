@@ -5,19 +5,17 @@
         :rows="state_rows" :maxlength="state_max_length"
         :state="state_item(state_textarea,state_must)" />
     </div>
-    <div v-if='!state_preview_mode' class="mt-1">
-      <div v-if='!state_preview_mode' class="mt-0 float-right">
-        <b-button variant="outline-secondary" size="sm" @click="mode_change">{{ lang('preview') }}</b-button>
-      </div>
+    <div v-if='!state_preview_mode' class="mt-1 ml-2 float-right">
+      <b-button variant="outline-secondary" size="sm" @click="mode_change">{{ lang('preview') }}</b-button>
     </div>
-    
     <div v-if='state_preview_mode' class="preview_mode">
       <div class="markdown-body" v-html="state_result"></div>
     </div>
-    <div v-if='state_preview_mode' class="mt-2 float-right">
+    <div v-if='state_preview_mode' class="mt-2 ml-2 float-right">
       <b-button variant="outline-secondary" size="sm" @click="mode_change">{{ lang('back') }}</b-button>
     </div>
-    <div>&nbsp;</div>
+    <div class="text-secondary mt-1 mb-0 small">{{ state_description }}</div>
+    
   </div>
 </template>
 
@@ -55,6 +53,11 @@ export default {
       type: String,
       default: ""
     },
+    // 補足説明
+    description: {
+      type: String,
+      default: ""
+    },
   },
   // ローカルデータ変数
   data () {
@@ -64,6 +67,7 @@ export default {
       state_max_length: 10, // 最大文字数
       state_must: false, // 必須
       state_placeholder: "",
+      state_description: "",
       state_preview_mode: false,  //プレビューモード
       state_textarea: "",
       state_result: "TEXT"
@@ -99,6 +103,9 @@ export default {
     placeholder: function(){
       this.state_placeholder = this.placeholder;
     },
+    description: function(){
+      this.state_description = this.description;
+    },
     state_textarea: function(){
       this.$emit('input',this.state_textarea);
     },
@@ -115,6 +122,7 @@ export default {
     this.state_rows = this.rows;
     this.state_max_length = this.max_max_length;
     this.state_placeholder = this.placeholder;
+    this.state_description = this.description;
   },
   // ローカル関数
   methods: {
