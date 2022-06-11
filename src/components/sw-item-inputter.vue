@@ -575,6 +575,9 @@ export default {
         if( item_info.item_allowed_type.toLowerCase() == "ascii" ){
           return validator.isAscii(item_data);
         }
+        // if( item_info.item_allowed_type.toLowerCase() == "email" ){
+        //   return validator.isEmail(item_data);
+        // }
         return false;
       }
     },

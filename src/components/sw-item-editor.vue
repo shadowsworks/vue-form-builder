@@ -521,6 +521,7 @@ export default {
           { text: lang[locale].numbers, value: 'Numeric' },
           { text: lang[locale].alphanumeric, value: 'Alphanumeric' },
           { text: lang[locale].ascii, value: 'Ascii' },
+          //{ text: lang[locale].email, value: 'Email' },
         ],
         item_options: [
           { 

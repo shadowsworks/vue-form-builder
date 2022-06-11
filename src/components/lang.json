@@ -12,6 +12,7 @@
     "numbers":"半角数字",
     "alphanumeric":"半角英大小文字数字",
     "ascii":"アスキー文字",
+    "email":"メールアドレス",
 
     "short_text":"短いテキスト",
     "long_text":"長いテキスト",
@@ -95,6 +96,7 @@
     "numbers":"Numbers",
     "alphanumeric":"Alphanumeric",
     "ascii":"Ascii",
+    "email":"E-mail",
 
     "short_text":"Short Text",
     "long_text":"Long Text",

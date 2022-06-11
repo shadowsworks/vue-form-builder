@@ -9,13 +9,33 @@ It is a component that improves in terms of productivity.
 
 ![vue-form-producer](https://github.com/shadowsworks/vue-form-producer/blob/main/vue-form-producer-demo.gif)
 
-デモサイトは<a href="https://form-producer.demo.shadows-works.com/">こちら</a>から
+デモサイトは<a href="https://form-producer.demo.shadows-works.com/">こちら</a>
 
 # Install
 
 ```
 npm install vue-form-producer
 ```
+
+# BootstrapVue Setup
+
+Register BootstrapVue in your app entry point (typically app.js or main.js):
+
+```
+import Vue from 'vue'
+import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
+
+// Import Bootstrap and BootstrapVue CSS files (order is important)
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
+
+// Make BootstrapVue available throughout your project
+Vue.use(BootstrapVue)
+// Optionally install the BootstrapVue icon components plugin
+Vue.use(IconsPlugin)
+```
+
+詳しくは [BootstrapVue](https://bootstrap-vue.org/docs) のサイトを参照ください
 
 # Setup
 
@@ -27,9 +47,9 @@ import { swFormEditor, swFormInputter, swFormViewer } from sw-form-producer
 
 vue-form-producer は、以下の3つのコンポーネントで構成されています。
 
-* フォーム作成コンポーネント
-* 入力フォームコンポーネント
-* データ表示コンポーネント
+* フォーム作成コンポーネント / sw-form-editor
+* 入力フォームコンポーネント / sw-form-inputter
+* データ表示コンポーネント / sw-form-viewer
 
 ![vue-form-producer](https://github.com/shadowsworks/vue-form-producer/blob/main//vue-form-builder-usage.png)
 
@@ -71,6 +91,31 @@ vue-form-producer は、以下の3つのコンポーネントで構成されて�
 |:--|:--|:--|
 |value|update|フォームの定義されたデータが出力される。|
 
+### type-info
+
+|Type|Value|Description|
+|:--|:--|:--|
+|String|"ALL"|全てを表示する|
+|Array|"text"|短いテキスト|
+||"texts"|長いテキスト|
+||"number"|数値|
+||"radio"|ラジオボタン|
+||"checkbox"|チェックボックス|
+||"boolean"|スイッチ|
+||"date"|日付|
+||"time"|時刻|
+||"datetime"|日時|
+||"image"|写真|
+||"password"|パスワード|
+||"name"|氏名|
+||"telephone"|電話番号|
+||"table"|表|
+||"markdown"|マークダウン|
+|Number|1|"text","texts","number","radio", "checkbox","boolean","date","time","datetime" のセット|
+||2|1 + "image","password","name","telephone" のセット|
+||3|2 + "table","markdown" のセット|
+
+
 <br>
 
 ## 入力フォームコンポーネント / sw-form-inputter
@@ -108,9 +153,10 @@ vue-form-producer は、以下の3つのコンポーネントで構成されて�
 |:--|:--|:--|
 |value|update|フォームで入力されたデータが出力される。|
 
+
 <br>
 
-## データ表示コンポーネント　 / sw-form-viewer
+## データ表示コンポーネント / sw-form-viewer
 
 ```
 <template>
@@ -141,4 +187,7 @@ vue-form-producer は、以下の3つのコンポーネントで構成されて�
 |pdf_output|boolean|false|true:PDF出力ボタンを表示する / false:PDF出力ボタンを表示しない|
 |pdf_output_button|String|"PDF出力"|PDF出力ボタンの名称|
 |pdf_output_placement|String|"top"|PDF出力ボタンの表示位置 "top":先頭 "bottom":最後尾|
+
+<br><br><br>
+
 
