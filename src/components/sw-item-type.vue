@@ -1,10 +1,19 @@
 <template>
   <div class="item-type" v-if="state_data.loaded">
-    <b-button block size="sm" variant="outline-secondary" class="p-2 text-left" 
-      :title="lang('click_add_item')" @click="onClick()" >
-      <b-icon :icon="bind_data.type_info.icon_name" scale="1" aria-hidden="true"></b-icon>
-      <span class="ml-3"> {{ bind_data.type_info.type_desc }}</span>
-    </b-button>
+    <div v-if='bind_data.type_option=="list"'>
+      <b-button block size="sm" variant="outline-secondary" class="p-2 text-left" 
+        :title="lang('click_add_item')" @click="onClick()" >
+        <b-icon :icon="bind_data.type_info.icon_name" scale="1" aria-hidden="true"></b-icon>
+        <span class="ml-3"> {{ bind_data.type_info.type_desc }}</span>
+      </b-button>
+    </div>
+    <div v-if='bind_data.type_option=="tile"'>
+      <b-button block size="sm" variant="outline-secondary" class="p-2 text-center" 
+        :title="lang('click_add_item')" @click="onClick()" >
+        <b-icon :icon="bind_data.type_info.icon_name" scale="1" aria-hidden="true"></b-icon>
+        <div class="mt-2 mb-0 fsize">{{ bind_data.type_info.type_desc }}</div>
+      </b-button>
+    </div>
   </div>
   
 </template>
@@ -22,6 +31,11 @@ export default {
   props: {
     // ItemType情報
     type_info: Object, 
+    // 
+    type_option: {
+      type: String,
+      default: "list"
+    },
   },
   // ローカルデータ変数
   data () {
@@ -29,6 +43,7 @@ export default {
       // バインドデータ
       bind_data: {
         type_info: null,
+        type_option: "",
       },
       state_data: {
         loaded: false,
@@ -45,6 +60,9 @@ export default {
         if( this.item_info != null ){
           this.bind_data.type_info = this.type_info;
         }
+        if( this.type_option != "" ){
+          this.bind_data.type_option = this.type_option;
+        }
       },
       deep: true,
     }
@@ -58,6 +76,7 @@ export default {
   // インスタンスマウント後
   mounted(){
     this.bind_data.type_info = this.type_info;
+    this.bind_data.type_option = this.type_option;
     this.$nextTick(function() {
       this.state_data.loaded = true;
     })
@@ -77,5 +96,8 @@ export default {
 .item-type {
   text-align: left;
   padding: 4px;
+}
+.fsize {
+  font-size: 0.7rem;
 }
 </style>

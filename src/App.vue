@@ -25,6 +25,7 @@
         <sw-form-editor 
           :form_info="bind_data.sw_form_editor.init_info" 
           :type_info="bind_data.sw_form_editor.type_info" 
+          type_option="tile"
           :item_key_option="bind_data.sw_form_editor.item_key_option" 
           v-model="bind_data.sw_form_editor.form_info" />
       </div>

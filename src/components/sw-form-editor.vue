@@ -3,8 +3,17 @@
     <b-row class="text-left">
       <b-col cols="3" class="border-right">
         <div class="text-secondary mx-1 mt-0 mb-2 small border-bottom" >{{ lang('item_type_to_add') }}</div>
-        <div class="item m-1" v-for="(type_info) in bind_data.type_info" :key="type_info.item_type">
-          <sw-item-type :type_info="type_info" @add_item_method="add_item_method" />
+        <div v-if='type_option=="tile"'>
+          <b-row class="mx-1">
+            <b-col cols="6" class="item mx-0 px-0" v-for="(type_info) in bind_data.type_info" :key="type_info.item_type">
+              <sw-item-type :type_info="type_info" :type_option="type_option" @add_item_method="add_item_method" />
+            </b-col>
+          </b-row>
+        </div>
+        <div v-if='type_option=="list"'>
+          <div class="item m-1" v-for="(type_info) in bind_data.type_info" :key="type_info.item_type">
+            <sw-item-type :type_info="type_info" :type_option="type_option" @add_item_method="add_item_method" />
+          </div>
         </div>
       </b-col>
       <b-col cols="5">
@@ -48,10 +57,15 @@ export default {
     //
     type_info: [ String, Array, Number ],
     //
+    type_option: {
+      type:  String,
+      default: "list"
+    },
+    //
     item_key_option: {
       type:  String,
       default: "false"
-    }
+    },
   },
   // ローカルデータ変数
   data () {
@@ -59,6 +73,7 @@ export default {
       // バインドデータ
       bind_data: {
         type_info: [],
+        type_option: "",
         item_data: [],
         form_info: {
           version: require('../../package.json').version,
@@ -120,7 +135,10 @@ export default {
         this.set_type_info();
       },
       deep: true,
-    }
+    },
+    type_option(){
+      this.bind_data.type_option = this.type_option;
+    },
   },
   // インスタンス初期化後
   created(){
