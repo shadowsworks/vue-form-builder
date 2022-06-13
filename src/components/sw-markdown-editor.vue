@@ -39,10 +39,7 @@ export default {
       default: 0
     },
     // 最大文字数
-    max_length: {
-      type: Number,
-      default: 10
-    },
+    max_length: [ Number, String ],
     // 必須
     must: {
       type: Boolean,
@@ -78,13 +75,17 @@ export default {
     state_item: function() {
       return function(item_data,item_must){
         if( item_must ){
-          if( item_data === "" ){
+          if( item_data === "" || item_data === null ){
             return false;
           } else {
             return true;
           }
         } else {
-          return null;
+          if( item_data === "" || item_data === null ){
+            return null;
+          } else {
+            return true;
+          }
         }
       }
     },
@@ -95,7 +96,7 @@ export default {
       this.state_rows = this.rows;
     },
     max_length: function(){
-      this.state_max_length = this.max_length;
+      this.state_max_length = Number(this.max_length);
     },
     must: function(){
       this.state_must = this.must;
@@ -120,7 +121,8 @@ export default {
   // インスタンスマウント後
   mounted(){
     this.state_rows = this.rows;
-    this.state_max_length = this.max_max_length;
+    this.state_max_length = this.max_length;
+    this.state_must = this.must;
     this.state_placeholder = this.placeholder;
     this.state_description = this.description;
   },

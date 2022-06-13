@@ -440,15 +440,48 @@
             <!-- 最小文字数 -->
             <label class="text-secondary mt-2 mb-0 small" >{{ lang('min_characters') }} </label>
             <b-form-input type="number" v-model="bind_data.item_length" :placeholder="lang('enter_min_number_characters')" class="mt-0" 
-              :state="state_item_min_length" :min="bind_data.item_length_min" :max="bind_data.item_length_max" />
+              :state="state_item_length" :min="bind_data.item_length_min" :max="bind_data.item_length_max" />
             <!-- 文字種 -->
             <label class="text-secondary mt-2 mb-0 small" >{{ lang('character_type') }} </label>
-              <b-form-checkbox-group v-model="bind_data.item_selected" :aria-describedby="ariaDescribedby" >
+              <b-form-checkbox-group v-model="bind_data.item_selected"  >
                 <b-form-checkbox value="uppercase">{{ lang('uppercase') }}</b-form-checkbox>
                 <b-form-checkbox value="lowercase">{{ lang('lowercase') }}</b-form-checkbox>
                 <b-form-checkbox value="numbers">{{ lang('numbers') }}</b-form-checkbox>
                 <b-form-checkbox value="symbols">{{ lang('symbols') }}</b-form-checkbox>
               </b-form-checkbox-group>
+          </template>
+
+          <!-- メールアドレス -->
+          <template v-if='bind_data.item_type=="email"'>
+            <!-- 項目名 -->
+            <label class="text-secondary mt-2 mb-0 small" >{{ lang('item_name') }}</label>
+            <b-form-input type="text" v-model="bind_data.item_name" :state="state_item_name" :placeholder="lang('enter_item_name')" class="mt-0 mb-0" maxlength="100" ></b-form-input>
+            <!-- 説明 -->
+            <label class="text-secondary mt-2 mb-0 small" >{{ lang('placeholder') }}</label>
+            <b-form-input type="text" v-model="bind_data.item_placeholder" :placeholder="lang('enter_placeholder')" class="mt-0 mb-0" maxlength="100" ></b-form-input>
+            <!-- 補足説明 -->
+            <label class="text-secondary mt-2 mb-0 small" >{{ lang('description') }}</label>
+            <b-form-input type="text" v-model="bind_data.item_description" :placeholder="lang('enter_description')" class="mt-0 mb-0" maxlength="100" ></b-form-input>
+            <!-- 項目キー -->
+            <div v-if="local_data.item_key_option">
+              <label class="text-secondary mt-2 mb-0 small" >{{ lang('item_key') }}</label>
+              <b-form-input type="text" v-model="bind_data.item_key" :placeholder="lang('enter_item_key')" class="mt-0 mb-0" maxlength="32"
+                :state="state_item_key" />
+            </div>
+            <!-- 必須選択 -->
+            <label class="text-secondary mt-2 mb-0 small">{{ lang('required') }}</label>
+            <div v-if="bind_data.item_must" class="float-right mt-1">
+              <br><b-form-checkbox v-model="bind_data.item_must_badge" value="checked" unchecked-value="unchecked">{{ lang('badge') }}</b-form-checkbox>
+            </div>
+            <b-form-group v-slot="{ ariaDescribedby }" class="mt-0 mb-0">
+              <b-form-radio-group v-model="bind_data.item_must" :options="local_data.item_must_options" :aria-describedby="ariaDescribedby" />
+            </b-form-group>
+            <!-- 複数可 -->
+            <label class="text-secondary mt-2 mb-0 small">{{ lang('allow_multiple_entries') }}</label>
+            <div class="mt-1">
+              <b-form-checkbox v-model="bind_data.item_allow_multiple" value="checked" unchecked-value="unchecked">{{ lang('allow_multiple') }}</b-form-checkbox>
+            </div>
+            
           </template>
 
         </b-card-body>
@@ -674,7 +707,7 @@ export default {
             item_name: lang[locale].datetime,
             item_desc: lang[locale].datetime,
             item_placeholder: [lang[locale].select_date,lang[locale].select_time], //説明
-            item_description: "", //補足説明
+            item_description: "", //補足説明item_state
             item_key: "", //キー
             item_cols: "12", //6:縦向き 12:横向き
             item_must: false,
@@ -749,6 +782,19 @@ export default {
             item_is_uppercase: true,  //英字（大文字） 
             item_is_numbers: true,  //数字
             item_is_symbols: false, //記号なし 記号あり
+            item_uuid: "",
+            item_seq: 0,
+          },{ 
+            item_type: 'email', 
+            item_state: false,
+            item_name: lang[locale].email, 
+            item_desc: lang[locale].email,
+            item_placeholder: "", //説明
+            item_description: "", //補足説明
+            item_key: "", //キー
+            item_must: false,
+            item_must_badge: "unchecked",
+            item_allow_multiple: "unchecked",//カンマ区切りで複数入力可能
             item_uuid: "",
             item_seq: 0,
           }

@@ -4,7 +4,8 @@
       bind_data.item_data.item_type=="radio" || bind_data.item_data.item_type=="checkbox" ||
       bind_data.item_data.item_type=="boolean" || bind_data.item_data.item_type=="telephone" || bind_data.item_data.item_type=="date" ||
       bind_data.item_data.item_type=="time" || bind_data.item_data.item_type=="datetime" || bind_data.item_data.item_type=="table" ||
-      bind_data.item_data.item_type=="markdown" || bind_data.item_data.item_type=="image" || bind_data.item_data.item_type=="password" ' >
+      bind_data.item_data.item_type=="markdown" || bind_data.item_data.item_type=="image" || bind_data.item_data.item_type=="password" ||
+      bind_data.item_data.item_type=="email" ' >
       <label class="text-secondary mt-2 mb-0 small" >{{ bind_data.item_data.item_name }}</label>
     </template>
     
@@ -97,6 +98,11 @@
     <!-- パスワード -->
     <template v-if='bind_data.item_data.item_type=="password"' >
       <div class="mx-2" v-if="bind_data.item_data.item_data !== null">**********</div>
+    </template>
+
+    <!-- メールアドレス -->
+    <template v-if='bind_data.item_data.item_type=="email"' >
+      <div class="mx-2">{{ bind_data.item_data.item_data }}</div>
     </template>
 
   </div>

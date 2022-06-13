@@ -65,6 +65,8 @@
     "uppercase": "半角英字（大文字）", 
     "symbols": "記号",
     "badge":"バッジ表示",
+    "allow_multiple_entries":"カンマ区切りで複数入力可能とする",
+    "allow_multiple":"複数入力可",
 
     "enter_your_choice":"選択肢を入力してください",
     "click_add_item":"クリックして項目を追加する",
@@ -149,6 +151,8 @@
     "uppercase": "Uppercase", 
     "symbols": "Symbols",
     "badge": "Badge",
+    "allow_multiple_entries":"Allow multiple entries separated by commas",
+    "allow_multiple":"Allow multiple",
 
     "enter_your_choice":"Please enter your choice",
     "click_add_item":"Click to add an item",

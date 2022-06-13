@@ -86,6 +86,7 @@ export default {
           { item_type: "password", type_desc: lang[locale].password, icon_name: "key", level: 2 },
           { item_type: "name", type_desc: lang[locale].full_name, icon_name: "person-square", level: 2 },
           { item_type: "telephone", type_desc: lang[locale].phone_number, icon_name: "telephone", level: 2 },
+          { item_type: "email", type_desc: lang[locale].email, icon_name: "envelope", level: 2 },
           //{ item_type: "select", type_desc: "プルダウン選択", icon_name: "card-list", level: 2 },
           { item_type: "table", type_desc: lang[locale].table, icon_name: "table", level: 3 },
           { item_type: "markdown", type_desc: lang[locale].markdown, icon_name: "markdown", level: 3 },

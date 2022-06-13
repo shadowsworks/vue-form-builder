@@ -13,7 +13,8 @@
       bind_data.item_info.item_type=="table" || 
       bind_data.item_info.item_type=="markdown" ||
       bind_data.item_info.item_type=="image" ||
-      bind_data.item_info.item_type=="password"' >
+      bind_data.item_info.item_type=="password" ||
+      bind_data.item_info.item_type=="email"' >
       <label class="text-secondary mt-2 mb-0 small" >{{ bind_data.item_info.item_name }}</label>
       <b-badge v-if='bind_data.item_info.item_must && bind_data.item_info.item_must_badge=="checked"' variant="danger" class="mx-2">{{ lang('mandatory') }}</b-badge>
     </template>
@@ -43,7 +44,7 @@
         <b-form-input type="number" v-model="bind_data.item_data" class="mt-0 mb-0" 
           :placeholder="bind_data.item_info.item_placeholder" 
           :min="bind_data.item_info.item_limit_min" :max="bind_data.item_info.item_limit_max" 
-          :state="state_item(bind_data.item_data,bind_data.item_info.item_must)" />
+          :state="state_item(bind_data.item_data,bind_data.item_info)" />
         <b-input-group-append v-if='bind_data.item_info.item_unit_name!==""'>
           <b-input-group-text>{{ bind_data.item_info.item_unit_name }}</b-input-group-text>
         </b-input-group-append>
@@ -199,11 +200,20 @@
         <b-form-input :type="state_data.password_type" v-model="bind_data.item_data" class="mt-0 mb-0" 
           :placeholder="bind_data.item_info.item_placeholder" 
           :maxlength="bind_data.item_info.item_length_max" 
-          :state="state_item_password(bind_data.item_data,bind_data.item_info)" />
+          :state="state_item(bind_data.item_data,bind_data.item_info)" />
         <b-input-group-append is-text>
           <b-link v-on:click="password_icon"><b-icon :icon="state_data.password_icon"></b-icon></b-link>
         </b-input-group-append>
       </b-input-group>
+      <div class="text-secondary mt-1 mb-0 small">{{ bind_data.item_info.item_description }}</div>
+    </template>
+
+    <!-- メールアドレス -->
+    <template v-if='bind_data.item_info.item_type=="email"' >
+      <b-form-input type="text" v-model="bind_data.item_data" class="mt-0 mb-0" 
+        :placeholder="bind_data.item_info.item_placeholder" 
+        :maxlength="bind_data.item_info.item_length" 
+        :state="state_item(bind_data.item_data,bind_data.item_info)" />
       <div class="text-secondary mt-1 mb-0 small">{{ bind_data.item_info.item_description }}</div>
     </template>
 
@@ -270,7 +280,23 @@ export default {
             return false;
           }
         }
-        return this.is_allowed_type(item_data,item_info);
+        // 短いテキスト 電話番号
+        if( item_info.item_type == "text" || item_info.item_type == "telephone" ){
+          return this.is_allowed_type(item_data,item_info);
+        }
+        // パスワード
+        if( item_info.item_type == "password" ){
+          return this.is_password_type(item_data,item_info);
+        }
+        // メールアドレス
+        if( item_info.item_type == "email" ){
+          return this.is_email_type(item_data,item_info);
+        }
+        if( item_data === "" || item_data === null ){
+          return null;
+        } else {
+          return true;
+        }
       }
     },
     inputedValue: {
@@ -286,16 +312,6 @@ export default {
         return false;
       } else {
         return true;
-      }
-    },
-    state_item_password: function() {
-      return function(item_data,item_info){
-        if( item_info.item_must ){
-          if( item_data === "" || item_data === null ){
-            return false;
-          }
-        }
-        return this.is_password_type(item_data,item_info);
       }
     },
   },
@@ -410,15 +426,64 @@ export default {
           if( item_data === "" ){
             return false;
           }
-        } else {
+        } else if( Array.isArray(item_data) ){
           for( let i=0;i<item_data.length;i++ ){
-            if( item_data[i] === "" ){
+            if( item_data[i] === "" || item_data[i] === null ){
               return false;
             }
           }
+        } else {
+          if( item_data === null ){
+            return false;
+          }
         }
       }
-      return this.is_allowed_type(item_data,item_info);
+      //return this.is_allowed_type(item_data,item_info);
+      // 短いテキスト
+      if( item_info.item_type == "text" ){
+        return this.is_allowed_type(item_data,item_info);
+      }
+      // 氏名 日時
+      if( item_info.item_type == "name" || item_info.item_type == "datetime" ){
+        if( item_data[0] == "" && item_data[1] == "" ){
+          return null;
+        }
+        if( item_data[0] !== "" && item_data[1] !== "" ){
+          return true;
+        }
+        return false;
+      }
+      // 電話番号
+      if( item_info.item_type == "telephone" ){
+        if( item_data[0] == "" && item_data[1] == "" && item_data[2] == "" ){
+          return null;
+        }
+        let ret = true;
+        for( let i=0;i<item_data.length;i++ ){
+          if( !this.is_allowed_type(item_data[i],item_info) ){
+            ret = false;
+          }
+        }
+        return ret;
+      }
+      // パスワード
+      if( item_info.item_type == "password" ){
+        return this.is_password_type(item_data,item_info);
+      }
+      // メールアドレス
+      if( item_info.item_type == "email" ){
+        return this.is_email_type(item_data,item_info);
+      }
+      if( typeof item_data === "string" ){
+        if( item_data === "" ){
+          return null;
+        }
+      } else {
+        if( item_data === null ){
+          return null;
+        }
+      }
+      return true;
     },
     get_ret_data: function(){
       //console.log("ItemInputter:get_ret_data="+JSON.stringify(this.bind_data.item_info,null,2));
@@ -559,27 +624,22 @@ export default {
       if( item_data === "" || item_data === null ){
         return null;
       }
-      if( item_info.item_allowed_type !== undefined ){
-        if( item_info.item_allowed_type.toLowerCase() == "all" ){
-          return true;
-        }
-        if( item_info.item_allowed_type.toLowerCase() == "alpha" ){
-         return validator.isAlpha(item_data);
-        }
-        if( item_info.item_allowed_type.toLowerCase() == "numeric" ){
-          return validator.isNumeric(item_data);
-        }
-        if( item_info.item_allowed_type.toLowerCase() == "alphanumeric" ){
-          return validator.isAlphanumeric(item_data);
-        }
-        if( item_info.item_allowed_type.toLowerCase() == "ascii" ){
-          return validator.isAscii(item_data);
-        }
-        // if( item_info.item_allowed_type.toLowerCase() == "email" ){
-        //   return validator.isEmail(item_data);
-        // }
-        return false;
+      if( item_info.item_allowed_type.toLowerCase() == "all" ){
+        return true;
       }
+      if( item_info.item_allowed_type.toLowerCase() == "alpha" ){
+        return validator.isAlpha(item_data);
+      }
+      if( item_info.item_allowed_type.toLowerCase() == "numeric" ){
+        return validator.isNumeric(item_data);
+      }
+      if( item_info.item_allowed_type.toLowerCase() == "alphanumeric" ){
+        return validator.isAlphanumeric(item_data);
+      }
+      if( item_info.item_allowed_type.toLowerCase() == "ascii" ){
+        return validator.isAscii(item_data);
+      }
+      return false;
     },
     is_password_type( item_data, item_info ){
       if( item_data === "" || item_data === null ){
@@ -618,6 +678,23 @@ export default {
       } else {
         this.state_data.password_type = "password";
         this.state_data.password_icon = "eye";
+      }
+    },
+    is_email_type( item_data, item_info ){
+      if( item_data === "" || item_data === null ){
+        return null;
+      }
+      if( item_info.item_allow_multiple == "checked" ){
+        let matx = item_data.split(",");
+        let ret = true;
+        for( let i=0;i<matx.length;i++ ){
+          if( !validator.isEmail(matx[i].trim()) ){
+            ret = false;
+          }
+        }
+        return ret;
+      } else {
+        return validator.isEmail(item_data);
       }
     },
   }
