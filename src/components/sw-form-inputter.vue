@@ -38,7 +38,7 @@ export default {
       },
       state_data: {
         loaded: false,
-        debug: true,
+        debug: false,
       },
     }
   },
