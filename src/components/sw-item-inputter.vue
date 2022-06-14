@@ -54,13 +54,13 @@
 
     <!-- ラジオボタン -->
     <template v-if='bind_data.item_info.item_type=="radio"'>
-      <b-form-radio-group v-model="bind_data.item_data" :options="bind_data.item_info.item_options" />
+      <b-form-radio-group v-model="bind_data.item_data" :options="bind_data.item_info.item_options" :stacked="bind_data.item_info.item_stacked" />
       <div class="text-secondary mt-1 mb-0 small">{{ bind_data.item_info.item_description }}</div>
     </template>
 
     <!-- チェックボックス -->
     <template v-if='bind_data.item_info.item_type=="checkbox"'>
-      <b-form-checkbox-group v-model="bind_data.item_data" :options="bind_data.item_info.item_options" />
+      <b-form-checkbox-group v-model="bind_data.item_data" :options="bind_data.item_info.item_options" :stacked="bind_data.item_info.item_stacked" />
       <div class="text-secondary mt-1 mb-0 small">{{ bind_data.item_info.item_description }}</div>
     </template>
 
@@ -406,7 +406,7 @@ export default {
           this.bind_data.item_data = [];
         }
         if( this.bind_data.item_info.item_type == "boolean" ){
-          this.bind_data.item_data = "false";
+          this.bind_data.item_data = this.bind_data.item_info.item_unchecked_value;
         }
         if( this.bind_data.item_info.item_type == "name" || this.bind_data.item_info.item_type == "datetime" ){
           this.bind_data.item_data = ["",""];

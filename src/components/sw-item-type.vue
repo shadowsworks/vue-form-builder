@@ -97,7 +97,7 @@ export default {
   text-align: left;
   padding: 4px;
 }
-.fsize {
+/* .fsize {
   font-size: 0.7rem;
-}
+} */
 </style>

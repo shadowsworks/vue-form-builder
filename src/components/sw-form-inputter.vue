@@ -38,7 +38,7 @@ export default {
       },
       state_data: {
         loaded: false,
-        debug: false,
+        debug: true,
       },
     }
   },
@@ -116,6 +116,19 @@ export default {
         this.$nextTick(function() {
           this.state_data.loaded = true;
         })
+      }
+    },
+    // 
+    is_input_completed(){
+      if( this.bind_data.form_data.item_data.length > 0 ){
+        for( let i=0;i<this.bind_data.form_data.item_data.length;i++ ){
+          if( this.bind_data.form_data.item_data[i].item_state === false ){
+            return false;
+          } 
+        }
+        return true;
+      } else {
+        return false;
       }
     }
   }

@@ -151,6 +151,11 @@
               <b-form-input type="text" v-model="bind_data.item_key" :placeholder="lang('enter_item_key')" class="mt-0 mb-0" maxlength="32"
                 :state="state_item_key" />
             </div>
+            <!-- 並び方 -->
+            <label class="text-secondary mt-2 mb-0 small">{{ lang('inline_or_stacked') }}</label>
+            <b-form-group v-slot="{ ariaDescribedby }" class="mt-0 mb-0">
+              <b-form-radio-group v-model="bind_data.item_stacked" :options="local_data.item_stacked_options" :aria-describedby="ariaDescribedby" />
+            </b-form-group>
             <!-- 選択肢 -->
             <label class="text-secondary mt-2 mb-0 small" >{{ lang('choices') }}</label>
             <sw-column-editor item_type="radio" max_column="10" :column_data="bind_data.item_options" v-model="bind_data.item_options"></sw-column-editor>
@@ -170,6 +175,11 @@
               <b-form-input type="text" v-model="bind_data.item_key" :placeholder="lang('enter_item_key')" class="mt-0 mb-0" maxlength="32"
                 :state="state_item_key" />
             </div>
+            <!-- 並び方 -->
+            <label class="text-secondary mt-2 mb-0 small">{{ lang('inline_or_stacked') }}</label>
+            <b-form-group v-slot="{ ariaDescribedby }" class="mt-0 mb-0">
+              <b-form-radio-group v-model="bind_data.item_stacked" :options="local_data.item_stacked_options" :aria-describedby="ariaDescribedby" />
+            </b-form-group>
             <!-- 選択肢 -->
             <label class="text-secondary mt-2 mb-0 small" >{{ lang('choices') }}</label>
             <sw-column-editor max_column="10" :column_data="bind_data.item_options" v-model="bind_data.item_options"></sw-column-editor>
@@ -192,6 +202,16 @@
               <b-form-input type="text" v-model="bind_data.item_key" :placeholder="lang('enter_item_key')" class="mt-0 mb-0" maxlength="32"
                 :state="state_item_key" />
             </div>
+            <b-row>
+              <b-col cols="6">
+                <label class="text-secondary mt-2 mb-0 small" >{{ lang('checked_value') }}</label>
+                <b-form-input type="text" v-model="bind_data.item_checked_value" :state="state_item_checked_value" :placeholder="lang('checked_value')" class="mt-0 mb-0" maxlength="100" />
+              </b-col>
+              <b-col cols="6">
+                <label class="text-secondary mt-2 mb-0 small" >{{ lang('unchecked_value') }}</label>
+                <b-form-input type="text" v-model="bind_data.item_unchecked_value" :state="state_item_unchecked_value" :placeholder="lang('unchecked_value')" class="mt-0 mb-0" maxlength="100" />
+              </b-col>
+            </b-row>
           </template>
 
           <!-- 氏名 -->
@@ -556,6 +576,10 @@ export default {
           { text: lang[locale].ascii, value: 'Ascii' },
           //{ text: lang[locale].email, value: 'Email' },
         ],
+        item_stacked_options: [
+          { text: lang[locale].inline, value: false },
+          { text: lang[locale].stacked, value: true },
+        ],
         item_options: [
           { 
             item_type: 'text', 
@@ -617,6 +641,7 @@ export default {
             item_must: false,
             item_must_badge: "unchecked",
             item_options: [],
+            item_stacked: false,
             item_uuid: "",
             item_seq: 0,
           },{ 
@@ -630,6 +655,7 @@ export default {
             item_must: false, 
             item_must_badge: false,
             item_options: [],
+            item_stacked: false,
             item_uuid: "",
             item_seq: 0,
           },{ 
@@ -914,6 +940,22 @@ export default {
         }
       }
       return null;
+    },
+    state_item_checked_value(){
+      if( this.bind_data.item_checked_value !== undefined ){
+        if( this.bind_data.item_checked_value !== "" ){
+          return true;
+        }
+      }
+      return false;
+    },
+    state_item_unchecked_value(){
+      if( this.bind_data.item_unchecked_value !== undefined ){
+        if( this.bind_data.item_unchecked_value !== "" ){
+          return true;
+        }
+      }
+      return false;
     }
   },
   // 監視
