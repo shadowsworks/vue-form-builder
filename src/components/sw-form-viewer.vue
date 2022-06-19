@@ -66,7 +66,7 @@ export default {
       },
       state_data: {
         loaded: false,
-        debug: false,
+        debug: true,
       },
     }
   },

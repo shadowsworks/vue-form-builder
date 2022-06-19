@@ -20,7 +20,8 @@
         <div class="text-secondary mx-1 mt-0 mb-2 small border-bottom" >{{ lang('item_setting') }}</div>
         <draggable v-model="bind_data.form_info.item_info" group="myGroup2">
           <div class="item m-1" v-for="(item_info,index) in bind_data.form_info.item_info" :key="item_info.item_uuid">
-            <sw-item-editor :item_info="item_info" :item_key_option="bind_data.item_key_option" v-model="bind_data.form_info.item_info[index]" @copy_item_method="copy_item_method" @delete_item_method="delete_item_method" />
+            <sw-item-editor :item_info="item_info" :item_key_option="bind_data.item_key_option" :item_condition_option="bind_data.item_condition_option" 
+              v-model="bind_data.form_info.item_info[index]" @copy_item_method="copy_item_method" @delete_item_method="delete_item_method" />
           </div>
         </draggable>
       </b-col>
@@ -66,6 +67,10 @@ export default {
       type:  String,
       default: "false"
     },
+    item_condition_option: {
+      type:  String,
+      default: "false"
+    },
   },
   // ローカルデータ変数
   data () {
@@ -82,6 +87,7 @@ export default {
           item_info: [],
         },
         item_key_option: "false",
+        item_condition_option: "false",
       },
       state_data: {
         loaded: false
@@ -123,6 +129,9 @@ export default {
     item_key_option(){
       this.bind_data.item_key_option = this.item_key_option;
     },
+    item_condition_option(){
+      this.bind_data.item_condition_option = this.item_condition_option;
+    },
     bind_data: {
       handler: function(){
         this.reset_seq();
@@ -149,6 +158,7 @@ export default {
   // インスタンスマウント後
   mounted(){
     this.bind_data.item_key_option = this.item_key_option;
+    this.bind_data.item_condition_option = this.item_condition_option;
     if( this.form_info !== undefined ){
       if( this.form_info !== null ){
         this.bind_data.form_info = this.form_info;

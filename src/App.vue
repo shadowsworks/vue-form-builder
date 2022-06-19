@@ -16,7 +16,7 @@
             <b-icon class="mt-2" icon="arrow-right" />
           </b-col>
           <b-col cols="3">
-            <b-button block :variant="state_viewer" @click='button_click("sw-form-viewer")' :disabled='state_data.disabled_viewer'>sw-form-viewer</b-button>
+            <b-button block :variant="state_viewer" @click='button_click("sw-form-viewer")'>sw-form-viewer</b-button>
           </b-col>
         </b-row>
       </div>
@@ -27,11 +27,12 @@
           :type_info="bind_data.sw_form_editor.type_info" 
           type_option="tile"
           :item_key_option="bind_data.sw_form_editor.item_key_option" 
+          :item_condition_option="bind_data.sw_form_editor.item_condition_option" 
           v-model="bind_data.sw_form_editor.form_info" />
       </div>
 
       <div v-if='selected==="sw-form-inputter"'>
-        <sw-form-inputter ref="inputter"
+        <sw-form-inputter 
           :form_info="bind_data.sw_form_inputter.form_info" 
           v-model="bind_data.sw_form_inputter.form_data" />
       </div>
@@ -65,6 +66,7 @@
             init_info: null,
             type_info: "ALL",
             item_key_option: "true",
+            item_condition_option: "true",
             form_info: null,
           },
           sw_form_inputter: {
@@ -76,7 +78,6 @@
           },
         },
         state_data: {
-          disabled_viewer: true,
         }
       }
     },
@@ -85,14 +86,14 @@
       'bind_data.sw_form_editor': {
         handler: function(){
           this.bind_data.sw_form_inputter.form_info = this.bind_data.sw_form_editor.form_info;
-          this.disabled_viewer();
+          //this.disabled_viewer();
         },
         deep: true,
       },
       'bind_data.sw_form_inputter': {
         handler: function(){
           this.bind_data.sw_form_viewer.form_data = this.bind_data.sw_form_inputter.form_data;
-          this.disabled_viewer();
+          //this.disabled_viewer();
         },
         deep: true,
       }
@@ -125,13 +126,6 @@
       button_click(data){
         this.selected = data;
       },
-      disabled_viewer(){
-        if( this.$refs.inputter.is_input_completed() ){
-          this.state_data.disabled_viewer = false;
-        } else {
-          this.state_data.disabled_viewer = true;
-        }
-      }
     }
   }
 </script>

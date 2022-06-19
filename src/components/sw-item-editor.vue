@@ -14,28 +14,64 @@
           <span v-show="!local_data.collapse_visible"> : {{ get_item_name(bind_data.item_name) }}</span>
         </div>
       </b-card-header>
+
       <!-- ボディ -->
       <b-collapse :id="local_data.collapse_id" visible v-model="local_data.collapse_visible" >
         <b-card-body class="py-0 pb-3">
 
-          <!-- 短文テキスト -->
-          <template v-if='bind_data.item_type=="text"'>
-            <!-- 項目名 -->
+          <!-- 項目名 -->
+          <template v-if='bind_data.item_type=="name"'>
+            <b-row>
+              <b-col v-for="n in 2" :key="n" cols="6">
+                <label class="text-secondary mt-2 mb-0 small" >{{ lang('item_name') }}{{n}}</label>
+                <b-form-input type="text" v-model="bind_data.item_name[n-1]" :state="state_item(bind_data.item_name[n-1],true)" :placeholder="lang('enter_item_name')" class="mt-0 mb-0" maxlength="100" />
+              </b-col>
+            </b-row>
+          </template>
+          <template v-else>         
             <label class="text-secondary mt-2 mb-0 small" >{{ lang('item_name') }}</label>
             <b-form-input type="text" v-model="bind_data.item_name" :state="state_item_name" :placeholder="lang('enter_item_name')" class="mt-0 mb-0" maxlength="100" ></b-form-input>
-            <!-- 説明 -->
-            <label class="text-secondary mt-2 mb-0 small" >{{ lang('placeholder') }}</label>
-            <b-form-input type="text" v-model="bind_data.item_placeholder" :placeholder="lang('enter_placeholder')" class="mt-0 mb-0" maxlength="100" ></b-form-input>
-            <!-- 補足説明 -->
-            <label class="text-secondary mt-2 mb-0 small" >{{ lang('description') }}</label>
-            <b-form-input type="text" v-model="bind_data.item_description" :placeholder="lang('enter_description')" class="mt-0 mb-0" maxlength="100" ></b-form-input>
-            <!-- 項目キー -->
-            <div v-if="local_data.item_key_option">
-              <label class="text-secondary mt-2 mb-0 small" >{{ lang('item_key') }}</label>
-              <b-form-input type="text" v-model="bind_data.item_key" :placeholder="lang('enter_item_key')" class="mt-0 mb-0" maxlength="32"
-                :state="state_item_key" />
-            </div>
-            <!-- 必須選択 -->
+          </template>
+
+          <!-- 説明 -->
+          <template v-if='bind_data.item_type=="datetime" || bind_data.item_type=="name"'>
+            <b-row>
+              <b-col v-for="n in 2" :key="n" cols="6">
+                <label class="text-secondary mt-2 mb-0 small" >{{ lang('placeholder') }}{{n}}</label>
+                <b-form-input type="text" v-model="bind_data.item_placeholder[n-1]" :placeholder="lang('enter_placeholder')" class="mt-0 mb-0" maxlength="100" />
+              </b-col>
+            </b-row>
+          </template>
+          <template v-else>
+            <template v-if='bind_data.item_type!=="telephone"'>
+              <label class="text-secondary mt-2 mb-0 small" >{{ lang('placeholder') }}</label>
+              <b-form-input type="text" v-model="bind_data.item_placeholder" :placeholder="lang('enter_placeholder')" class="mt-0 mb-0" maxlength="100" ></b-form-input>
+            </template>
+          </template>
+          
+          <!-- 補足説明 -->
+          <label class="text-secondary mt-2 mb-0 small" >{{ lang('description') }}</label>
+          <b-form-input type="text" v-model="bind_data.item_description" :placeholder="lang('enter_description')" class="mt-0 mb-0" maxlength="100" ></b-form-input>
+          
+          <!-- 項目キー -->
+          <div v-show="local_data.item_key_display">
+            <label class="text-secondary mt-2 mb-0 small" >{{ lang('item_key') }}</label>
+            <b-form-input type="text" v-model="bind_data.item_key" :placeholder="lang('enter_item_key')" class="mt-0 mb-0" maxlength="32" :state="state_item_key" />
+          </div>
+          
+          <!-- 条件付き表示 -->
+          <div v-show="bind_data.item_condition_use">
+            <label class="text-secondary mt-2 mb-0 small" >{{ lang('item_condition') }}</label>
+            <b-form inline>
+              <b-form-input type="text" v-model="bind_data.item_condition_key" :state="state_item_condition_key" :placeholder="lang('this_item_key')" class="mt-0 w-50 mr-2" />
+              <span>が</span>
+              <b-form-input type="text" v-model="bind_data.item_condition_value" :state="state_item_condition_value" :placeholder="lang('this_item_value')" class="mt-1 w-50 mr-2" />
+              <span>の時に表示</span>
+            </b-form>
+          </div>
+
+          <!-- 必須選択 ラジオボタン チェックボックス スイッチ 表-->
+          <template v-if='bind_data.item_type!=="radio" && bind_data.item_type!=="checkbox" && bind_data.item_type!=="boolean" && bind_data.item_type!=="table"'>
             <label class="text-secondary mt-2 mb-0 small">{{ lang('required') }}</label>
             <div v-if="bind_data.item_must" class="float-right mt-1">
               <br><b-form-checkbox v-model="bind_data.item_must_badge" value="checked" unchecked-value="unchecked">{{ lang('badge') }}</b-form-checkbox>
@@ -43,6 +79,9 @@
             <b-form-group v-slot="{ ariaDescribedby }" class="mt-0 mb-0">
               <b-form-radio-group v-model="bind_data.item_must" :options="local_data.item_must_options" :aria-describedby="ariaDescribedby" />
             </b-form-group>
+          </template>
+          <!-- 短文テキスト -->
+          <template v-if='bind_data.item_type=="text"'>
             <!-- 最大文字数 -->
             <label class="text-secondary mt-2 mb-0 small" >{{ lang('max_characters') }}</label>
             <b-form-input type="number" v-model="bind_data.item_length" :placeholder="lang('enter_max_number_characters')" class="mt-0" 
@@ -56,29 +95,6 @@
 
           <!-- 長文テキスト -->
           <template v-if='bind_data.item_type=="texts"'>
-            <!-- 項目名 -->
-            <label class="text-secondary mt-2 mb-0 small" >{{ lang('item_name') }}</label>
-            <b-form-input type="text" v-model="bind_data.item_name" :state="state_item_name" :placeholder="lang('enter_item_name')" class="mt-0 mb-0" maxlength="100" ></b-form-input>
-            <!-- 説明 -->
-            <label class="text-secondary mt-2 mb-0 small" >{{ lang('placeholder') }}</label>
-            <b-form-input type="text" v-model="bind_data.item_placeholder" :placeholder="lang('enter_placeholder')" class="mt-0 mb-0" maxlength="100" ></b-form-input>
-            <!-- 補足説明 -->
-            <label class="text-secondary mt-2 mb-0 small" >{{ lang('description') }}</label>
-            <b-form-input type="text" v-model="bind_data.item_description" :placeholder="lang('enter_description')" class="mt-0 mb-0" maxlength="100" ></b-form-input>
-            <!-- 項目キー -->
-            <div v-if="local_data.item_key_option">
-              <label class="text-secondary mt-2 mb-0 small" >{{ lang('item_key') }}</label>
-              <b-form-input type="text" v-model="bind_data.item_key" :placeholder="lang('enter_item_key')" class="mt-0 mb-0" maxlength="32"
-                :state="state_item_key" />
-            </div>
-            <!-- 必須選択 -->
-            <label class="text-secondary mt-2 mb-0 small">{{ lang('required') }}</label>
-            <div v-if="bind_data.item_must" class="float-right mt-1">
-              <br><b-form-checkbox v-model="bind_data.item_must_badge" value="checked" unchecked-value="unchecked">{{ lang('badge') }}</b-form-checkbox>
-            </div>
-            <b-form-group v-slot="{ ariaDescribedby }" class="mt-0 mb-0">
-              <b-form-radio-group v-model="bind_data.item_must" :options="local_data.item_must_options" :aria-describedby="ariaDescribedby" />
-            </b-form-group>
             <!-- 最大文字数 -->
             <label class="text-secondary mt-2 mb-0 small" >{{ lang('max_characters') }}</label>
             <b-form-input type="number" v-model="bind_data.item_length" :placeholder="lang('enter_max_number_characters')" class="mt-0" 
@@ -95,29 +111,6 @@
          
           <!-- 数値 -->
           <template v-if='bind_data.item_type=="number"'>
-            <!-- 項目名 -->
-            <label class="text-secondary mt-2 mb-0 small" >{{ lang('item_name') }}</label>
-            <b-form-input type="text" v-model="bind_data.item_name" :state="state_item_name" :placeholder="lang('enter_item_name')" class="mt-0 mb-0" maxlength="100" ></b-form-input>
-            <!-- 説明 -->
-            <label class="text-secondary mt-2 mb-0 small" >{{ lang('placeholder') }}</label>
-            <b-form-input type="text" v-model="bind_data.item_placeholder" :placeholder="lang('enter_placeholder')" class="mt-0 mb-0" maxlength="100" ></b-form-input>
-            <!-- 補足説明 -->
-            <label class="text-secondary mt-2 mb-0 small" >{{ lang('description') }}</label>
-            <b-form-input type="text" v-model="bind_data.item_description" :placeholder="lang('enter_description')" class="mt-0 mb-0" maxlength="100" ></b-form-input>
-            <!-- 項目キー -->
-            <div v-if="local_data.item_key_option">
-              <label class="text-secondary mt-2 mb-0 small" >{{ lang('item_key') }}</label>
-              <b-form-input type="text" v-model="bind_data.item_key" :placeholder="lang('enter_item_key')" class="mt-0 mb-0" maxlength="32"
-                :state="state_item_key" />
-            </div>
-            <!-- 必須選択 -->
-            <label class="text-secondary mt-2 mb-0 small">{{ lang('required') }}</label>
-            <div v-if="bind_data.item_must" class="float-right mt-1">
-              <br><b-form-checkbox v-model="bind_data.item_must_badge" value="checked" unchecked-value="unchecked">{{ lang('badge') }}</b-form-checkbox>
-            </div>
-            <b-form-group v-slot="{ ariaDescribedby }" class="mt-0 mb-0">
-              <b-form-radio-group v-model="bind_data.item_must" :options="local_data.item_must_options" :aria-describedby="ariaDescribedby" />
-            </b-form-group>
             <!-- 最小値 最大値 単位 -->
             <b-row >
               <b-col>
@@ -139,18 +132,6 @@
 
           <!-- ラジオボタン -->
           <template v-if='bind_data.item_type=="radio"'>
-            <!-- 項目名 -->
-            <label class="text-secondary mt-2 mb-0 small" >{{ lang('item_name') }}</label>
-            <b-form-input type="text" v-model="bind_data.item_name" :state="state_item_name" :placeholder="lang('enter_item_name')" class="mt-0 mb-0" maxlength="100" ></b-form-input>
-            <!-- 説明 -->
-            <label class="text-secondary mt-2 mb-0 small" >{{ lang('description') }}</label>
-            <b-form-input type="text" v-model="bind_data.item_description" :placeholder="lang('enter_description')" class="mt-0 mb-0" maxlength="100" ></b-form-input>
-            <!-- 項目キー -->
-            <div v-if="local_data.item_key_option">
-              <label class="text-secondary mt-2 mb-0 small" >{{ lang('item_key') }}</label>
-              <b-form-input type="text" v-model="bind_data.item_key" :placeholder="lang('enter_item_key')" class="mt-0 mb-0" maxlength="32"
-                :state="state_item_key" />
-            </div>
             <!-- 並び方 -->
             <label class="text-secondary mt-2 mb-0 small">{{ lang('inline_or_stacked') }}</label>
             <b-form-group v-slot="{ ariaDescribedby }" class="mt-0 mb-0">
@@ -163,18 +144,6 @@
 
           <!-- チェックボックス -->
           <template v-if='bind_data.item_type=="checkbox"'>
-            <!-- 項目名 -->
-            <label class="text-secondary mt-2 mb-0 small" >{{ lang('item_name') }}</label>
-            <b-form-input type="text" v-model="bind_data.item_name" :state="state_item_name" :placeholder="lang('enter_item_name')" class="mt-0 mb-0" maxlength="100" ></b-form-input>
-            <!-- 説明 -->
-            <label class="text-secondary mt-2 mb-0 small" >{{ lang('description') }}</label>
-            <b-form-input type="text" v-model="bind_data.item_description" :placeholder="lang('enter_description')" class="mt-0 mb-0" maxlength="100" ></b-form-input>
-            <!-- 項目キー -->
-            <div v-if="local_data.item_key_option">
-              <label class="text-secondary mt-2 mb-0 small" >{{ lang('item_key') }}</label>
-              <b-form-input type="text" v-model="bind_data.item_key" :placeholder="lang('enter_item_key')" class="mt-0 mb-0" maxlength="32"
-                :state="state_item_key" />
-            </div>
             <!-- 並び方 -->
             <label class="text-secondary mt-2 mb-0 small">{{ lang('inline_or_stacked') }}</label>
             <b-form-group v-slot="{ ariaDescribedby }" class="mt-0 mb-0">
@@ -187,21 +156,7 @@
 
           <!-- スイッチ -->
           <template v-if='bind_data.item_type=="boolean"'>
-            <!-- 項目名 -->
-            <label class="text-secondary mt-2 mb-0 small" >{{ lang('item_name') }}</label>
-            <b-form-input type="text" v-model="bind_data.item_name" :state="state_item_name" :placeholder="lang('enter_item_name')" class="mt-0 mb-0" maxlength="100" ></b-form-input>
-            <!-- 説明 -->
-            <label class="text-secondary mt-2 mb-0 small" >{{ lang('placeholder') }}</label>
-            <b-form-input type="text" v-model="bind_data.item_placeholder" :placeholder="lang('enter_placeholder')" class="mt-0 mb-0" maxlength="100" ></b-form-input>
-            <!-- 補足説明 -->
-            <label class="text-secondary mt-2 mb-0 small" >{{ lang('description') }}</label>
-            <b-form-input type="text" v-model="bind_data.item_description" :placeholder="lang('enter_description')" class="mt-0 mb-0" maxlength="100" ></b-form-input>
-            <!-- 項目キー -->
-            <div v-if="local_data.item_key_option">
-              <label class="text-secondary mt-2 mb-0 small" >{{ lang('item_key') }}</label>
-              <b-form-input type="text" v-model="bind_data.item_key" :placeholder="lang('enter_item_key')" class="mt-0 mb-0" maxlength="32"
-                :state="state_item_key" />
-            </div>
+            <!-- 値 -->
             <b-row>
               <b-col cols="6">
                 <label class="text-secondary mt-2 mb-0 small" >{{ lang('checked_value') }}</label>
@@ -216,37 +171,6 @@
 
           <!-- 氏名 -->
           <template v-if='bind_data.item_type=="name"'>
-            <!-- 項目名 -->
-            <b-row>
-              <b-col v-for="n in 2" :key="n" cols="6">
-                <label class="text-secondary mt-2 mb-0 small" >{{ lang('item_name') }}{{n}}</label>
-                <b-form-input type="text" v-model="bind_data.item_name[n-1]" :state="state_item(bind_data.item_name[n-1],true)" :placeholder="lang('enter_item_name')" class="mt-0 mb-0" maxlength="100" />
-              </b-col>
-            </b-row>
-            <!-- 説明 -->
-            <b-row>
-              <b-col v-for="n in 2" :key="n" cols="6">
-                <label class="text-secondary mt-2 mb-0 small" >{{ lang('placeholder') }}{{n}}</label>
-                <b-form-input type="text" v-model="bind_data.item_placeholder[n-1]" :placeholder="lang('enter_placeholder')" class="mt-0 mb-0" maxlength="100" />
-              </b-col>
-            </b-row>
-            <!-- 補足説明 -->
-            <label class="text-secondary mt-2 mb-0 small" >{{ lang('description') }}</label>
-            <b-form-input type="text" v-model="bind_data.item_description" :placeholder="lang('enter_description')" class="mt-0 mb-0" maxlength="100" ></b-form-input>
-            <!-- 項目キー -->
-            <div v-if="local_data.item_key_option">
-              <label class="text-secondary mt-2 mb-0 small" >{{ lang('item_key') }}</label>
-              <b-form-input type="text" v-model="bind_data.item_key" :placeholder="lang('enter_item_key')" class="mt-0 mb-0" maxlength="32"
-                :state="state_item_key" />
-            </div>
-            <!-- 必須選択 -->
-            <label class="text-secondary mt-2 mb-0 small">{{ lang('required') }}</label>
-            <div v-if="bind_data.item_must" class="float-right mt-1">
-              <br><b-form-checkbox v-model="bind_data.item_must_badge" value="checked" unchecked-value="unchecked">{{ lang('badge') }}</b-form-checkbox>
-            </div>
-            <b-form-group v-slot="{ ariaDescribedby }" class="mt-0 mb-0">
-              <b-form-radio-group v-model="bind_data.item_must" :options="local_data.item_must_options" :aria-describedby="ariaDescribedby" />
-            </b-form-group>
             <!-- 最大文字数 -->
             <label class="text-secondary mt-2 mb-0 small" >{{ lang('max_characters') }}</label>
             <b-form-input type="number" v-model="bind_data.item_length" :placeholder="lang('enter_max_number_characters')" class="mt-0" 
@@ -257,99 +181,22 @@
           
           <!-- 電話番号 -->
           <template v-if='bind_data.item_type=="telephone"'>
-            <!-- 項目名 -->
-            <label class="text-secondary mt-2 mb-0 small" >{{ lang('item_name') }}</label>
-            <b-form-input type="text" v-model="bind_data.item_name" :state="state_item_name" :placeholder="lang('enter_item_name')" class="mt-0 mb-0" maxlength="100" />
-            <!-- 補足説明 -->
-            <label class="text-secondary mt-2 mb-0 small" >{{ lang('description') }}</label>
-            <b-form-input type="text" v-model="bind_data.item_description" :placeholder="lang('enter_description')" class="mt-0 mb-0" maxlength="100" ></b-form-input>
-            <!-- 項目キー -->
-            <div v-if="local_data.item_key_option">
-              <label class="text-secondary mt-2 mb-0 small" >{{ lang('item_key') }}</label>
-              <b-form-input type="text" v-model="bind_data.item_key" :placeholder="lang('enter_item_key')" class="mt-0 mb-0" maxlength="32"
-                :state="state_item_key" />
-            </div>
-            <!-- 必須選択 -->
-            <label class="text-secondary mt-2 mb-0 small">{{ lang('required') }}</label>
-            <div v-if="bind_data.item_must" class="float-right mt-1">
-              <br><b-form-checkbox v-model="bind_data.item_must_badge" value="checked" unchecked-value="unchecked">{{ lang('badge') }}</b-form-checkbox>
-            </div>
-            <b-form-group v-slot="{ ariaDescribedby }" class="mt-0 mb-0">
-              <b-form-radio-group v-model="bind_data.item_must" :options="local_data.item_must_options" :aria-describedby="ariaDescribedby" />
-            </b-form-group>
           </template>
 
-          <!-- 日付/時刻-->
-          <template v-if='bind_data.item_type=="date" || bind_data.item_type=="time"'>
-            <!-- 項目名 -->
-            <label class="text-secondary mt-2 mb-0 small" >{{ lang('item_name') }}</label>
-            <b-form-input type="text" v-model="bind_data.item_name" :state="state_item_name" :placeholder="lang('enter_item_name')" class="mt-0 mb-0" maxlength="100" />
-            <!-- 説明 -->
-            <label class="text-secondary mt-2 mb-0 small" >{{ lang('placeholder') }}</label>
-            <b-form-input type="text" v-model="bind_data.item_placeholder" :placeholder="lang('enter_placeholder')" class="mt-0 mb-0" maxlength="100" ></b-form-input>
-            <!-- 補足説明 -->
-            <label class="text-secondary mt-2 mb-0 small" >{{ lang('description') }}</label>
-            <b-form-input type="text" v-model="bind_data.item_description" :placeholder="lang('enter_description')" class="mt-0 mb-0" maxlength="100" ></b-form-input>
-            <!-- 項目キー -->
-            <div v-if="local_data.item_key_option">
-              <label class="text-secondary mt-2 mb-0 small" >{{ lang('item_key') }}</label>
-              <b-form-input type="text" v-model="bind_data.item_key" :placeholder="lang('enter_item_key')" class="mt-0 mb-0" maxlength="32"
-                :state="state_item_key" />
-            </div>
-            <!-- 必須選択 -->
-            <label class="text-secondary mt-2 mb-0 small">{{ lang('required') }}</label>
-            <div v-if="bind_data.item_must" class="float-right mt-1">
-              <br><b-form-checkbox v-model="bind_data.item_must_badge" value="checked" unchecked-value="unchecked">{{ lang('badge') }}</b-form-checkbox>
-            </div>
-            <b-form-group v-slot="{ ariaDescribedby }" class="mt-0 mb-0">
-              <b-form-radio-group v-model="bind_data.item_must" :options="local_data.item_must_options" :aria-describedby="ariaDescribedby" />
-            </b-form-group>
+          <!-- 日付-->
+          <template v-if='bind_data.item_type=="date"'>
+          </template>
+
+          <!-- 時刻-->
+          <template v-if='bind_data.item_type=="time"'>
           </template>
 
           <!-- 日時-->
           <template v-if='bind_data.item_type=="datetime"'>
-            <!-- 項目名 -->
-            <label class="text-secondary mt-2 mb-0 small" >{{ lang('item_name') }}</label>
-            <b-form-input type="text" v-model="bind_data.item_name" :state="state_item_name" :placeholder="lang('enter_item_name')" class="mt-0 mb-0" maxlength="100" />
-            <b-row>
-              <b-col v-for="n in 2" :key="n" cols="6">
-                <label class="text-secondary mt-2 mb-0 small" >{{ lang('placeholder') }}{{n}}</label>
-                <b-form-input type="text" v-model="bind_data.item_placeholder[n-1]" :placeholder="lang('enter_placeholder')" class="mt-0 mb-0" maxlength="100" />
-              </b-col>
-            </b-row>
-            <!-- 補足説明 -->
-            <label class="text-secondary mt-2 mb-0 small" >{{ lang('description') }}</label>
-            <b-form-input type="text" v-model="bind_data.item_description" :placeholder="lang('enter_description')" class="mt-0 mb-0" maxlength="100" ></b-form-input>
-            <!-- 項目キー -->
-            <div v-if="local_data.item_key_option">
-              <label class="text-secondary mt-2 mb-0 small" >{{ lang('item_key') }}</label>
-              <b-form-input type="text" v-model="bind_data.item_key" :placeholder="lang('enter_item_key')" class="mt-0 mb-0" maxlength="32"
-                :state="state_item_key" />
-            </div>
-            <!-- 必須選択 -->
-            <label class="text-secondary mt-2 mb-0 small">{{ lang('required') }}</label>
-            <div v-if="bind_data.item_must" class="float-right mt-1">
-              <br><b-form-checkbox v-model="bind_data.item_must_badge" value="checked" unchecked-value="unchecked">{{ lang('badge') }}</b-form-checkbox>
-            </div>
-            <b-form-group v-slot="{ ariaDescribedby }" class="mt-0 mb-0">
-              <b-form-radio-group v-model="bind_data.item_must" :options="local_data.item_must_options" :aria-describedby="ariaDescribedby" />
-            </b-form-group>
           </template>
 
           <!-- 表-->
           <template v-if='bind_data.item_type=="table"'>
-            <!-- 項目名 -->
-            <label class="text-secondary mt-2 mb-0 small" >{{ lang('item_name') }}</label>
-            <b-form-input type="text" v-model="bind_data.item_name" :state="state_item_name" :placeholder="lang('enter_item_name')" class="mt-0 mb-0" maxlength="100" />
-            <!-- 補足説明 -->
-            <label class="text-secondary mt-2 mb-0 small" >{{ lang('description') }}</label>
-            <b-form-input type="text" v-model="bind_data.item_description" :placeholder="lang('enter_description')" class="mt-0 mb-0" maxlength="100" ></b-form-input>
-            <!-- 項目キー -->
-            <div v-if="local_data.item_key_option">
-              <label class="text-secondary mt-2 mb-0 small" >{{ lang('item_key') }}</label>
-              <b-form-input type="text" v-model="bind_data.item_key" :placeholder="lang('enter_item_key')" class="mt-0 mb-0" maxlength="32"
-                :state="state_item_key" />
-            </div>
             <!-- 選択肢 -->
             <label class="text-secondary mt-2 mb-0 small" >{{ lang('row') }}</label>
             <sw-column-editor max_column="5" :column_data="bind_data.table_rows" v-model="bind_data.table_rows"></sw-column-editor>
@@ -360,29 +207,6 @@
 
           <!-- マークダウンテキスト -->
           <template v-if='bind_data.item_type=="markdown"'>
-            <!-- 項目名 -->
-            <label class="text-secondary mt-2 mb-0 small" >{{ lang('item_name') }}</label>
-            <b-form-input type="text" v-model="bind_data.item_name" :state="state_item_name" :placeholder="lang('enter_item_name')" class="mt-0 mb-0" maxlength="100" ></b-form-input>
-            <!-- 説明 -->
-            <label class="text-secondary mt-2 mb-0 small" >{{ lang('placeholder') }}</label>
-            <b-form-input type="text" v-model="bind_data.item_placeholder" :placeholder="lang('enter_placeholder')" class="mt-0 mb-0" maxlength="100" ></b-form-input>
-            <!-- 補足説明 -->
-            <label class="text-secondary mt-2 mb-0 small" >{{ lang('description') }}</label>
-            <b-form-input type="text" v-model="bind_data.item_description" :placeholder="lang('enter_description')" class="mt-0 mb-0" maxlength="100" ></b-form-input>
-            <!-- 項目キー -->
-            <div v-if="local_data.item_key_option">
-              <label class="text-secondary mt-2 mb-0 small" >{{ lang('item_key') }}</label>
-              <b-form-input type="text" v-model="bind_data.item_key" :placeholder="lang('enter_item_key')" class="mt-0 mb-0" maxlength="32"
-                :state="state_item_key" />
-            </div>
-            <!-- 必須選択 -->
-            <label class="text-secondary mt-2 mb-0 small">{{ lang('required') }}</label>
-            <div v-if="bind_data.item_must" class="float-right mt-1">
-              <br><b-form-checkbox v-model="bind_data.item_must_badge" value="checked" unchecked-value="unchecked">{{ lang('badge') }}</b-form-checkbox>
-            </div>
-            <b-form-group v-slot="{ ariaDescribedby }" class="mt-0 mb-0">
-              <b-form-radio-group v-model="bind_data.item_must" :options="local_data.item_must_options" :aria-describedby="ariaDescribedby" />
-            </b-form-group>
             <!-- 最大文字数 -->
             <label class="text-secondary mt-2 mb-0 small" >{{ lang('max_characters') }}</label>
             <b-form-input type="number" v-model="bind_data.item_length" :placeholder="lang('enter_max_number_characters')" class="mt-0" 
@@ -399,29 +223,6 @@
 
           <!-- 写真 -->
           <template v-if='bind_data.item_type=="image"'>
-            <!-- 項目名 -->
-            <label class="text-secondary mt-2 mb-0 small" >{{ lang('item_name') }}</label>
-            <b-form-input type="text" v-model="bind_data.item_name" :state="state_item_name" :placeholder="lang('enter_item_name')" class="mt-0 mb-0" maxlength="100" ></b-form-input>
-            <!-- 説明 -->
-            <label class="text-secondary mt-2 mb-0 small" >{{ lang('placeholder') }}</label>
-            <b-form-input type="text" v-model="bind_data.item_placeholder" :placeholder="lang('enter_placeholder')" class="mt-0 mb-0" maxlength="100" ></b-form-input>
-            <!-- 補足説明 -->
-            <label class="text-secondary mt-2 mb-0 small" >{{ lang('description') }}</label>
-            <b-form-input type="text" v-model="bind_data.item_description" :placeholder="lang('enter_description')" class="mt-0 mb-0" maxlength="100" ></b-form-input>
-            <!-- 項目キー -->
-            <div v-if="local_data.item_key_option">
-              <label class="text-secondary mt-2 mb-0 small" >{{ lang('item_key') }}</label>
-              <b-form-input type="text" v-model="bind_data.item_key" :placeholder="lang('enter_item_key')" class="mt-0 mb-0" maxlength="32"
-                :state="state_item_key" />
-            </div>
-            <!-- 必須選択 -->
-            <label class="text-secondary mt-2 mb-0 small">{{ lang('required') }}</label>
-            <div v-if="bind_data.item_must" class="float-right mt-1">
-              <br><b-form-checkbox v-model="bind_data.item_must_badge" value="checked" unchecked-value="unchecked">{{ lang('badge') }}</b-form-checkbox>
-            </div>
-            <b-form-group v-slot="{ ariaDescribedby }" class="mt-0 mb-0">
-              <b-form-radio-group v-model="bind_data.item_must" :options="local_data.item_must_options" :aria-describedby="ariaDescribedby" />
-            </b-form-group>
             <!-- 最大幅 -->
             <label class="text-secondary mt-2 mb-0 small" >{{ lang('max_width') }} {{bind_data.item_width_min}} - {{bind_data.item_width_max}} pixel</label>
             <b-form-input type="number" v-model="bind_data.item_width" :placeholder="lang('enter_max_width')" class="mt-0" 
@@ -434,29 +235,6 @@
 
           <!-- パスワード -->
           <template v-if='bind_data.item_type=="password"'>
-            <!-- 項目名 -->
-            <label class="text-secondary mt-2 mb-0 small" >{{ lang('item_name') }}</label>
-            <b-form-input type="text" v-model="bind_data.item_name" :state="state_item_name" :placeholder="lang('enter_item_name')" class="mt-0 mb-0" maxlength="100" ></b-form-input>
-            <!-- 説明 -->
-            <label class="text-secondary mt-2 mb-0 small" >{{ lang('placeholder') }}</label>
-            <b-form-input type="text" v-model="bind_data.item_placeholder" :placeholder="lang('enter_placeholder')" class="mt-0 mb-0" maxlength="100" ></b-form-input>
-            <!-- 補足説明 -->
-            <label class="text-secondary mt-2 mb-0 small" >{{ lang('description') }}</label>
-            <b-form-input type="text" v-model="bind_data.item_description" :placeholder="lang('enter_description')" class="mt-0 mb-0" maxlength="100" ></b-form-input>
-            <!-- 項目キー -->
-            <div v-if="local_data.item_key_option">
-              <label class="text-secondary mt-2 mb-0 small" >{{ lang('item_key') }}</label>
-              <b-form-input type="text" v-model="bind_data.item_key" :placeholder="lang('enter_item_key')" class="mt-0 mb-0" maxlength="32"
-                :state="state_item_key" />
-            </div>
-            <!-- 必須選択 -->
-            <label class="text-secondary mt-2 mb-0 small">{{ lang('required') }}</label>
-            <div v-if="bind_data.item_must" class="float-right mt-1">
-              <br><b-form-checkbox v-model="bind_data.item_must_badge" value="checked" unchecked-value="unchecked">{{ lang('badge') }}</b-form-checkbox>
-            </div>
-            <b-form-group v-slot="{ ariaDescribedby }" class="mt-0 mb-0">
-              <b-form-radio-group v-model="bind_data.item_must" :options="local_data.item_must_options" :aria-describedby="ariaDescribedby" />
-            </b-form-group>
             <!-- 最小文字数 -->
             <label class="text-secondary mt-2 mb-0 small" >{{ lang('min_characters') }} </label>
             <b-form-input type="number" v-model="bind_data.item_length" :placeholder="lang('enter_min_number_characters')" class="mt-0" 
@@ -473,47 +251,38 @@
 
           <!-- メールアドレス -->
           <template v-if='bind_data.item_type=="email"'>
-            <!-- 項目名 -->
-            <label class="text-secondary mt-2 mb-0 small" >{{ lang('item_name') }}</label>
-            <b-form-input type="text" v-model="bind_data.item_name" :state="state_item_name" :placeholder="lang('enter_item_name')" class="mt-0 mb-0" maxlength="100" ></b-form-input>
-            <!-- 説明 -->
-            <label class="text-secondary mt-2 mb-0 small" >{{ lang('placeholder') }}</label>
-            <b-form-input type="text" v-model="bind_data.item_placeholder" :placeholder="lang('enter_placeholder')" class="mt-0 mb-0" maxlength="100" ></b-form-input>
-            <!-- 補足説明 -->
-            <label class="text-secondary mt-2 mb-0 small" >{{ lang('description') }}</label>
-            <b-form-input type="text" v-model="bind_data.item_description" :placeholder="lang('enter_description')" class="mt-0 mb-0" maxlength="100" ></b-form-input>
-            <!-- 項目キー -->
-            <div v-if="local_data.item_key_option">
-              <label class="text-secondary mt-2 mb-0 small" >{{ lang('item_key') }}</label>
-              <b-form-input type="text" v-model="bind_data.item_key" :placeholder="lang('enter_item_key')" class="mt-0 mb-0" maxlength="32"
-                :state="state_item_key" />
-            </div>
-            <!-- 必須選択 -->
-            <label class="text-secondary mt-2 mb-0 small">{{ lang('required') }}</label>
-            <div v-if="bind_data.item_must" class="float-right mt-1">
-              <br><b-form-checkbox v-model="bind_data.item_must_badge" value="checked" unchecked-value="unchecked">{{ lang('badge') }}</b-form-checkbox>
-            </div>
-            <b-form-group v-slot="{ ariaDescribedby }" class="mt-0 mb-0">
-              <b-form-radio-group v-model="bind_data.item_must" :options="local_data.item_must_options" :aria-describedby="ariaDescribedby" />
-            </b-form-group>
             <!-- 複数可 -->
             <label class="text-secondary mt-2 mb-0 small">{{ lang('allow_multiple_entries') }}</label>
             <div class="mt-1">
               <b-form-checkbox v-model="bind_data.item_allow_multiple" value="checked" unchecked-value="unchecked">{{ lang('allow_multiple') }}</b-form-checkbox>
             </div>
-            
           </template>
 
         </b-card-body>
+
+        <!-- フッター共通 -->
         <b-card-footer class="px-3 pt-1 py-1">
-          <b-button variant="light" size="sm" class="m-0 float-right" v-b-tooltip.hover title="複製する" @click="copy_item()">
+          <b-button variant="light" size="sm" class="m-0 float-right" v-b-tooltip.hover :title="lang('copy')" @click="copy_item()">
             <b-icon icon="files" aria-hidden="true"></b-icon>
           </b-button>
-          <b-button variant="light" size="sm" class="m-0 float-right" v-b-tooltip.hover title="削除する" @click="delete_item()">
+          <b-button variant="light" size="sm" class="m-0 float-right" v-b-tooltip.hover :title="lang('delete')" @click="delete_item()">
             <b-icon icon="trash" aria-hidden="true"></b-icon>
           </b-button>
-          <b-button variant="light" size="sm" class="m-0" disabled >
-            <b-icon icon="blank" aria-hidden="true"></b-icon>
+          <b-button variant="light" size="sm" class="m-0" v-b-tooltip.hover :title="lang('view_item_key')" 
+            @click="view_item_key()" v-show="local_data.item_key_option && !local_data.item_key_display">
+            <b-icon icon="tag" aria-hidden="true"></b-icon>
+          </b-button>
+          <b-button variant="light" size="sm" class="m-0" v-b-tooltip.hover :title="lang('hide_item_key')" 
+            @click="hide_item_key()" v-show="local_data.item_key_option && local_data.item_key_display">
+            <b-icon icon="tag-fill" aria-hidden="true"></b-icon>
+          </b-button>
+          <b-button variant="light" size="sm" class="m-0" v-b-tooltip.hover :title="lang('view_item_condition')" 
+            @click="view_item_condition()" v-show="local_data.item_key_option && local_data.item_condition_option && !bind_data.item_condition_use">
+            <b-icon icon="patch-exclamation" aria-hidden="true"></b-icon>
+          </b-button>
+          <b-button variant="light" size="sm" class="m-0" v-b-tooltip.hover :title="lang('hide_item_condition')" 
+            @click="hide_item_condition()" v-show="local_data.item_key_option && local_data.item_condition_option && bind_data.item_condition_use">
+            <b-icon icon="patch-exclamation-fill" aria-hidden="true"></b-icon>
           </b-button>
         </b-card-footer>
       </b-collapse>
@@ -549,6 +318,10 @@ export default {
       type:  String,
       default: "false"
     },
+    item_condition_option: {
+      type:  String,
+      default: "false"
+    },
   },
   // ローカルデータ変数
   data () {
@@ -560,6 +333,8 @@ export default {
         collapse_id: "",
         collapse_visible: true,
         item_key_option: false,
+        item_key_display: false,
+        item_condition_option: false,
         item_must_options: [
           { text: lang[locale].any, value: false },
           { text: lang[locale].mandatory, value: true },
@@ -588,7 +363,10 @@ export default {
             item_desc: lang[locale].short_text, 
             item_placeholder: "", //説明
             item_description: "", //補足説明
-            item_key: "", //キー
+            item_key: "", //項目キー
+            item_condition_use: false, //条件付き表示
+            item_condition_key: "", //条件付き表示
+            item_condition_value: "", //条件付き表示
             item_must: false, 
             item_must_badge: false,
             item_length: 20,      //文字数初期値
@@ -604,7 +382,10 @@ export default {
             item_desc: lang[locale].long_text,
             item_placeholder: "", //説明
             item_description: "", //補足説明
-            item_key: "", //キー
+            item_key: "", //項目キー
+            item_condition_use: false, //条件付き表示
+            item_condition_key: "", //条件付き表示
+            item_condition_value: "", //条件付き表示
             item_must: false,
             item_must_badge: "unchecked",
             item_length: 100,     //文字数初期値
@@ -622,7 +403,10 @@ export default {
             item_desc: lang[locale].numeric, 
             item_placeholder: "", //説明
             item_description: "", //補足説明
-            item_key: "", //キー
+            item_key: "", //項目キー
+            item_condition_use: false, //条件付き表示
+            item_condition_key: "", //条件付き表示
+            item_condition_value: "", //条件付き表示
             item_must: false, 
             item_must_badge: "unchecked",
             item_limit_min: 0,    //制限最小値
@@ -637,7 +421,10 @@ export default {
             item_desc: lang[locale].radio, 
             item_placeholder: "", //説明
             item_description: "", //補足説明
-            item_key: "", //キー
+            item_key: "", //項目キー
+            item_condition_use: false, //条件付き表示
+            item_condition_key: "", //条件付き表示
+            item_condition_value: "", //条件付き表示
             item_must: false,
             item_must_badge: "unchecked",
             item_options: [],
@@ -651,7 +438,10 @@ export default {
             item_desc: lang[locale].checkbox, 
             item_placeholder: "", //説明
             item_description: "", //補足説明
-            item_key: "", //キー
+            item_key: "", //項目キー
+            item_condition_use: false, //条件付き表示
+            item_condition_key: "", //条件付き表示
+            item_condition_value: "", //条件付き表示
             item_must: false, 
             item_must_badge: false,
             item_options: [],
@@ -665,7 +455,10 @@ export default {
             item_desc: lang[locale].switch, 
             item_placeholder: "", //説明
             item_description: "", //補足説明
-            item_key: "", //キー
+            item_key: "", //項目キー
+            item_condition_use: false, //条件付き表示
+            item_condition_key: "", //条件付き表示
+            item_condition_value: "", //条件付き表示
             item_must: false, 
             item_must_badge: "unchecked",
             item_checked_value: "true",
@@ -679,7 +472,10 @@ export default {
             item_desc: lang[locale].full_name,
             item_placeholder: ["",""], //説明
             item_description: "", //補足説明
-            item_key: "", //キー
+            item_key: "", //項目キー
+            item_condition_use: false, //条件付き表示
+            item_condition_key: "", //条件付き表示
+            item_condition_value: "", //条件付き表示
             item_must: false,
             item_must_badge: "unchecked",
             item_length: 10,     //文字数初期値
@@ -694,7 +490,10 @@ export default {
             item_desc: lang[locale].phone_number,
             item_placeholder: ["03","1234","5678"], //説明
             item_description: "", //補足説明
-            item_key: "", //キー
+            item_key: "", //項目キー
+            item_condition_use: false, //条件付き表示
+            item_condition_key: "", //条件付き表示
+            item_condition_value: "", //条件付き表示
             item_must: false,
             item_must_badge: "unchecked",
             item_length: 6,     //文字数初期値
@@ -710,7 +509,10 @@ export default {
             item_desc: lang[locale].date,
             item_placeholder: lang[locale].select_date, //説明
             item_description: "", //補足説明
-            item_key: "", //キー
+            item_key: "", //項目キー
+            item_condition_use: false, //条件付き表示
+            item_condition_key: "", //条件付き表示
+            item_condition_value: "", //条件付き表示
             item_must: false,
             item_must_badge: false,
             item_uuid: "",
@@ -722,7 +524,10 @@ export default {
             item_desc: lang[locale].time,
             item_placeholder: lang[locale].select_time, //説明
             item_description: "", //補足説明
-            item_key: "", //キー
+            item_key: "", //項目キー
+            item_condition_use: false, //条件付き表示
+            item_condition_key: "", //条件付き表示
+            item_condition_value: "", //条件付き表示
             item_must: false,
             item_must_badge: "unchecked",
             item_uuid: "",
@@ -734,7 +539,10 @@ export default {
             item_desc: lang[locale].datetime,
             item_placeholder: [lang[locale].select_date,lang[locale].select_time], //説明
             item_description: "", //補足説明item_state
-            item_key: "", //キー
+            item_key: "", //項目キー
+            item_condition_use: false, //条件付き表示
+            item_condition_key: "", //条件付き表示
+            item_condition_value: "", //条件付き表示
             item_cols: "12", //6:縦向き 12:横向き
             item_must: false,
             item_must_badge: false,
@@ -747,7 +555,10 @@ export default {
             item_desc: lang[locale].table,
             item_placeholder: "", //説明
             item_description: "", //補足説明
-            item_key: "", //キー
+            item_key: "", //項目キー
+            item_condition_use: false, //条件付き表示
+            item_condition_key: "", //条件付き表示
+            item_condition_value: "", //条件付き表示
             item_must: false,
             item_must_badge: "unchecked", 
             table_rows: [],
@@ -761,7 +572,10 @@ export default {
             item_desc: lang[locale].markdown,
             item_placeholder: "", //説明
             item_description: "", //補足説明
-            item_key: "", //キー
+            item_key: "", //項目キー
+            item_condition_use: false, //条件付き表示
+            item_condition_key: "", //条件付き表示
+            item_condition_value: "", //条件付き表示
             item_must: false,
             item_must_badge: "unchecked",
             item_length: 100,     //文字数初期値
@@ -779,7 +593,10 @@ export default {
             item_desc: lang[locale].image,
             item_placeholder: "", //説明
             item_description: "", //補足説明
-            item_key: "", //キー
+            item_key: "", //項目キー
+            item_condition_use: false, //条件付き表示
+            item_condition_key: "", //条件付き表示
+            item_condition_value: "", //条件付き表示
             item_must: false,
             item_must_badge: "unchecked",
             item_width: 800,     //幅デフォルト値
@@ -797,7 +614,10 @@ export default {
             item_desc: lang[locale].password,
             item_placeholder: "", //説明
             item_description: "", //補足説明
-            item_key: "", //キー
+            item_key: "", //項目キー
+            item_condition_use: false, //条件付き表示
+            item_condition_key: "", //条件付き表示
+            item_condition_value: "", //条件付き表示
             item_must: false,
             item_must_badge: "unchecked",
             item_length: 10,  //最小文字数
@@ -817,7 +637,10 @@ export default {
             item_desc: lang[locale].email,
             item_placeholder: "", //説明
             item_description: "", //補足説明
-            item_key: "", //キー
+            item_key: "", //項目キー
+            item_condition_use: false, //条件付き表示
+            item_condition_key: "", //条件付き表示
+            item_condition_value: "", //条件付き表示
             item_must: false,
             item_must_badge: "unchecked",
             item_allow_multiple: "unchecked",//カンマ区切りで複数入力可能
@@ -829,6 +652,10 @@ export default {
       // 状態データ
       state_data: {
         loaded: false,
+        item_condition: {
+          item_key: false,
+          item_value: false,
+        }
       },
     }
   },
@@ -930,13 +757,14 @@ export default {
     state_item_key(){
       if( this.bind_data.item_key !== undefined ){
         if( this.bind_data.item_key !== "" ){
-          if( validator.isAlpha(this.bind_data.item_key,['en-US'],{'ignore':'_'}) ){
+          //if( validator.isAlpha(this.bind_data.item_key,['en-US'],{'ignore':'_'}) ){
+          if( validator.isAlphanumeric(this.bind_data.item_key,['en-US'],{'ignore':'-'}) ){
             return true;
           } else {
             return false;
           }
         } else {
-          return null;
+          return false;
         }
       }
       return null;
@@ -956,6 +784,20 @@ export default {
         }
       }
       return false;
+    },
+    state_item_condition_key(){
+      if( this.bind_data.item_condition_key !== "" ){
+        if( validator.isAlphanumeric(this.bind_data.item_condition_key,['en-US'],{'ignore':'-'}) ){
+          return true;
+        }
+      }
+      return false;
+    },
+    state_item_condition_value(){
+      if( this.bind_data.item_condition_value !== "" ){
+        return true;
+      }
+      return false;
     }
   },
   // 監視
@@ -965,6 +807,13 @@ export default {
         this.local_data.item_key_option = true;
       } else {
         this.local_data.item_key_option = false;
+      }
+    },
+    item_condition_option() {
+      if( this.item_condition_option == "true" ){
+        this.local_data.item_condition_option = true;
+      } else {
+        this.local_data.item_condition_option = false;
       }
     },
     bind_data: {
@@ -1083,6 +932,11 @@ export default {
     } else {
       this.local_data.item_key_option = false;
     }
+    if( this.item_condition_option == "true" ){
+      this.local_data.item_condition_option = true;
+    } else {
+      this.local_data.item_condition_option = false;
+    }
     if( this.item_info == null ){
       this.bind_data = this.get_item_options("text");
     } else {
@@ -1136,6 +990,20 @@ export default {
     },
     copy_item: function(){
       this.$emit("copy_item_method",this.bind_data);
+    },
+    view_item_key: function(){
+      this.local_data.item_key_display = true;
+    },
+    hide_item_key: function(){
+      this.local_data.item_key_display = false;
+    },
+    view_item_condition: function(){
+      this.bind_data.item_condition_use = true;
+    },
+    hide_item_condition: function(){
+      this.bind_data.item_condition_use = false;
+      this.bind_data.item_condition_key = "";
+      this.bind_data.item_condition_value = "";
     }
   }
 };

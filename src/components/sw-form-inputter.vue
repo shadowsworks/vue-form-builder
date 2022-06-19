@@ -1,7 +1,9 @@
 <template>
   <div class="form-inputter text-left" v-if="state_data.loaded">
     <div v-for="(item_info,index) in bind_data.form_info.item_info" :key="item_info.item_uuid">
-      <sw-item-inputter :item_info="item_info" :item_data="bind_data.form_data.item_data[index]" v-model="bind_data.form_data.item_data[index]" />
+      <div v-show="show_judgement(item_info,bind_data.form_data)">
+        <sw-item-inputter :item_info="item_info" :item_data="bind_data.form_data.item_data[index]" v-model="bind_data.form_data.item_data[index]" />
+      </div>
     </div>
     <div v-if="state_data.debug">{{ JSON.stringify(bind_data.form_info,null,2) }}</div>
     <div v-if="state_data.debug">{{ JSON.stringify(bind_data.form_data,null,2) }}</div>
@@ -38,7 +40,7 @@ export default {
       },
       state_data: {
         loaded: false,
-        debug: false,
+        debug: true,
       },
     }
   },
@@ -89,7 +91,7 @@ export default {
     lang: function( param ){
       return lang[locale][param];
     },
-    data_set(){
+    data_set: function(){
       if( this.form_info !== undefined && this.form_info != null ){
         this.bind_data.form_info = this.form_info;
         if( this.form_data !== undefined  && this.form_data != null ){
@@ -110,7 +112,7 @@ export default {
         }
       }
     },
-    reset(){
+    reset: function(){
       if( this.bind_data.form_info != null ){
         this.state_data.loaded = false;
         this.$nextTick(function() {
@@ -119,7 +121,7 @@ export default {
       }
     },
     // 
-    is_input_completed(){
+    is_input_completed: function(){
       if( this.bind_data.form_data.item_data.length > 0 ){
         for( let i=0;i<this.bind_data.form_data.item_data.length;i++ ){
           if( this.bind_data.form_data.item_data[i].item_state === false ){
@@ -130,6 +132,22 @@ export default {
       } else {
         return false;
       }
+    },
+    show_judgement(item_info,form_data){
+      //console.log("show_judgement:item_info="+JSON.stringify(item_info,null,2));
+      //console.log("show_judgement:item_info.item_condition_use="+item_info.item_condition_use);
+      //console.log("show_judgement:form_data="+JSON.stringify(form_data,null,2));
+      if( !item_info.item_condition_use ){
+        return true;
+      }
+      for( let i=0;i<form_data.item_data.length;i++ ){
+        if( form_data.item_data[i] !== null ){
+          if( item_info.item_condition_key == form_data.item_data[i].item_key && item_info.item_condition_value == form_data.item_data[i].item_data ){
+            return true;
+          }
+        }
+      }
+      return false;
     }
   }
 };
