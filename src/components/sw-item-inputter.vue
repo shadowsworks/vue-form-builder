@@ -266,6 +266,7 @@ export default {
         state: false,
         preview: false,
         debug: false,
+        show: false,
         password_type: "password",
         password_icon: "eye",
       }
@@ -344,14 +345,17 @@ export default {
       },
       deep: true,
     },
-    // 'bind_data.table_items': {
-    //   handler: function(){
-    //     let ret = this.get_ret_data();
-    //     console.log("ItemInputter:watch"+JSON.stringify(ret));
-    //     this.$emit('input',ret);
-    //   },
-    //   deep: true,
-    // }
+    'state_data.show': {
+      handler: function(){
+        if( this.bind_data.item_info.item_type == "number" ){
+          this.number_data_set();
+        }
+        let ret = this.get_ret_data();
+        //console.log("ItemInputter:watch"+JSON.stringify(ret));
+        this.$emit('input',ret);
+      },
+      deep: true,
+    },
   },
   // インスタンス初期化後
   created(){
@@ -361,6 +365,7 @@ export default {
   },
   // インスタンスマウント後
   mounted(){
+    this.is_show();
     this.bind_data.item_info = this.item_info;
     if( this.item_data !== undefined && this.item_data !== null ){
       //console.log("ItemInputter:mounted:"+JSON.stringify(this.item_data))
@@ -382,38 +387,7 @@ export default {
     },
     item_check: function(){
       if( this.bind_data.item_data === null ){
-        if( this.bind_data.item_info.item_type == "text" || this.bind_data.item_info.item_type == "texts" ||
-            this.bind_data.item_info.item_type == "number" || 
-            this.bind_data.item_info.item_type == "date" || this.bind_data.item_info.item_type == "time" ){
-          this.bind_data.item_data = "";
-        }
-        if( this.bind_data.item_info.item_type == "radio" ){
-          if( this.bind_data.item_info.item_options === undefined ){
-            this.bind_data.item_data = "";
-          } else {
-            if( this.bind_data.item_info.item_options.length ){
-              for( let i=0;i<this.bind_data.item_info.item_options.length;i++ ){
-                if( this.bind_data.item_info.item_options[i].init ){
-                  this.bind_data.item_data = this.bind_data.item_info.item_options[i].value;
-                }
-              }
-            } else {
-              this.bind_data.item_data = "";
-            }
-          }
-        }
-        if( this.bind_data.item_info.item_type == "checkbox" ){
-          this.bind_data.item_data = [];
-        }
-        if( this.bind_data.item_info.item_type == "boolean" ){
-          this.bind_data.item_data = this.bind_data.item_info.item_unchecked_value;
-        }
-        if( this.bind_data.item_info.item_type == "name" || this.bind_data.item_info.item_type == "datetime" ){
-          this.bind_data.item_data = ["",""];
-        }
-        if( this.bind_data.item_info.item_type == "telephone" ){
-          this.bind_data.item_data = ["","",""];
-        }
+        this.init_item_data();
       }
       this.state_data.state = false;
       this.$nextTick(function() {
@@ -492,7 +466,8 @@ export default {
       ret.item_key = this.bind_data.item_info.item_key;
       ret.item_type = this.bind_data.item_info.item_type;
       ret.item_name = this.bind_data.item_info.item_name;
-      ret.item_data = this.bind_data.item_data;//// ここを改修すること
+      ret.item_show = this.state_data.show;
+      ret.item_data = this.bind_data.item_data;
       //console.log("ret.item_data:"+this.bind_data.item_data+"@");
       if( this.bind_data.item_info.item_type == "number" ){
         ret.item_unit_name = this.bind_data.item_info.item_unit_name;
@@ -561,7 +536,7 @@ export default {
       this.$emit('input',this.get_ret_data());
     },
     // 画像の選択
-    async item_image_input(){
+    item_image_input: async function(){
 
       if( this.bind_data.image_file === null ){
         return;
@@ -571,12 +546,12 @@ export default {
       this.bind_data.image_preview_src = this.resize_image(image_data);
       this.bind_data.item_data = this.bind_data.image_preview_src;
     },
-    item_image_clear(){
+    item_image_clear: function(){
       this.bind_data.image_file = null;
       this.bind_data.image_preview_src = null;
       this.bind_data.item_data = null;
     },
-    resize_image(image_data){
+    resize_image: function(image_data){
       let bounds = {};
       bounds.width = this.bind_data.item_info.item_width;
       bounds.height = this.bind_data.item_info.item_height;
@@ -590,7 +565,7 @@ export default {
       ctx.drawImage(image_data, 0, 0, rect.width, rect.height);
       return canvas.toDataURL('image/png');
     },
-    get_image_base64(image_file) {
+    get_image_base64: function(image_file) {
       return new Promise((resolve, reject) => {
           let reader = new FileReader();
           reader.onload = () => { resolve(reader.result); };
@@ -598,7 +573,7 @@ export default {
           reader.readAsDataURL(image_file);
       });
     },
-    get_image_data(image_base64){
+    get_image_data: function(image_base64){
       return new Promise((resolve, reject) => {
           let image = new Image();
           image.onload = () => { resolve(image); };
@@ -606,7 +581,7 @@ export default {
           image.src = image_base64;
       });
     },
-    fit_rect_into_bounds(rect, bounds) {
+    fit_rect_into_bounds: function(rect, bounds) {
       let rectRatio = rect.width / rect.height;
       let boundsRatio = bounds.width / bounds.height;
       let newDimensions = {};
@@ -620,7 +595,7 @@ export default {
       }
       return newDimensions;
     },
-    is_allowed_type( item_data, item_info ){
+    is_allowed_type: function( item_data, item_info ){
       if( item_data === "" || item_data === null ){
         return null;
       }
@@ -641,7 +616,7 @@ export default {
       }
       return false;
     },
-    is_password_type( item_data, item_info ){
+    is_password_type: function( item_data, item_info ){
       if( item_data === "" || item_data === null ){
         return null;
       }
@@ -671,7 +646,7 @@ export default {
       return validator.isStrongPassword(item_data, options);
     },
     // パスワード（eye）アイコン パスワードのマスク有無
-    password_icon(){
+    password_icon: function(){
       if( this.state_data.password_type == "password" ){
         this.state_data.password_type = "text";
         this.state_data.password_icon = "eye-slash";
@@ -680,7 +655,7 @@ export default {
         this.state_data.password_icon = "eye";
       }
     },
-    is_email_type( item_data, item_info ){
+    is_email_type: function( item_data, item_info ){
       if( item_data === "" || item_data === null ){
         return null;
       }
@@ -697,6 +672,56 @@ export default {
         return validator.isEmail(item_data);
       }
     },
+    is_show: function(){
+      let rect = this.$el.getBoundingClientRect();
+      //console.log("is_show="+JSON.stringify(rect));
+      if( rect.height > 0 ){
+        this.state_data.show = true;
+      } else {
+        this.state_data.show = false;
+        // 初期化
+        if( this.bind_data.item_data !== null ){
+          this.init_item_data();
+        }
+      }
+      setTimeout(()=>{
+				this.is_show();
+			}, 1000);
+    },
+    init_item_data: function(){
+      if( this.bind_data.item_info.item_type == "text" || this.bind_data.item_info.item_type == "texts" ||
+          this.bind_data.item_info.item_type == "number" || 
+          this.bind_data.item_info.item_type == "date" || this.bind_data.item_info.item_type == "time" ){
+        this.bind_data.item_data = "";
+      }
+      if( this.bind_data.item_info.item_type == "radio" ){
+        if( this.bind_data.item_info.item_options === undefined ){
+          this.bind_data.item_data = "";
+        } else {
+          if( this.bind_data.item_info.item_options.length ){
+            for( let i=0;i<this.bind_data.item_info.item_options.length;i++ ){
+              if( this.bind_data.item_info.item_options[i].init ){
+                this.bind_data.item_data = this.bind_data.item_info.item_options[i].value;
+              }
+            }
+          } else {
+            this.bind_data.item_data = "";
+          }
+        }
+      }
+      if( this.bind_data.item_info.item_type == "checkbox" ){
+        this.bind_data.item_data = [];
+      }
+      if( this.bind_data.item_info.item_type == "boolean" ){
+        this.bind_data.item_data = this.bind_data.item_info.item_unchecked_value;
+      }
+      if( this.bind_data.item_info.item_type == "name" || this.bind_data.item_info.item_type == "datetime" ){
+        this.bind_data.item_data = ["",""];
+      }
+      if( this.bind_data.item_info.item_type == "telephone" ){
+        this.bind_data.item_data = ["","",""];
+      }
+    }
   }
 };
 </script>

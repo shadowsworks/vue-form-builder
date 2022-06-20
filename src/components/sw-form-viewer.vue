@@ -7,7 +7,7 @@
     </div>
     <div id="form-viewer-content">
       <div v-for="item_data in bind_data.form_data.item_data" :key="item_data.item_uuid">
-        <sw-item-viewer :item_data="item_data" />
+        <sw-item-viewer v-if="item_data.item_show" :item_data="item_data" />
         <div v-if="state_data.debug">{{ JSON.stringify(item_data,null,2) }}</div>
       </div>
     </div>

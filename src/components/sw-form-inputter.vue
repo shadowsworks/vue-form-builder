@@ -142,8 +142,18 @@ export default {
       }
       for( let i=0;i<form_data.item_data.length;i++ ){
         if( form_data.item_data[i] !== null ){
-          if( item_info.item_condition_key == form_data.item_data[i].item_key && item_info.item_condition_value == form_data.item_data[i].item_data ){
-            return true;
+          if( item_info.item_condition_key == form_data.item_data[i].item_key ){
+            if( Array.isArray(form_data.item_data[i].item_data) ){
+              for( let j=0;j<form_data.item_data[i].item_data.length;j++ ){
+                if( item_info.item_condition_value == form_data.item_data[i].item_data[j] ){
+                  return true;
+                }
+              }
+            } else {
+              if( item_info.item_condition_value == form_data.item_data[i].item_data ){
+                return true;
+              }
+            }
           }
         }
       }
