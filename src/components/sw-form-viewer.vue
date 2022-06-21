@@ -8,7 +8,7 @@
     <div id="form-viewer-content">
       <div v-for="item_data in bind_data.form_data.item_data" :key="item_data.item_uuid">
         <sw-item-viewer v-if="item_data.item_show" :item_data="item_data" />
-        <div v-if="state_data.debug">{{ JSON.stringify(item_data,null,2) }}</div>
+        <div v-if="debug">{{ JSON.stringify(item_data,null,2) }}</div>
       </div>
     </div>
     <div v-if='bind_data.pdf_output && bind_data.pdf_output_placement=="bottom"' class="text-right m-2">
@@ -53,6 +53,11 @@ export default {
       type:  String,
       default: "top"
     },
+    // デバッグ情報
+    debug: {
+      type: Boolean,
+      default: false
+    }
   },
   // ローカルデータ変数
   data () {
@@ -65,8 +70,7 @@ export default {
         pdf_output_placement: "",
       },
       state_data: {
-        loaded: false,
-        debug: true,
+        loaded: false
       },
     }
   },

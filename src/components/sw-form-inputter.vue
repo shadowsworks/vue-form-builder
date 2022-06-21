@@ -5,8 +5,8 @@
         <sw-item-inputter :item_info="item_info" :item_data="bind_data.form_data.item_data[index]" v-model="bind_data.form_data.item_data[index]" />
       </div>
     </div>
-    <div v-if="state_data.debug">{{ JSON.stringify(bind_data.form_info,null,2) }}</div>
-    <div v-if="state_data.debug">{{ JSON.stringify(bind_data.form_data,null,2) }}</div>
+    <div v-if="debug">{{ JSON.stringify(bind_data.form_info,null,2) }}</div>
+    <div v-if="debug">{{ JSON.stringify(bind_data.form_data,null,2) }}</div>
   </div>
 </template>
 
@@ -27,6 +27,11 @@ export default {
     form_info: Object, 
     // Form情報
     form_data: Object, 
+    // デバッグ情報
+    debug: {
+      type: Boolean,
+      default: false
+    }
   },
   // ローカルデータ変数
   data () {
@@ -40,7 +45,6 @@ export default {
       },
       state_data: {
         loaded: false,
-        debug: true,
       },
     }
   },

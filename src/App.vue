@@ -32,13 +32,13 @@
       </div>
 
       <div v-if='selected==="sw-form-inputter"'>
-        <sw-form-inputter 
+        <sw-form-inputter
           :form_info="bind_data.sw_form_inputter.form_info" 
           v-model="bind_data.sw_form_inputter.form_data" />
       </div>
 
       <div v-if='selected==="sw-form-viewer"'>
-        <sw-form-viewer 
+        <sw-form-viewer
           :form_data="bind_data.sw_form_viewer.form_data" 
           pdf_output pdf_output_button="PDF出力" pdf_output_placement="top" />
       </div>
