@@ -145,6 +145,6 @@ export default {
 }
 .preview_mode {
   box-sizing: border-box;
-  margin: 7px 12px 7px 12px;
+  margin: 7px 0px 7px 0px;
 }
 </style>

@@ -16,33 +16,33 @@
       bind_data.item_info.item_type=="password" ||
       bind_data.item_info.item_type=="email" ||
       bind_data.item_info.item_type=="pulldown"' >
-      <label class="text-secondary mt-2 mb-0 mx-3 small" >{{ bind_data.item_info.item_name }}</label>
+      <label class="text-secondary mt-2 mb-0 small" >{{ bind_data.item_info.item_name }}</label>
       <b-badge v-if='bind_data.item_info.item_must && bind_data.item_info.item_must_badge=="checked"' variant="danger" class="mx-2">{{ lang('mandatory') }}</b-badge>
     </template>
 
     <!-- 短文テキスト -->
     <template v-if='bind_data.item_info.item_type=="text"' >
-      <b-form-input type="text" v-model="bind_data.item_data" class="mt-0 mb-0 mx-3" 
+      <b-form-input type="text" v-model="bind_data.item_data" class="mt-0 mb-0" 
         :placeholder="bind_data.item_info.item_placeholder" 
         :maxlength="bind_data.item_info.item_length" 
         :state="state_item(bind_data.item_data,bind_data.item_info)" />
-      <div class="text-secondary mt-1 mb-0 mx-3 small">{{ bind_data.item_info.item_description }}</div>
+      <div class="text-secondary mt-1 mb-0 small">{{ bind_data.item_info.item_description }}</div>
     </template>
 
     <!-- 長文テキスト -->
     <template v-if='bind_data.item_info.item_type=="texts"'>
-      <b-form-textarea type="text" v-model="bind_data.item_data" class="mt-0 mb-0 mx-3" 
+      <b-form-textarea type="text" v-model="bind_data.item_data" class="mt-0 mb-0" 
         :placeholder="bind_data.item_info.item_placeholder" 
         :rows="bind_data.item_info.item_rows" 
         :maxlength="bind_data.item_info.item_length" 
         :state="state_item(bind_data.item_data,bind_data.item_info)" />
-      <div class="text-secondary mt-1 mb-0 mx-3 small">{{ bind_data.item_info.item_description }}</div>
+      <div class="text-secondary mt-1 mb-0 small">{{ bind_data.item_info.item_description }}</div>
     </template>
 
     <!-- 数値 -->
     <template v-if='bind_data.item_info.item_type=="number"'>
       <b-input-group>
-        <b-form-input type="number" v-model="bind_data.item_data" class="mt-0 mb-0 mx-3" 
+        <b-form-input type="number" v-model="bind_data.item_data" class="mt-0 mb-0" 
           :placeholder="bind_data.item_info.item_placeholder" 
           :min="bind_data.item_info.item_limit_min" :max="bind_data.item_info.item_limit_max" 
           :state="state_item(bind_data.item_data,bind_data.item_info)" />
@@ -50,19 +50,19 @@
           <b-input-group-text>{{ bind_data.item_info.item_unit_name }}</b-input-group-text>
         </b-input-group-append>
       </b-input-group>
-      <div class="text-secondary mt-1 mb-0 mx-3 small">{{ bind_data.item_info.item_description }}</div>
+      <div class="text-secondary mt-1 mb-0 small">{{ bind_data.item_info.item_description }}</div>
     </template>
 
     <!-- ラジオボタン -->
     <template v-if='bind_data.item_info.item_type=="radio"'>
       <b-form-radio-group v-model="bind_data.item_data" :options="bind_data.item_info.item_options" :stacked="bind_data.item_info.item_stacked" />
-      <div class="text-secondary mt-1 mb-0 mx-3 small">{{ bind_data.item_info.item_description }}</div>
+      <div class="text-secondary mt-1 mb-0 small">{{ bind_data.item_info.item_description }}</div>
     </template>
 
     <!-- チェックボックス -->
     <template v-if='bind_data.item_info.item_type=="checkbox"'>
       <b-form-checkbox-group v-model="bind_data.item_data" :options="bind_data.item_info.item_options" :stacked="bind_data.item_info.item_stacked" />
-      <div class="text-secondary mt-1 mb-0 mx-3 small">{{ bind_data.item_info.item_description }}</div>
+      <div class="text-secondary mt-1 mb-0 small">{{ bind_data.item_info.item_description }}</div>
     </template>
 
     <!-- スイッチ -->
@@ -72,41 +72,41 @@
         :unchecked-value="bind_data.item_info.item_unchecked_value">
         <span class="small">{{ bind_data.item_info.item_placeholder }}</span>
       </b-form-checkbox>
-      <div class="text-secondary mt-1 mb-0 mx-3 small">{{ bind_data.item_info.item_description }}</div>
+      <div class="text-secondary mt-1 mb-0 small">{{ bind_data.item_info.item_description }}</div>
     </template>
 
     <!-- 氏名 -->
     <template v-if='bind_data.item_info.item_type=="name"' >
       <b-row>
         <b-col v-for="n in 2" :key="n" cols="6">
-          <label class="text-secondary mt-2 mb-0 mx-3 small" >{{ bind_data.item_info.item_name[n-1] }}</label>
+          <label class="text-secondary mt-2 mb-0 small" >{{ bind_data.item_info.item_name[n-1] }}</label>
           <b-badge v-if='bind_data.item_info.item_must && bind_data.item_info.item_must_badge=="checked"' variant="danger" class="mx-2">{{ lang('mandatory') }}</b-badge>
-          <b-form-input type="text" v-model="bind_data.item_data[n-1]" class="mt-0 mb-0 mx-3" 
+          <b-form-input type="text" v-model="bind_data.item_data[n-1]" class="mt-0 mb-0" 
             :placeholder="bind_data.item_info.item_placeholder[n-1]" 
             :maxlength="bind_data.item_info.item_length"
             :state="state_item(bind_data.item_data[n-1],bind_data.item_info)" />
         </b-col>
       </b-row>
-      <div class="text-secondary mt-1 mb-0 mx-3 small">{{ bind_data.item_info.item_description }}</div>
+      <div class="text-secondary mt-1 mb-0 small">{{ bind_data.item_info.item_description }}</div>
     </template>
 
     <!-- 電話番号 -->
     <template v-if='bind_data.item_info.item_type=="telephone"' >
       <b-row>
         <b-col v-for="n in 3" :key="n" cols="4">
-          <b-form-input type="text" v-model="bind_data.item_data[n-1]" class="mt-0 mb-0 mx-3" 
+          <b-form-input type="text" v-model="bind_data.item_data[n-1]" class="mt-0 mb-0" 
             :placeholder="bind_data.item_info.item_placeholder[n-1]" 
             :maxlength="bind_data.item_info.item_length"
             :state="state_item(bind_data.item_data[n-1],bind_data.item_info)" />
         </b-col>
       </b-row>
-      <div class="text-secondary mt-1 mb-0 mx-3 small">{{ bind_data.item_info.item_description }}</div>
+      <div class="text-secondary mt-1 mb-0 small">{{ bind_data.item_info.item_description }}</div>
     </template>
 
     <!-- 日付 -->
     <template v-if='bind_data.item_info.item_type=="date"'>
       <b-input-group>
-        <b-form-datepicker v-model="bind_data.item_data" class="mb-0 mx-3" :placeholder="bind_data.item_info.item_placeholder" locale="ja"
+        <b-form-datepicker v-model="bind_data.item_data" class="mb-0" :placeholder="bind_data.item_info.item_placeholder" locale="ja"
             :date-format-options="{ year: 'numeric', month: '2-digit', day: '2-digit', weekday: 'short' }" 
             :state="state_item(bind_data.item_data,bind_data.item_info)" />
         <b-input-group-append is-text style="height:38px;">
@@ -119,14 +119,14 @@
     <!-- 時刻 -->
     <template v-if='bind_data.item_info.item_type=="time"'>
       <b-input-group>
-        <b-form-timepicker v-model="bind_data.item_data" class="mb-0 mx-3" :placeholder="bind_data.item_info.item_placeholder" 
+        <b-form-timepicker v-model="bind_data.item_data" class="mb-0" :placeholder="bind_data.item_info.item_placeholder" 
             now-button label-now-button="現在" now-button-variant="outline-secondary" label-close-button="閉じる" label-no-time-selected="未設定"
             :state="state_item(bind_data.item_data,bind_data.item_info)" />
         <b-input-group-append is-text style="height:38px;">
           <b-icon icon="eraser" class="mt-0 item-curosr" @click="erase_item_data()" ></b-icon>
         </b-input-group-append>
       </b-input-group>
-      <div class="text-secondary mt-1 mb-0 mx-3 small">{{ bind_data.item_info.item_description }}</div>
+      <div class="text-secondary mt-1 mb-0 small">{{ bind_data.item_info.item_description }}</div>
     </template>
     
     <!-- 日時 -->
@@ -134,7 +134,7 @@
       <b-row>
         <b-col :cols="bind_data.item_info.item_cols">
           <b-input-group>
-            <b-form-datepicker v-model="bind_data.item_data[0]" class="mb-2 mx-3" :placeholder="bind_data.item_info.item_placeholder[0]" locale="ja"
+            <b-form-datepicker v-model="bind_data.item_data[0]" class="mb-2" :placeholder="bind_data.item_info.item_placeholder[0]" locale="ja"
                 :date-format-options="{ year: 'numeric', month: '2-digit', day: '2-digit', weekday: 'short' }" 
                 :state="state_item(bind_data.item_data[0],bind_data.item_info)" />
             <b-input-group-append is-text style="height:38px;">
@@ -144,7 +144,7 @@
         </b-col>
         <b-col :cols="bind_data.item_info.item_cols">
           <b-input-group>
-            <b-form-timepicker v-model="bind_data.item_data[1]" class="mb-0 mx-3" :placeholder="bind_data.item_info.item_placeholder[1]" 
+            <b-form-timepicker v-model="bind_data.item_data[1]" class="mb-0" :placeholder="bind_data.item_info.item_placeholder[1]" 
                 now-button label-now-button="現在" now-button-variant="outline-secondary" label-close-button="閉じる" label-no-time-selected="未設定"
                 :state="state_item(bind_data.item_data[1],bind_data.item_info)" />
             <b-input-group-append is-text style="height:38px;">
@@ -153,18 +153,18 @@
           </b-input-group>
         </b-col>
       </b-row>
-      <div class="text-secondary mt-1 mb-0 mx-3 small">{{ bind_data.item_info.item_description }}</div>
+      <div class="text-secondary mt-1 mb-0 small">{{ bind_data.item_info.item_description }}</div>
     </template>
 
     <!-- 表 -->
     <template v-if='bind_data.item_info.item_type=="table"' >
-      <b-table bordered responsive :items="bind_data.table_items" :fields="bind_data.table_fields" class="mb-0 mx-3 text-nowrap">
+      <b-table bordered responsive :items="bind_data.table_items" :fields="bind_data.table_fields" class="mb-0 text-nowrap">
         <template #cell()="data">
           <div v-if='data.field.key=="row_name"' class="text-nowrap">{{ data.value }}</div>
           <div v-else><b-form-input size="sm" v-model="data.value" maxlength="100" @input="table_data_change(data)"></b-form-input></div>
         </template>
       </b-table>
-      <div class="text-secondary mt-1 mb-0 mx-3 small">{{ bind_data.item_info.item_description }}</div>
+      <div class="text-secondary mt-1 mb-0 small">{{ bind_data.item_info.item_description }}</div>
     </template>
 
     <!-- マークダウン -->
@@ -183,7 +183,7 @@
       <div v-if="state_image_preview_show">
         <b-img :src="bind_data.image_preview_src" class="my-1 p-1 image-shadow" style="max-height:400px;max-width:100%;"></b-img>
       </div>
-      <b-input-group class="mt-1 mx-3">
+      <b-input-group class="mt-1">
         <b-form-file v-model="bind_data.image_file" @input="item_image_input"
           :placeholder="bind_data.item_info.item_placeholder"
           :drop-placeholder="lang('drop_here')" accept=".jpg,.png,.JPG,.PNG" 
@@ -192,13 +192,13 @@
           <b-button variant="info" @click="item_image_clear">Clear</b-button>
         </b-input-group-append>
       </b-input-group>
-      <div class="text-secondary mt-1 mb-0 mx-3 small">{{ bind_data.item_info.item_description }}</div>
+      <div class="text-secondary mt-1 mb-0 small">{{ bind_data.item_info.item_description }}</div>
     </template>
 
     <!-- パスワード -->
     <template v-if='bind_data.item_info.item_type=="password"' >
       <b-input-group>
-        <b-form-input :type="state_data.password_type" v-model="bind_data.item_data" class="mt-0 mb-0 mx-3" 
+        <b-form-input :type="state_data.password_type" v-model="bind_data.item_data" class="mt-0 mb-0" 
           :placeholder="bind_data.item_info.item_placeholder" 
           :maxlength="bind_data.item_info.item_length_max" 
           :state="state_item(bind_data.item_data,bind_data.item_info)" />
@@ -206,30 +206,30 @@
           <b-link v-on:click="password_icon"><b-icon :icon="state_data.password_icon"></b-icon></b-link>
         </b-input-group-append>
       </b-input-group>
-      <div class="text-secondary mt-1 mb-0 mx-3 small">{{ bind_data.item_info.item_description }}</div>
+      <div class="text-secondary mt-1 mb-0 small">{{ bind_data.item_info.item_description }}</div>
     </template>
 
     <!-- メールアドレス -->
     <template v-if='bind_data.item_info.item_type=="email"' >
-      <b-form-input type="text" v-model="bind_data.item_data" class="mt-0 mb-0 mx-3" 
+      <b-form-input type="text" v-model="bind_data.item_data" class="mt-0 mb-0" 
         :placeholder="bind_data.item_info.item_placeholder" 
         :maxlength="bind_data.item_info.item_length" 
         :state="state_item(bind_data.item_data,bind_data.item_info)" />
-      <div class="text-secondary mt-1 mb-0 mx-3 small">{{ bind_data.item_info.item_description }}</div>
+      <div class="text-secondary mt-1 mb-0 small">{{ bind_data.item_info.item_description }}</div>
     </template>
 
     <!-- プルダウン -->
     <template v-if='bind_data.item_info.item_type=="pulldown"'>
       <b-form-select v-model="bind_data.item_data" :options="bind_data.item_info.item_options" />
-      <div class="text-secondary mt-1 mb-0 mx-3 small">{{ bind_data.item_info.item_description }}</div>
+      <div class="text-secondary mt-1 mb-0 small">{{ bind_data.item_info.item_description }}</div>
     </template>
 
     <!-- ラベル -->
     <template v-if='bind_data.item_info.item_type=="label"'>
-      <div v-if='bind_data.item_info.item_markdown_checked=="true"' >
+      <div v-if='bind_data.item_info.item_markdown_checked=="true"'>
         <sw-markdown-viewer :md_text="bind_data.item_info.item_description" />
       </div>
-      <div v-else class="text-secondary mt-1 mb-0 mx-3 long_text">{{ bind_data.item_info.item_description }}</div>
+      <div v-else class="text-secondary mt-1 mb-0 long_text">{{ bind_data.item_info.item_description }}</div>
     </template>
 
     <div v-if="state_data.debug" class="text-left">{{ JSON.stringify(bind_data,null,2) }}</div>
