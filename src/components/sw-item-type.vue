@@ -8,10 +8,10 @@
       </b-button>
     </div>
     <div v-if='bind_data.type_option=="tile"'>
-      <b-button block size="sm" variant="outline-secondary" class="p-2 text-center" 
+      <b-button block size="sm" variant="outline-secondary" class="px-2 py-1 text-center" 
         :title="lang('click_add_item')" @click="onClick()" >
         <b-icon :icon="bind_data.type_info.icon_name" scale="1" aria-hidden="true"></b-icon>
-        <div class="mt-2 mb-0 fsize">{{ bind_data.type_info.type_desc }}</div>
+        <div class="mt-1 mb-0 fsize">{{ bind_data.type_info.type_desc }}</div>
       </b-button>
     </div>
   </div>

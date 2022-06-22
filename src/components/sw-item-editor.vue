@@ -28,6 +28,8 @@
               </b-col>
             </b-row>
           </template>
+          <template v-else-if='bind_data.item_type=="label"'>
+          </template>
           <template v-else>         
             <label class="text-secondary mt-2 mb-0 small" >{{ lang('item_name') }}</label>
             <b-form-input type="text" v-model="bind_data.item_name" :state="state_item_name" :placeholder="lang('enter_item_name')" class="mt-0 mb-0" maxlength="100" ></b-form-input>
@@ -42,6 +44,8 @@
               </b-col>
             </b-row>
           </template>
+          <template v-else-if='bind_data.item_type=="label"'>
+          </template>
           <template v-else>
             <template v-if='bind_data.item_type!=="telephone"'>
               <label class="text-secondary mt-2 mb-0 small" >{{ lang('placeholder') }}</label>
@@ -50,9 +54,13 @@
           </template>
           
           <!-- 補足説明 -->
-          <label class="text-secondary mt-2 mb-0 small" >{{ lang('description') }}</label>
-          <b-form-input type="text" v-model="bind_data.item_description" :placeholder="lang('enter_description')" class="mt-0 mb-0" maxlength="100" ></b-form-input>
-          
+          <template v-if='bind_data.item_type=="label"'>
+          </template>
+          <template v-else>
+            <label class="text-secondary mt-2 mb-0 small" >{{ lang('description') }}</label>
+            <b-form-input type="text" v-model="bind_data.item_description" :placeholder="lang('enter_description')" class="mt-0 mb-0" maxlength="100" ></b-form-input>
+          </template>
+
           <!-- 項目キー -->
           <div v-show="local_data.item_key_display">
             <label class="text-secondary mt-2 mb-0 small" >{{ lang('item_key') }}</label>
@@ -71,7 +79,8 @@
           </div>
 
           <!-- 必須選択 ラジオボタン チェックボックス スイッチ 表-->
-          <template v-if='bind_data.item_type!=="radio" && bind_data.item_type!=="checkbox" && bind_data.item_type!=="boolean" && bind_data.item_type!=="table"'>
+          <template v-if='bind_data.item_type!=="radio" && bind_data.item_type!=="checkbox" && bind_data.item_type!=="boolean" 
+            && bind_data.item_type!=="table" && bind_data.item_type!=="pulldown" && bind_data.item_type!=="label"'>
             <label class="text-secondary mt-2 mb-0 small">{{ lang('required') }}</label>
             <div v-if="bind_data.item_must" class="float-right mt-1">
               <br><b-form-checkbox v-model="bind_data.item_must_badge" value="checked" unchecked-value="unchecked">{{ lang('badge') }}</b-form-checkbox>
@@ -80,6 +89,7 @@
               <b-form-radio-group v-model="bind_data.item_must" :options="local_data.item_must_options" :aria-describedby="ariaDescribedby" />
             </b-form-group>
           </template>
+
           <!-- 短文テキスト -->
           <template v-if='bind_data.item_type=="text"'>
             <!-- 最大文字数 -->
@@ -258,30 +268,70 @@
             </div>
           </template>
 
+          <!-- プルダウン -->
+          <template v-if='bind_data.item_type=="pulldown"'>
+            <!-- 設定方法 -->
+            <label class="text-secondary mt-2 mb-0 small">{{ lang('dynamic_or_static') }}</label>
+            <b-form-group v-slot="{ ariaDescribedby }" class="mt-0 mb-0">
+              <b-form-radio-group v-model="bind_data.item_method" :options="local_data.item_pulldown_options" :aria-describedby="ariaDescribedby" 
+                @input="click_pulldown_options()" />
+            </b-form-group>
+            <div v-if='bind_data.item_method=="static"'>
+              <!-- 選択肢 -->
+              <label class="text-secondary mt-2 mb-0 small" >{{ lang('choices') }}</label>
+              <sw-column-editor item_type="radio" max_column="10" :column_data="bind_data.item_options" v-model="bind_data.item_options"></sw-column-editor>
+            </div>
+            <div v-if='bind_data.item_method=="dynamic"'>
+              <div class="text-secondary mt-2 mb-0 ml-2 small" >{{ lang('set_pulldown_item_key') }}</div>
+            </div>
+          </template>
+
+          <!-- ラベル -->
+          <template v-if='bind_data.item_type=="label"'>
+            <!-- 設定方法 -->
+            <label class="text-secondary mt-2 mb-0 small">{{ lang('label') }}</label>
+            <b-form-textarea type="text" v-model="bind_data.item_description" class="mt-0 mb-1" rows="4" maxlength="512" />
+            <div class="text-secondary mt-1 mb-0 small">{{ lang('enter_label_characters') }}</div>
+            <!-- 表示方法 -->
+            <label class="text-secondary mt-2 mb-0 small">{{ lang('markdown') }}</label>
+            <b-form-checkbox v-model="bind_data.item_markdown_checked" size="lg"
+              :value="bind_data.item_checked_value" 
+              :unchecked-value="bind_data.item_unchecked_value">
+              <span class="small">{{ lang('markdown_use') }}</span>
+            </b-form-checkbox>
+            <label class="text-secondary mt-2 mb-0 small">{{ lang('form_viewer') }}</label>
+            <b-form-checkbox v-model="bind_data.item_display_checked" size="lg"
+              :value="bind_data.item_checked_value" 
+              :unchecked-value="bind_data.item_unchecked_value">
+              <span class="small">{{ lang('viewer_display') }}</span>
+            </b-form-checkbox>
+          
+          </template>
+
         </b-card-body>
 
         <!-- フッター共通 -->
         <b-card-footer class="px-3 pt-1 py-1">
-          <b-button variant="light" size="sm" class="m-0 float-right" v-b-tooltip.hover :title="lang('copy')" @click="copy_item()">
+          <b-button variant="light" size="sm" class="m-0 float-right" v-b-tooltip.hover :title="lang('copy')" @click="click_copy_item()">
             <b-icon icon="files" aria-hidden="true"></b-icon>
           </b-button>
-          <b-button variant="light" size="sm" class="m-0 float-right" v-b-tooltip.hover :title="lang('delete')" @click="delete_item()">
+          <b-button variant="light" size="sm" class="m-0 float-right" v-b-tooltip.hover :title="lang('delete')" @click="click_delete_item()">
             <b-icon icon="trash" aria-hidden="true"></b-icon>
           </b-button>
           <b-button variant="light" size="sm" class="m-0" v-b-tooltip.hover :title="lang('view_item_key')" 
-            @click="view_item_key()" v-show="local_data.item_key_option && !local_data.item_key_display">
+            @click="click_view_item_key()" v-show="local_data.item_key_option && !local_data.item_key_display">
             <b-icon icon="tag" aria-hidden="true"></b-icon>
           </b-button>
           <b-button variant="light" size="sm" class="m-0" v-b-tooltip.hover :title="lang('hide_item_key')" 
-            @click="hide_item_key()" v-show="local_data.item_key_option && local_data.item_key_display">
+            @click="click_hide_item_key()" v-show="local_data.item_key_option && local_data.item_key_display">
             <b-icon icon="tag-fill" aria-hidden="true"></b-icon>
           </b-button>
           <b-button variant="light" size="sm" class="m-0" v-b-tooltip.hover :title="lang('view_item_condition')" 
-            @click="view_item_condition()" v-show="local_data.item_key_option && local_data.item_condition_option && !bind_data.item_condition_use">
+            @click="click_view_item_condition()" v-show="local_data.item_key_option && local_data.item_condition_option && !bind_data.item_condition_use">
             <b-icon icon="patch-exclamation" aria-hidden="true"></b-icon>
           </b-button>
           <b-button variant="light" size="sm" class="m-0" v-b-tooltip.hover :title="lang('hide_item_condition')" 
-            @click="hide_item_condition()" v-show="local_data.item_key_option && local_data.item_condition_option && bind_data.item_condition_use">
+            @click="click_hide_item_condition()" v-show="local_data.item_key_option && local_data.item_condition_option && bind_data.item_condition_use">
             <b-icon icon="patch-exclamation-fill" aria-hidden="true"></b-icon>
           </b-button>
         </b-card-footer>
@@ -354,6 +404,10 @@ export default {
         item_stacked_options: [
           { text: lang[locale].inline, value: false },
           { text: lang[locale].stacked, value: true },
+        ],
+        item_pulldown_options: [
+          { text: lang[locale].static, value: "static" },
+          { text: lang[locale].dynamic, value: "dynamic" },
         ],
         item_options: [
           { 
@@ -644,6 +698,40 @@ export default {
             item_must: false,
             item_must_badge: "unchecked",
             item_allow_multiple: "unchecked",//カンマ区切りで複数入力可能
+            item_uuid: "",
+            item_seq: 0,
+          },{ 
+            item_type: 'pulldown', 
+            item_state: false,
+            item_name: lang[locale].pulldown, 
+            item_desc: lang[locale].pulldown,
+            item_placeholder: "", //説明
+            item_description: "", //補足説明
+            item_key: "", //項目キー
+            item_condition_use: false, //条件付き表示
+            item_condition_key: "", //条件付き表示
+            item_condition_value: "", //条件付き表示
+            item_must: false,
+            item_must_badge: "unchecked",
+            item_options: [],
+            item_method:"static", //設定方法 static or dynamic
+            item_uuid: "",
+            item_seq: 0,
+          },{ 
+            item_type: 'label', 
+            item_state: true,
+            item_name: lang[locale].label, 
+            item_desc: lang[locale].label,
+            item_placeholder: "", //説明
+            item_description: "", //補足説明
+            item_key: "", //項目キー
+            item_condition_use: false, //条件付き表示
+            item_condition_key: "", //条件付き表示
+            item_condition_value: "", //条件付き表示
+            item_markdown_checked:"false",
+            item_display_checked:"false",
+            item_checked_value:"true",
+            item_unchecked_value:"false",
             item_uuid: "",
             item_seq: 0,
           }
@@ -985,25 +1073,29 @@ export default {
       if (myStrong) strong = myStrong;
       return new Date().getTime().toString(16)  + Math.floor(strong*Math.random()).toString(16)
     },
-    delete_item: function(){
+    click_delete_item: function(){
       this.$emit("delete_item_method",this.bind_data);
     },
-    copy_item: function(){
+    click_copy_item: function(){
       this.$emit("copy_item_method",this.bind_data);
     },
-    view_item_key: function(){
+    click_view_item_key: function(){
       this.local_data.item_key_display = true;
     },
-    hide_item_key: function(){
+    click_hide_item_key: function(){
       this.local_data.item_key_display = false;
     },
-    view_item_condition: function(){
+    click_view_item_condition: function(){
       this.bind_data.item_condition_use = true;
     },
-    hide_item_condition: function(){
+    click_hide_item_condition: function(){
       this.bind_data.item_condition_use = false;
       this.bind_data.item_condition_key = "";
       this.bind_data.item_condition_value = "";
+    },
+    click_pulldown_options: function(){
+      //console.log("click_pulldown_options="+this.bind_data.item_method);
+      this.bind_data.item_options = [];
     }
   }
 };

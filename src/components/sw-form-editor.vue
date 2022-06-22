@@ -28,7 +28,7 @@
       <b-col cols="4" class="border-left">
         <div class="text-secondary mx-1 mt-0 mb-2 small border-bottom" >{{ lang('preview') }}</div>
         <div v-for="(item_info,index) in bind_data.form_info.item_info" :key="item_info.item_uuid">
-          <sw-item-inputter :item_info="item_info" v-model="local_data.item_data[index]" />
+          <sw-item-inputter debug :item_info="item_info" v-model="local_data.item_data[index]" />
         </div>
       </b-col>
     </b-row>
@@ -108,7 +108,8 @@ export default {
           { item_type: "name", type_desc: lang[locale].full_name, icon_name: "person-square", level: 2 },
           { item_type: "telephone", type_desc: lang[locale].phone_number, icon_name: "telephone", level: 2 },
           { item_type: "email", type_desc: lang[locale].email, icon_name: "envelope", level: 2 },
-          //{ item_type: "select", type_desc: "プルダウン選択", icon_name: "card-list", level: 2 },
+          { item_type: "pulldown", type_desc: lang[locale].pulldown, icon_name: "card-list", level: 2 },
+          { item_type: "label", type_desc: lang[locale].label, icon_name: "sticky", level: 2 },
           { item_type: "table", type_desc: lang[locale].table, icon_name: "table", level: 3 },
           { item_type: "markdown", type_desc: lang[locale].markdown, icon_name: "markdown", level: 3 },
         ],

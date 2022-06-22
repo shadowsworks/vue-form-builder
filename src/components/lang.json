@@ -37,6 +37,8 @@
     "markdown":"マークダウン",
     "image":"写真",
     "password":"パスワード",
+    "pulldown":"プルダウン",
+    "label":"ラベル",
 
     "preview": "プレビュー",
     "back": "戻る",
@@ -82,6 +84,12 @@
     "inline_or_stacked": "並び",
     "inline": "横並び",
     "stacked": "縦並び",
+    "dynamic_or_static":"設定方法",
+    "dynamic":"動的",
+    "static":"静的",
+    "form_viewer":"データ表示コンポーネント",
+    "viewer_display":"表示する",
+    "markdown_use":"使用する",
 
     "enter_your_choice":"選択肢を入力してください",
     "click_add_item":"クリックして項目を追加する",
@@ -99,7 +107,9 @@
     "enter_unit":"単位を入力してください",
     "enter_max_width":"最大幅（pixel）を入力してください",
     "enter_max_height":"最大高さ（pixel）を入力してください",
-    "set_initial_selection":"初期選択を設定する"
+    "set_initial_selection":"初期選択を設定する",
+    "set_pulldown_item_key":"項目キーを設定し、コンポーネントにデータを設定してください。詳しくはドキュメントを参照してください。",
+    "enter_label_characters":"ラベルとして設定する文字を入力してください。"
   },
   "en": {
     "item1": "item1",
@@ -139,6 +149,8 @@
     "markdown":"Markdown",
     "image":"Image",
     "password":"Password",
+    "pulldown":"プルダウン",
+    "label":"ラベル",
 
     "preview": "Preview",
     "back": "Back",
@@ -184,6 +196,9 @@
     "inline_or_stacked": "Inline or Stacked",
     "inline": "Inline",
     "stacked": "Stacked",
+    "form_viewer":"データ表示コンポーネント",
+    "viewer_display":"表示する",
+    "markdown_use":"使用する",
 
     "enter_your_choice":"Please enter your choice",
     "click_add_item":"Click to add an item",
@@ -201,6 +216,8 @@
     "enter_unit":"Please enter the unit",
     "enter_max_width":"Please enter the maximum width (pixel)",
     "enter_max_height":"Please enter the maximum height (pixel)",
-    "set_initial_selection":"Set initial selection"
+    "set_initial_selection":"Set initial selection",
+    "set_pulldown_item_key":"項目キーを設定し、コンポーネントにデータを設定してください。詳しくはドキュメントを参照してください。",
+    "enter_label_characters":"ラベルとして設定する文字を入力してください。マークダウンの記号も使用できます。"
   }
 }
