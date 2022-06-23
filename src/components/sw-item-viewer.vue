@@ -5,7 +5,7 @@
       bind_data.item_data.item_type=="boolean" || bind_data.item_data.item_type=="telephone" || bind_data.item_data.item_type=="date" ||
       bind_data.item_data.item_type=="time" || bind_data.item_data.item_type=="datetime" || bind_data.item_data.item_type=="table" ||
       bind_data.item_data.item_type=="markdown" || bind_data.item_data.item_type=="image" || bind_data.item_data.item_type=="password" ||
-      bind_data.item_data.item_type=="email" ' >
+      bind_data.item_data.item_type=="email" || bind_data.item_data.item_type=="pulldown" ' >
       <label class="text-secondary mt-2 mb-0 ml-3 small" >{{ bind_data.item_data.item_name }}</label>
     </template>
     

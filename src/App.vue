@@ -32,8 +32,9 @@
       </div>
 
       <div v-if='selected==="sw-form-inputter"'>
-        <sw-form-inputter
+        <sw-form-inputter debug
           :form_info="bind_data.sw_form_inputter.form_info" 
+          :form_list_info="bind_data.sw_form_inputter.form_list_info"
           v-model="bind_data.sw_form_inputter.form_data" />
       </div>
 
@@ -72,6 +73,7 @@
           sw_form_inputter: {
             form_info: null,
             form_data: null,
+            form_list_info: null,
           },
           sw_form_viewer: {
             form_data: null,
@@ -121,6 +123,30 @@
         }
       },
       
+    },
+    // インスタンスマウント後
+    mounted(){
+      this.bind_data.sw_form_inputter.form_list_info = [];
+      let options = [
+        { value: 'aaaaaaa', text: '1 This is First option' },
+        { value: 'bbbbbbb', text: '1 Selected Option' },
+        { value: 'ccccc', text: '1 This is an option with object value' },
+        { value: 'dddddd', text: '1 This one is disabled', disabled: true }
+      ];
+      let item = {}
+      item.item_key = "select-1";
+      item.item_options = options;
+      this.bind_data.sw_form_inputter.form_list_info.push(item);
+      let options2 = [
+        { value: 'aaaaaaa', text: '2 This is First option' },
+        { value: 'bbbbbbb', text: '2 Selected Option' },
+        { value: 'ccccc', text: '2 This is an option with object value' },
+        { value: 'dddddd', text: '2 This one is disabled', disabled: true }
+      ];
+      let item2 = {}
+      item2.item_key = "select-2";
+      item2.item_options = options2;
+      this.bind_data.sw_form_inputter.form_list_info.push(item2);
     },
     methods: {
       button_click(data){

@@ -2,7 +2,8 @@
   <div class="form-inputter text-left" v-if="state_data.loaded">
     <div v-for="(item_info,index) in bind_data.form_info.item_info" :key="item_info.item_uuid">
       <div v-show="show_judgement(item_info,bind_data.form_data)">
-        <sw-item-inputter :item_info="item_info" :item_data="bind_data.form_data.item_data[index]" v-model="bind_data.form_data.item_data[index]" />
+        <sw-item-inputter :item_info="item_info" :item_data="bind_data.form_data.item_data[index]" 
+            :list_info="bind_data.form_list_info" v-model="bind_data.form_data.item_data[index]" />
       </div>
     </div>
     <div v-if="debug">{{ JSON.stringify(bind_data.form_info,null,2) }}</div>
@@ -27,6 +28,11 @@ export default {
     form_info: Object, 
     // Form情報
     form_data: Object, 
+    // Pulldown情報
+    form_list_info: {
+      type: Array, 
+      default: null
+    },
     // デバッグ情報
     debug: {
       type: Boolean,
@@ -39,6 +45,7 @@ export default {
       // バインドデータ
       bind_data: {
         form_info: null,
+        form_list_info: null,
         form_data: {
           item_data: []
         },
@@ -67,6 +74,14 @@ export default {
       },
       deep: true,
     },
+    form_list_info: {
+      handler: function(){
+        if( this.form_list_info !== null ){
+          this.bind_data.form_list_info = this.form_list_info;
+        }
+      },
+      deep: true,
+    },
     'bind_data.form_data': {
       handler: function(){
         this.$emit('input',this.bind_data.form_data);
@@ -86,6 +101,9 @@ export default {
   mounted(){
     //console.log("FormInputter:mounted:this.form_info:"+JSON.stringify(this.form_info));
     //console.log("FormInputter:mounted:this.form_data:"+JSON.stringify(this.form_data));
+    if( this.form_list_info !== null ){
+      this.bind_data.form_list_info = this.form_list_info;
+    }
     this.data_set();
     this.reset();
     this.$emit('input',this.bind_data.form_data);

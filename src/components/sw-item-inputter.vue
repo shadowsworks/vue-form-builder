@@ -220,7 +220,8 @@
 
     <!-- プルダウン -->
     <template v-if='bind_data.item_info.item_type=="pulldown"'>
-      <b-form-select v-model="bind_data.item_data" :options="bind_data.item_info.item_options" />
+      <b-form-select v-if='bind_data.item_info.item_method=="static"' v-model="bind_data.item_data" :options="bind_data.item_info.item_options" />
+      <b-form-select v-if='bind_data.item_info.item_method=="dynamic"' v-model="bind_data.item_data" :options="bind_data.pulldown_list" />
       <div class="text-secondary mt-1 mb-0 small">{{ bind_data.item_info.item_description }}</div>
     </template>
 
@@ -260,6 +261,10 @@ export default {
     // Item情報
     item_info: Object,
     item_data: [ String, Array, Object ],
+    list_info: {
+      type: Array, 
+      default: null
+    },
   },
   // ローカルデータ変数
   data () {
@@ -272,6 +277,7 @@ export default {
         table_items: [],
         image_file: null,
         image_preview_src: "",
+        pulldown_list: [],
       },
       local_data: {
         table_field: { key: 'row_name', label: '', stickyColumn: true, }, 
@@ -340,6 +346,11 @@ export default {
         if( this.bind_data.item_info.item_type == "table" ){
           this.table_data_set();
         }
+        if( this.bind_data.item_info.item_type == "pulldown" ){
+          if( this.bind_data.item_info.item_method == "dynamic" && this.list_info !== null ){
+            this.pulldown_data_set();
+          }
+        }
         // this.item_check();
         // this.state_data.loaded = false;
         // this.$nextTick(function() {
@@ -388,6 +399,11 @@ export default {
     }
     if( this.bind_data.item_info.item_type == "table" ){
       this.table_data_set();
+    }
+    if( this.bind_data.item_info.item_type == "pulldown" ){
+      if( this.bind_data.item_info.item_method == "dynamic" && this.list_info !== null ){
+        this.pulldown_data_set();
+      }
     }
     this.item_check();
     this.$nextTick(function() {
@@ -555,6 +571,18 @@ export default {
       //console.log("ItemInputter:table_data_change:data:"+JSON.stringify(data))
       data.item[data.field.key]=data.value;
       this.$emit('input',this.get_ret_data());
+    },
+    pulldown_data_set: function(){
+      console.log("pulldown_data_set="+JSON.stringify(this.list_info,null,2));
+      if( Array.isArray(this.list_info) ){
+        for( let i=0;i<this.list_info.length;i++ ){
+          if( this.list_info[i].item_key == this.bind_data.item_info.item_key ){
+            this.bind_data.pulldown_list = this.list_info[i].item_options;
+            console.log("pulldown_data_set3="+JSON.stringify(this.bind_data.pulldown_list,null,2));
+            this.bind_data.item_data = this.bind_data.pulldown_list[0].value;
+          }
+        }
+      }
     },
     // 画像の選択
     item_image_input: async function(){
