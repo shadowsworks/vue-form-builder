@@ -38,7 +38,10 @@ export default {
 
   props: {
     // Form情報
-    form_data: Object,
+    form_data: {
+      type: Object,
+      default: null
+    },
     // pdf出力
 		pdf_output: {
       type: Boolean,

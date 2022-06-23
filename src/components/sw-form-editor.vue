@@ -54,9 +54,23 @@ export default {
   },
   props: {
     // 編集の時は Item情報 を指定
-    form_info: Object,
+    form_info: {
+      type:  Object,
+      default: null
+    },
     //
-    type_info: [ String, Array, Number ],
+    type_info: [ 
+      {
+        type: String,
+        default: ""
+      },{
+        type: Array,
+        default: [],
+      } ,{
+        type: Number,
+        default: 0,
+      }
+    ],
     //
     type_option: {
       type:  String,
@@ -108,8 +122,8 @@ export default {
           { item_type: "name", type_desc: lang[locale].full_name, icon_name: "person-square", level: 2 },
           { item_type: "telephone", type_desc: lang[locale].phone_number, icon_name: "telephone", level: 2 },
           { item_type: "email", type_desc: lang[locale].email, icon_name: "envelope", level: 2 },
-          { item_type: "pulldown", type_desc: lang[locale].pulldown, icon_name: "card-list", level: 2 },
-          { item_type: "label", type_desc: lang[locale].label, icon_name: "sticky", level: 2 },
+          { item_type: "pulldown", type_desc: lang[locale].pulldown, icon_name: "card-list", level: 3 },
+          { item_type: "label", type_desc: lang[locale].label, icon_name: "sticky", level: 3 },
           { item_type: "table", type_desc: lang[locale].table, icon_name: "table", level: 3 },
           { item_type: "markdown", type_desc: lang[locale].markdown, icon_name: "markdown", level: 3 },
         ],
@@ -160,10 +174,8 @@ export default {
   mounted(){
     this.bind_data.item_key_option = this.item_key_option;
     this.bind_data.item_condition_option = this.item_condition_option;
-    if( this.form_info !== undefined ){
-      if( this.form_info !== null ){
-        this.bind_data.form_info = this.form_info;
-      }
+    if( this.form_info !== null ){
+      this.bind_data.form_info = this.form_info;
     }
     this.set_type_info();
     this.$nextTick(function() {

@@ -23,9 +23,9 @@
 
       <div v-if='selected==="sw-form-editor"'>
         <sw-form-editor 
+          type_option="list"
           :form_info="bind_data.sw_form_editor.init_info" 
           :type_info="bind_data.sw_form_editor.type_info" 
-          type_option="tile"
           :item_key_option="bind_data.sw_form_editor.item_key_option" 
           :item_condition_option="bind_data.sw_form_editor.item_condition_option" 
           v-model="bind_data.sw_form_editor.form_info" />
@@ -65,10 +65,10 @@
         bind_data: {
           sw_form_editor: {
             init_info: null,
+            form_info: null,
             type_info: "ALL",
             item_key_option: "true",
             item_condition_option: "true",
-            form_info: null,
           },
           sw_form_inputter: {
             form_info: null,

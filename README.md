@@ -82,8 +82,11 @@ vue-form-producer は、以下の3つのコンポーネントで構成されて�
 |Property|Type|Default|Description|
 |:--|:--|:--|:--|
 |form_info|Object|null|null の時は、新規作成。v-model で取得した JSON Object をセットすると、編集モードとなる。|
-|type_info|String or Array or Number|"ALL"|"追加する項目"に表示する項目を指定。※別表を参照|
-|item_key_option|String|"false"|"true" or "false" を指定すること。項目キーの入力フィールドの表示/非表示を指定する。|
+|type_info|String or Array or Number|"ALL"|［追加する項目］に表示する項目を指定。※別表を参照|
+|type_option|String|"list"|［追加する項目タイプ］の表示方法を指定する。<br>"list":リスト形式 or "tile":タイル形式 を指定する。|
+|item_key_option|String|"false"|［項目キー］の入力フィールドの使用/不使用を指定する。<br>"true":使用 or "false":不使用 を指定すること。|
+|item_condition_option|String|"false"|［条件付き表示］の入力フィールドの使用/不使用を指定する。<br>"true":使用 or "false":不使用 を指定すること。|
+
 
 ### v-model
 
@@ -109,11 +112,14 @@ vue-form-producer は、以下の3つのコンポーネントで構成されて�
 ||"password"|パスワード|
 ||"name"|氏名|
 ||"telephone"|電話番号|
+||"email"|メールアドレス|
+||"pulldown"|プルダウン|
+||"label"|ラベル|
 ||"table"|表|
 ||"markdown"|マークダウン|
 |Number|1|"text","texts","number","radio", "checkbox","boolean","date","time","datetime" のセット|
-||2|1 + "image","password","name","telephone" のセット|
-||3|2 + "table","markdown" のセット|
+||2|1 + "image","password","name","telephone","email" のセット|
+||3|2 + "pulldown","label","table","markdown" のセット|
 
 
 <br>
@@ -145,7 +151,23 @@ vue-form-producer は、以下の3つのコンポーネントで構成されて�
 
 |Property|Type|Default|Description|
 |:--|:--|:--|:--|
-|form_info|Object|null|フォーム作成コンポーネントで取得したobjectを指定する|
+|form_info|Object|null|フォーム作成コンポーネントで取得したobjectを指定する。|
+|form_data|Object|null|編集時にフォーム入力コンポーネントで取得したobjectを指定する。|
+|form_list_info|Array|null|［プルダウン］項目で［動的］を選択した時に選択肢のデータを指定する。※別表を参照|
+
+### form_list_info
+
+```
+[ 
+  {
+    item_key: "select-1";
+    item_options: [
+      { value: 'value1', text: 'text 1' },
+      { value: 'value2', text: 'text 2' },...,{}
+    ]
+  },...,{}
+]
+```
 
 ### v-model
 
@@ -183,7 +205,7 @@ vue-form-producer は、以下の3つのコンポーネントで構成されて�
 
 |Property|Type|Default|Description|
 |:--|:--|:--|:--|
-|form_data|Object|null|フォーム入力コンポーネントで取得したobjectを指定する|
+|form_data|Object|null|フォーム入力コンポーネントで取得したobjectを指定する。|
 |pdf_output|boolean|false|true:PDF出力ボタンを表示する / false:PDF出力ボタンを表示しない|
 |pdf_output_button|String|"PDF出力"|PDF出力ボタンの名称|
 |pdf_output_placement|String|"top"|PDF出力ボタンの表示位置 "top":先頭 "bottom":最後尾|

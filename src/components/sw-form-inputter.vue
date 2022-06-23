@@ -25,9 +25,15 @@ export default {
   },
   props: {
     // Form情報
-    form_info: Object, 
+    form_info: {
+      type: Object,
+      default: null
+    },
     // Form情報
-    form_data: Object, 
+    form_data: {
+      type: Object,
+      default: null
+    },
     // Pulldown情報
     form_list_info: {
       type: Array, 

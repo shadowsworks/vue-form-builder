@@ -48,11 +48,11 @@
     <template v-if='bind_data.item_data.item_type=="name"' >
       <b-row>
         <b-col>
-          <label class="text-secondary mt-2 mb-0 small" >{{ bind_data.item_data.item_name[0] }}</label>
+          <label class="text-secondary ml-3 mt-2 mb-0 small" >{{ bind_data.item_data.item_name[0] }}</label>
           <div class="ml-3 mr-2">{{ bind_data.item_data.item_data[0] }}</div>
         </b-col>
         <b-col>
-          <label class="text-secondary mt-2 mb-0 small" >{{ bind_data.item_data.item_name[1] }}</label>
+          <label class="text-secondary ml-3 mt-2 mb-0 small" >{{ bind_data.item_data.item_name[1] }}</label>
           <div class="ml-3 mr-2">{{ bind_data.item_data.item_data[1] }}</div>
         </b-col>
       </b-row>
