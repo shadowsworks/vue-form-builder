@@ -7,8 +7,11 @@
     </div>
     <div id="form-viewer-content">
       <div v-for="item_data in bind_data.form_data.item_data" :key="item_data.item_uuid">
-        <sw-item-viewer v-if="item_data.item_show" :item_data="item_data" />
-        <div v-if="debug">{{ JSON.stringify(item_data,null,2) }}</div>
+        <div v-bind:class="bind_data.line_space">
+          <sw-item-viewer v-if="item_data.item_show" 
+            :item_data="item_data" 
+            :font_info="bind_data.form_data.font_info" />
+        </div>
       </div>
     </div>
     <div v-if='bind_data.pdf_output && bind_data.pdf_output_placement=="bottom"' class="text-right m-2">
@@ -16,6 +19,7 @@
         <b-icon icon="file-pdf"></b-icon> {{ bind_data.pdf_output_button }}
       </b-button>
     </div>
+    <div v-if="debug">form_data(in) {{ JSON.stringify(form_data,null,2) }}</div>
   </div>
 </template>
 
@@ -40,7 +44,7 @@ export default {
     // Form情報
     form_data: {
       type: Object,
-      default: null
+      default: () => null
     },
     // pdf出力
 		pdf_output: {
@@ -55,6 +59,10 @@ export default {
     pdf_output_placement: {
       type:  String,
       default: "top"
+    },
+    line_space: {
+      type: Number, 
+      default: 0
     },
     // デバッグ情報
     debug: {
@@ -71,6 +79,7 @@ export default {
         pdf_output: false,
         pdf_output_button: "",
         pdf_output_placement: "",
+        line_space: "mt-0",
       },
       state_data: {
         loaded: false
@@ -109,6 +118,11 @@ export default {
       handler: function(){
         this.bind_data.pdf_output_placement = this.pdf_output_placement;
       }
+    },
+    line_space: {
+      handler: function(){
+        this.bind_data.line_space = "mt-"+String(this.line_space);
+      }
     }
   },
   // インスタンス初期化後
@@ -123,6 +137,7 @@ export default {
     if( this.form_data != null ){
       this.bind_data.form_data = this.form_data;
     }
+    this.bind_data.line_space = "mt-"+String(this.line_space);
     this.bind_data.pdf_output = this.pdf_output;
     this.bind_data.pdf_output_button = this.pdf_output_button;
     this.bind_data.pdf_output_placement = this.pdf_output_placement;

@@ -2,11 +2,11 @@
   <div class="item-viewer text-left" v-if="state_data.loaded">
     <template v-if='bind_data.item_data.item_type=="text" || bind_data.item_data.item_type=="texts" || bind_data.item_data.item_type=="number" || 
       bind_data.item_data.item_type=="radio" || bind_data.item_data.item_type=="checkbox" ||
-      bind_data.item_data.item_type=="boolean" || bind_data.item_data.item_type=="telephone" || bind_data.item_data.item_type=="date" ||
+      bind_data.item_data.item_type=="toggle" || bind_data.item_data.item_type=="telephone" || bind_data.item_data.item_type=="date" ||
       bind_data.item_data.item_type=="time" || bind_data.item_data.item_type=="datetime" || bind_data.item_data.item_type=="table" ||
       bind_data.item_data.item_type=="markdown" || bind_data.item_data.item_type=="image" || bind_data.item_data.item_type=="password" ||
       bind_data.item_data.item_type=="email" || bind_data.item_data.item_type=="pulldown" ' >
-      <label class="text-secondary mt-2 mb-0 ml-3 small" >{{ bind_data.item_data.item_name }}</label>
+      <label class="text-secondary mt-2 mb-0 ml-3" v-bind:class="font_info">{{ bind_data.item_data.item_name }}</label>
     </template>
     
     <!-- <div class="text-left">{{ JSON.stringify(bind_data.item_data,null,2) }}</div> -->
@@ -40,7 +40,7 @@
     </template>
 
     <!-- スイッチ -->
-    <template v-if='bind_data.item_data.item_type=="boolean"'>
+    <template v-if='bind_data.item_data.item_type=="toggle"'>
       <div class="ml-3 mr-2">{{ bind_data.item_data.item_data }}</div>
     </template>
 
@@ -114,7 +114,9 @@
     <template v-if='bind_data.item_data.item_type=="label"' >
       <template v-if='bind_data.item_data.item_data.item_display_checked=="true"'>
         <div v-if='bind_data.item_data.item_data.item_markdown_checked=="true"' >
-          <sw-markdown-viewer :md_text="bind_data.item_data.item_data.item_description" />
+          <div class="ml-3 mr-2">
+            <sw-markdown-viewer :md_text="bind_data.item_data.item_data.item_description" />
+          </div>
         </div>
         <div v-else class="text-secondary mt-1 mb-0 ml-3 mr-2 long_text">{{ bind_data.item_data.item_data.item_description }}</div>
       </template>
@@ -139,7 +141,14 @@ export default {
   },
   props: {
     // Item情報
-    item_data: Object, 
+    item_data: {
+      type: Object,
+      default: () => null
+    },
+    font_info: {
+      type: String,
+      default: "small"
+    }
   },
   // ローカルデータ変数
   data () {

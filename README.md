@@ -81,46 +81,45 @@ vue-form-producer は、以下の3つのコンポーネントで構成されて�
 
 |Property|Type|Default|Description|
 |:--|:--|:--|:--|
-|form_info|Object|null|null の時は、新規作成。v-model で取得した JSON Object をセットすると、編集モードとなる。|
-|type_info|String or Array or Number|"ALL"|［追加する項目］に表示する項目を指定。※別表を参照|
-|type_option|String|"list"|［追加する項目タイプ］の表示方法を指定する。<br>"list":リスト形式 or "tile":タイル形式 を指定する。|
-|item_key_option|String|"false"|［項目キー］の入力フィールドの使用/不使用を指定する。<br>"true":使用 or "false":不使用 を指定すること。|
-|item_condition_option|String|"false"|［条件付き表示］の入力フィールドの使用/不使用を指定する。<br>"true":使用 or "false":不使用 を指定すること。|
+|form_info|Object|null|null の時は、新規作成。v-model で取得した "フォーム定義 JSON Object" をセットすると、編集モードとなる。|
+|type_info|String|"basic"|［追加する項目］に表示する項目を指定。複数の場合は、カンマ区切りで指定。※別表を参照|
+|type_option|String|"list"|［追加する項目タイプ］の表示方法を指定する。"list":リスト形式 or "tile":タイル形式 を指定する。|
+|item_key_option|String|"false"|［項目キー］の入力フィールドの使用/不使用を指定する。"true":使用 or "false":不使用 を指定すること。|
+|item_condition_option|String|"false"|［条件付き表示］の入力フィールドの使用/不使用を指定する。"true":使用 or "false":不使用 を指定すること。|
 
 
 ### v-model
 
 |Property|Event|Description|
 |:--|:--|:--|
-|value|update|フォームの定義されたデータが出力される。|
+|value|update|フォームが定義された "フォーム定義 JSON Object" が出力される。データフォーマットは<a href="https://form-producer.demo.shadows-works.com/">デモページ</a>を参照ください。|
 
 ### type-info
 
-|Type|Value|Description|
-|:--|:--|:--|
-|String|"ALL"|全てを表示する|
-|Array|"text"|短いテキスト|
-||"texts"|長いテキスト|
-||"number"|数値|
-||"radio"|ラジオボタン|
-||"checkbox"|チェックボックス|
-||"boolean"|スイッチ|
-||"date"|日付|
-||"time"|時刻|
-||"datetime"|日時|
-||"image"|写真|
-||"password"|パスワード|
-||"name"|氏名|
-||"telephone"|電話番号|
-||"email"|メールアドレス|
-||"pulldown"|プルダウン|
-||"label"|ラベル|
-||"table"|表|
-||"markdown"|マークダウン|
-|Number|1|"text","texts","number","radio", "checkbox","boolean","date","time","datetime" のセット|
-||2|1 + "image","password","name","telephone","email" のセット|
-||3|2 + "pulldown","label","table","markdown" のセット|
-
+|Value|Description|
+|:--|:--|
+|"all"|全てを表示する|
+|"text"|短いテキスト|
+|"texts"|長いテキスト|
+|"number"|数値|
+|"radio"|ラジオボタン|
+|"checkbox"|チェックボックス|
+|"toggle"|スイッチ|
+|"date"|日付|
+|"time"|時刻|
+|"datetime"|日時|
+|"image"|写真|
+|"password"|パスワード|
+|"name"|氏名|
+|"telephone"|電話番号|
+|"email"|メールアドレス|
+|"pulldown"|プルダウン|
+|"label"|ラベル|
+|"table"|表|
+|"markdown"|マークダウン|
+|"basic"|"text","texts","number","radio", "checkbox","toggle","date","time","datetime" のセット|
+|"standard"|"basic" + "image","password","name","telephone","email" のセット|
+|"pro"|"standard" + "pulldown","label","table","markdown" のセット|
 
 <br>
 
@@ -151,9 +150,10 @@ vue-form-producer は、以下の3つのコンポーネントで構成されて�
 
 |Property|Type|Default|Description|
 |:--|:--|:--|:--|
-|form_info|Object|null|フォーム作成コンポーネントで取得したobjectを指定する。|
-|form_data|Object|null|編集時にフォーム入力コンポーネントで取得したobjectを指定する。|
-|form_list_info|Array|null|［プルダウン］項目で［動的］を選択した時に選択肢のデータを指定する。※別表を参照|
+|form_info|Object|null|フォーム作成コンポーネントで取得した "フォーム定義 JSON Object" を指定する。データフォーマットは<a href="https://form-producer.demo.shadows-works.com/">デモページ</a>を参照ください。|
+|form_data|Object|null|新規の場合は、null。編集時には、フォーム入力コンポーネントで取得した "データ入力 JSON Object" を指定する。データフォーマットは<a href="https://form-producer.demo.shadows-works.com/">デモページ</a>を参照ください。|
+|form_list_info|Array|null|［プルダウン］項目で［動的］を選択した時に選択肢のデータを指定する。|
+|line_space|Number|0|項目の行間調整（0-5）|
 
 ### form_list_info
 
@@ -173,7 +173,7 @@ vue-form-producer は、以下の3つのコンポーネントで構成されて�
 
 |Property|Event|Description|
 |:--|:--|:--|
-|value|update|フォームで入力されたデータが出力される。|
+|value|update|フォームで入力された "データ入力 JSON Object" が出力される。データフォーマットは<a href="https://form-producer.demo.shadows-works.com/">デモページ</a>を参照ください。|
 
 
 <br>
@@ -205,10 +205,11 @@ vue-form-producer は、以下の3つのコンポーネントで構成されて�
 
 |Property|Type|Default|Description|
 |:--|:--|:--|:--|
-|form_data|Object|null|フォーム入力コンポーネントで取得したobjectを指定する。|
-|pdf_output|boolean|false|true:PDF出力ボタンを表示する / false:PDF出力ボタンを表示しない|
+|form_data|Object|null|フォーム入力コンポーネントで取得した "データ入力 JSON Object" を指定する。|
+|pdf_output|toggle|false|true:PDF出力ボタンを表示する / false:PDF出力ボタンを表示しない|
 |pdf_output_button|String|"PDF出力"|PDF出力ボタンの名称|
 |pdf_output_placement|String|"top"|PDF出力ボタンの表示位置 "top":先頭 "bottom":最後尾|
+|line_space|Number|0|項目の行間調整（0-5）|
 
 <br><br><br>
 

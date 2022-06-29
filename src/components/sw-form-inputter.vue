@@ -1,13 +1,20 @@
 <template>
   <div class="form-inputter text-left" v-if="state_data.loaded">
     <div v-for="(item_info,index) in bind_data.form_info.item_info" :key="item_info.item_uuid">
-      <div v-show="show_judgement(item_info,bind_data.form_data)">
-        <sw-item-inputter :item_info="item_info" :item_data="bind_data.form_data.item_data[index]" 
-            :list_info="bind_data.form_list_info" v-model="bind_data.form_data.item_data[index]" />
+      <div v-show="show_judgement(item_info,bind_data.form_data)" v-bind:class="bind_data.line_space">
+        <sw-item-inputter 
+          :font_info="bind_data.form_info.font_info"
+          :item_info="item_info" 
+          :item_data="bind_data.form_data.item_data[index]" 
+          :list_info="bind_data.form_list_info" 
+          v-model="bind_data.form_data.item_data[index]" />
       </div>
     </div>
-    <div v-if="debug">{{ JSON.stringify(bind_data.form_info,null,2) }}</div>
-    <div v-if="debug">{{ JSON.stringify(bind_data.form_data,null,2) }}</div>
+    <div v-if="debug">form_info {{ JSON.stringify(bind_data.form_info,null,2) }}</div>
+    <div v-if="debug"><hr></div>
+    <div v-if="debug">form_data(in) {{ JSON.stringify(form_data,null,2) }}</div>
+    <div v-if="debug"><hr></div>
+    <div v-if="debug">form_data(out) {{ JSON.stringify(bind_data.form_data,null,2) }}</div>
   </div>
 </template>
 
@@ -27,17 +34,21 @@ export default {
     // Form情報
     form_info: {
       type: Object,
-      default: null
+      default: () => null
     },
     // Form情報
     form_data: {
       type: Object,
-      default: null
+      default: () => null,
     },
     // Pulldown情報
     form_list_info: {
       type: Array, 
       default: null
+    },
+    line_space: {
+      type: Number, 
+      default: 0
     },
     // デバッグ情報
     debug: {
@@ -53,8 +64,13 @@ export default {
         form_info: null,
         form_list_info: null,
         form_data: {
+          version: "", 
+          update: "", 
+          desc: "", 
+          font_info: "small",
           item_data: []
         },
+        line_space: "mt-0",
       },
       state_data: {
         loaded: false,
@@ -94,6 +110,11 @@ export default {
       },
       deep: true,
     },
+    line_space: {
+      handler: function(){
+        this.bind_data.line_space = "mt-"+String(this.line_space);
+      }
+    },
   },
   // インスタンス初期化後
   created(){
@@ -110,6 +131,8 @@ export default {
     if( this.form_list_info !== null ){
       this.bind_data.form_list_info = this.form_list_info;
     }
+    this.bind_data.line_space = "mt-"+String(this.line_space);
+    //this.bind_data.font_info = this.font_info;
     this.data_set();
     this.reset();
     this.$emit('input',this.bind_data.form_data);
@@ -120,15 +143,21 @@ export default {
       return lang[locale][param];
     },
     data_set: function(){
-      if( this.form_info !== undefined && this.form_info != null ){
-        this.bind_data.form_info = this.form_info;
-        if( this.form_data !== undefined  && this.form_data != null ){
+      if( this.form_info != null ){
+        this.bind_data.form_info = JSON.parse(JSON.stringify(this.form_info));
+        this.bind_data.form_data.version = this.bind_data.form_info.version;
+        this.bind_data.form_data.update = this.bind_data.form_info.update;
+        this.bind_data.form_data.desc = this.bind_data.form_info.desc;
+        this.bind_data.form_data.font_info = this.bind_data.form_info.font_info;
+        this.bind_data.form_data.item_data = [];
+        if( this.form_data != null ){
           //console.log("FormInputter:methods:data_set1:");
           for( let i=0;i<this.bind_data.form_info.item_info.length;i++ ){
+            //if( this.debug ) console.log("FormInputter:methods:this.form_data=:"+JSON.stringify(this.form_data));
             for( let j=0;j<this.form_data.item_data.length;j++ ){
               if( this.bind_data.form_info.item_info[i].item_uuid === this.form_data.item_data[j].item_uuid ){
                 this.bind_data.form_data.item_data.push(this.form_data.item_data[j].item_data);
-                //console.log("FormInputter:mounted:this.form_data.item_data[j]"+JSON.stringify(this.form_data.item_data[j]));
+                //if( this.debug ) console.log("FormInputter:data_set:"+JSON.stringify(this.form_data.item_data[j],null,2));
               }
             }
           }

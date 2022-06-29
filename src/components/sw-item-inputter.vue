@@ -5,7 +5,7 @@
       bind_data.item_info.item_type=="number" || 
       bind_data.item_info.item_type=="radio" || 
       bind_data.item_info.item_type=="checkbox" ||
-      bind_data.item_info.item_type=="boolean" || 
+      bind_data.item_info.item_type=="toggle" || 
       bind_data.item_info.item_type=="telephone" || 
       bind_data.item_info.item_type=="date" ||
       bind_data.item_info.item_type=="time" || 
@@ -16,7 +16,7 @@
       bind_data.item_info.item_type=="password" ||
       bind_data.item_info.item_type=="email" ||
       bind_data.item_info.item_type=="pulldown"' >
-      <label class="text-secondary mt-2 mb-0 small" >{{ bind_data.item_info.item_name }}</label>
+      <label class="text-secondary mt-2 mb-0" v-bind:class="bind_data.font_info">{{ bind_data.item_info.item_name }}</label>
       <b-badge v-if='bind_data.item_info.item_must && bind_data.item_info.item_must_badge=="checked"' variant="danger" class="mx-2">{{ lang('mandatory') }}</b-badge>
     </template>
 
@@ -25,7 +25,8 @@
       <b-form-input type="text" v-model="bind_data.item_data" class="mt-0 mb-0" 
         :placeholder="bind_data.item_info.item_placeholder" 
         :maxlength="bind_data.item_info.item_length" 
-        :state="state_item(bind_data.item_data,bind_data.item_info)" />
+        :state="state_item(bind_data.item_data,bind_data.item_info)" 
+        @blur="state_focus()" />
       <div class="text-secondary mt-1 mb-0 small">{{ bind_data.item_info.item_description }}</div>
     </template>
 
@@ -35,7 +36,8 @@
         :placeholder="bind_data.item_info.item_placeholder" 
         :rows="bind_data.item_info.item_rows" 
         :maxlength="bind_data.item_info.item_length" 
-        :state="state_item(bind_data.item_data,bind_data.item_info)" />
+        :state="state_item(bind_data.item_data,bind_data.item_info)" 
+        @blur="state_focus()" />
       <div class="text-secondary mt-1 mb-0 small">{{ bind_data.item_info.item_description }}</div>
     </template>
 
@@ -45,7 +47,8 @@
         <b-form-input type="number" v-model="bind_data.item_data" class="mt-0 mb-0" 
           :placeholder="bind_data.item_info.item_placeholder" 
           :min="bind_data.item_info.item_limit_min" :max="bind_data.item_info.item_limit_max" 
-          :state="state_item(bind_data.item_data,bind_data.item_info)" />
+          :state="state_item(bind_data.item_data,bind_data.item_info)" 
+          @blur="state_focus()" />
         <b-input-group-append v-if='bind_data.item_info.item_unit_name!==""'>
           <b-input-group-text>{{ bind_data.item_info.item_unit_name }}</b-input-group-text>
         </b-input-group-append>
@@ -66,7 +69,7 @@
     </template>
 
     <!-- スイッチ -->
-    <template v-if='bind_data.item_info.item_type=="boolean"'>
+    <template v-if='bind_data.item_info.item_type=="toggle"'>
       <b-form-checkbox v-model="bind_data.item_data" switch size="lg"
         :value="bind_data.item_info.item_checked_value" 
         :unchecked-value="bind_data.item_info.item_unchecked_value">
@@ -79,12 +82,13 @@
     <template v-if='bind_data.item_info.item_type=="name"' >
       <b-row>
         <b-col v-for="n in 2" :key="n" cols="6">
-          <label class="text-secondary mt-2 mb-0 small" >{{ bind_data.item_info.item_name[n-1] }}</label>
+          <label class="text-secondary mt-2 mb-0" v-bind:class="bind_data.font_info">{{ bind_data.item_info.item_name[n-1] }}</label>
           <b-badge v-if='bind_data.item_info.item_must && bind_data.item_info.item_must_badge=="checked"' variant="danger" class="mx-2">{{ lang('mandatory') }}</b-badge>
           <b-form-input type="text" v-model="bind_data.item_data[n-1]" class="mt-0 mb-0" 
             :placeholder="bind_data.item_info.item_placeholder[n-1]" 
             :maxlength="bind_data.item_info.item_length"
-            :state="state_item(bind_data.item_data[n-1],bind_data.item_info)" />
+            :state="state_item(bind_data.item_data[n-1],bind_data.item_info)" 
+            @blur="state_focus()" />
         </b-col>
       </b-row>
       <div class="text-secondary mt-1 mb-0 small">{{ bind_data.item_info.item_description }}</div>
@@ -97,7 +101,8 @@
           <b-form-input type="text" v-model="bind_data.item_data[n-1]" class="mt-0 mb-0" 
             :placeholder="bind_data.item_info.item_placeholder[n-1]" 
             :maxlength="bind_data.item_info.item_length"
-            :state="state_item(bind_data.item_data[n-1],bind_data.item_info)" />
+            :state="state_item(bind_data.item_data[n-1],bind_data.item_info)"
+            @blur="state_focus()" />
         </b-col>
       </b-row>
       <div class="text-secondary mt-1 mb-0 small">{{ bind_data.item_info.item_description }}</div>
@@ -108,7 +113,8 @@
       <b-input-group>
         <b-form-datepicker v-model="bind_data.item_data" class="mb-0" :placeholder="bind_data.item_info.item_placeholder" locale="ja"
             :date-format-options="{ year: 'numeric', month: '2-digit', day: '2-digit', weekday: 'short' }" 
-            :state="state_item(bind_data.item_data,bind_data.item_info)" />
+            :state="state_item(bind_data.item_data,bind_data.item_info)" 
+            @blur="state_focus()" />
         <b-input-group-append is-text style="height:38px;">
           <b-icon icon="eraser" class="mt-0 item-curosr" @click="erase_item_data()"></b-icon>
         </b-input-group-append>
@@ -121,7 +127,8 @@
       <b-input-group>
         <b-form-timepicker v-model="bind_data.item_data" class="mb-0" :placeholder="bind_data.item_info.item_placeholder" 
             now-button label-now-button="現在" now-button-variant="outline-secondary" label-close-button="閉じる" label-no-time-selected="未設定"
-            :state="state_item(bind_data.item_data,bind_data.item_info)" />
+            :state="state_item(bind_data.item_data,bind_data.item_info)" 
+            @blur="state_focus()" />
         <b-input-group-append is-text style="height:38px;">
           <b-icon icon="eraser" class="mt-0 item-curosr" @click="erase_item_data()" ></b-icon>
         </b-input-group-append>
@@ -136,7 +143,8 @@
           <b-input-group>
             <b-form-datepicker v-model="bind_data.item_data[0]" class="mb-2" :placeholder="bind_data.item_info.item_placeholder[0]" locale="ja"
                 :date-format-options="{ year: 'numeric', month: '2-digit', day: '2-digit', weekday: 'short' }" 
-                :state="state_item(bind_data.item_data[0],bind_data.item_info)" />
+                :state="state_item(bind_data.item_data[0],bind_data.item_info)" 
+                @blur="state_focus()" />
             <b-input-group-append is-text style="height:38px;">
               <b-icon icon="eraser" class="mt-0 item-curosr" @click="erase_item_data(0)" ></b-icon>
             </b-input-group-append>
@@ -146,7 +154,8 @@
           <b-input-group>
             <b-form-timepicker v-model="bind_data.item_data[1]" class="mb-0" :placeholder="bind_data.item_info.item_placeholder[1]" 
                 now-button label-now-button="現在" now-button-variant="outline-secondary" label-close-button="閉じる" label-no-time-selected="未設定"
-                :state="state_item(bind_data.item_data[1],bind_data.item_info)" />
+                :state="state_item(bind_data.item_data[1],bind_data.item_info)" 
+                @blur="state_focus()" />
             <b-input-group-append is-text style="height:38px;">
               <b-icon icon="eraser" class="mt-0 item-curosr" @click="erase_item_data(1)" ></b-icon>
             </b-input-group-append>
@@ -187,7 +196,8 @@
         <b-form-file v-model="bind_data.image_file" @input="item_image_input"
           :placeholder="bind_data.item_info.item_placeholder"
           :drop-placeholder="lang('drop_here')" accept=".jpg,.png,.JPG,.PNG" 
-          :state="state_item(bind_data.item_data,bind_data.item_info)" />
+          :state="state_item(bind_data.item_data,bind_data.item_info)"
+          @blur="state_focus()"  />
         <b-input-group-append>
           <b-button variant="info" @click="item_image_clear">Clear</b-button>
         </b-input-group-append>
@@ -201,7 +211,8 @@
         <b-form-input :type="state_data.password_type" v-model="bind_data.item_data" class="mt-0 mb-0" 
           :placeholder="bind_data.item_info.item_placeholder" 
           :maxlength="bind_data.item_info.item_length_max" 
-          :state="state_item(bind_data.item_data,bind_data.item_info)" />
+          :state="state_item(bind_data.item_data,bind_data.item_info)" 
+          @blur="state_focus()" />
         <b-input-group-append is-text>
           <b-link v-on:click="password_icon"><b-icon :icon="state_data.password_icon"></b-icon></b-link>
         </b-input-group-append>
@@ -214,7 +225,8 @@
       <b-form-input type="text" v-model="bind_data.item_data" class="mt-0 mb-0" 
         :placeholder="bind_data.item_info.item_placeholder" 
         :maxlength="bind_data.item_info.item_length" 
-        :state="state_item(bind_data.item_data,bind_data.item_info)" />
+        :state="state_item(bind_data.item_data,bind_data.item_info)" 
+        @blur="state_focus()" />
       <div class="text-secondary mt-1 mb-0 small">{{ bind_data.item_info.item_description }}</div>
     </template>
 
@@ -259,12 +271,22 @@ export default {
   },
   props: {
     // Item情報
-    item_info: Object,
-    item_data: [ String, Array, Object ],
+    item_info: {
+      type: Object,
+      default: () => null
+    },
+    item_data: {
+      type: [ String, Array, Object ],
+      default: () => null,
+    },
     list_info: {
       type: Array, 
       default: null
     },
+    font_info: {
+      type: String, 
+      default: "small"
+    }
   },
   // ローカルデータ変数
   data () {
@@ -278,6 +300,7 @@ export default {
         image_file: null,
         image_preview_src: "",
         pulldown_list: [],
+        font_info: "small",//font-weight-bold small
       },
       local_data: {
         table_field: { key: 'row_name', label: '', stickyColumn: true, }, 
@@ -288,6 +311,7 @@ export default {
         preview: false,
         debug: false,
         show: false,
+        focus: false,
         password_type: "password",
         password_icon: "eye",
       }
@@ -298,8 +322,10 @@ export default {
     state_item: function() {
       return function(item_data,item_info){
         if( item_info.item_must ){
-          if( item_data === "" || item_data === null ){
+          if( ( item_data === "" || item_data === null ) && this.state_data.focus ){
             return false;
+          } else {
+            return null;
           }
         }
         // 短いテキスト 電話番号
@@ -351,12 +377,6 @@ export default {
             this.pulldown_data_set();
           }
         }
-        // this.item_check();
-        // this.state_data.loaded = false;
-        // this.$nextTick(function() {
-        //   this.state_data.loaded = true;
-        // });
-        // this.$emit('input',this.get_ret_data());
       },
       deep: true,
     },
@@ -382,6 +402,9 @@ export default {
       },
       deep: true,
     },
+    font_info(){
+      this.bind_data.font_info = this.font_info;
+    }
   },
   // インスタンス初期化後
   created(){
@@ -393,7 +416,8 @@ export default {
   mounted(){
     this.is_show();
     this.bind_data.item_info = this.item_info;
-    if( this.item_data !== undefined && this.item_data !== null ){
+    this.bind_data.font_info = this.font_info;
+    if( this.item_data !== null ){
       //console.log("ItemInputter:mounted:"+JSON.stringify(this.item_data))
       this.bind_data.item_data = this.item_data;
     }
@@ -406,6 +430,7 @@ export default {
       }
     }
     this.item_check();
+    this.state_data.loaded = false;
     this.$nextTick(function() {
       this.state_data.loaded = true;
     });
@@ -415,6 +440,9 @@ export default {
   methods: {
     lang: function( param ){
       return lang[locale][param];
+    },
+    state_focus: function(){
+      this.state_data.focus = true;
     },
     item_check: function(){
       if( this.bind_data.item_data === null ){
@@ -558,7 +586,13 @@ export default {
             if( i==0 ){
               row[this.bind_data.table_fields[i].key] = this.bind_data.item_info.table_rows[j].value;
             } else {
-              row[this.bind_data.table_fields[i].key] = "";
+              if( this.bind_data.item_data === null ){
+                row[this.bind_data.table_fields[i].key] = "";
+              } else {
+                //console.log(JSON.stringify(this.bind_data.item_data.table_items[j]));
+                row[this.bind_data.table_fields[i].key] = this.bind_data.item_data.table_items[j][this.bind_data.table_fields[i].key];
+                //row[this.bind_data.table_fields[i].key] = "";
+              }
             }
           }
           this.bind_data.table_items.push(row);
@@ -573,12 +607,12 @@ export default {
       this.$emit('input',this.get_ret_data());
     },
     pulldown_data_set: function(){
-      console.log("pulldown_data_set="+JSON.stringify(this.list_info,null,2));
+      //console.log("pulldown_data_set="+JSON.stringify(this.list_info,null,2));
       if( Array.isArray(this.list_info) ){
         for( let i=0;i<this.list_info.length;i++ ){
           if( this.list_info[i].item_key == this.bind_data.item_info.item_key ){
             this.bind_data.pulldown_list = this.list_info[i].item_options;
-            console.log("pulldown_data_set3="+JSON.stringify(this.bind_data.pulldown_list,null,2));
+            //console.log("pulldown_data_set3="+JSON.stringify(this.bind_data.pulldown_list,null,2));
             this.bind_data.item_data = this.bind_data.pulldown_list[0].value;
           }
         }
@@ -762,7 +796,7 @@ export default {
       if( this.bind_data.item_info.item_type == "checkbox" ){
         this.bind_data.item_data = [];
       }
-      if( this.bind_data.item_info.item_type == "boolean" ){
+      if( this.bind_data.item_info.item_type == "toggle" ){
         this.bind_data.item_data = this.bind_data.item_info.item_unchecked_value;
       }
       if( this.bind_data.item_info.item_type == "name" || this.bind_data.item_info.item_type == "datetime" ){

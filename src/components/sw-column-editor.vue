@@ -40,8 +40,14 @@ export default {
       type:  String,
       default: "checkbox"
     },
-    max_column: String,
-    column_data: [ Array, Object ],
+    max_column: {
+      type: String,
+      default: ""
+    },
+    column_data: {
+      type: [ Array, Object ],
+      default: () => null,
+    }
   },
   // ローカルデータ変数
   data () {

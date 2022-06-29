@@ -1,10 +1,10 @@
 {
   "name": "vue-form-producer",
-  "version": "0.4.0",
-  "update": "2022-06-23",
+  "version": "0.4.9",
+  "update": "2022-06-29",
   "private": false,
   "description": "業務アプリケーションに必要とされるフォームの作成から、フォームを使った入力画面、データ表示画面までをJSONデータで連携し、Vue.js / Bootstrap-Vue でのフロントエンド開発におけるフォーム開発の生産性を飛躍的に向上するコンポーネントです。",
-  "main": "dist/vue-form-producer.umd.js",
+  "main": "dist/vue-form-producer.umd.min.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/shadowsworks/vue-form-producer"
@@ -30,7 +30,7 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "build-bundle": "vue-cli-service build --target lib --name vue-form-producer --formats umd ./src/build-entry.js"
+    "build-bundle": "vue-cli-service build --target lib --name vue-form-producer --formats umd-min ./src/build-entry.js"
   },
   "dependencies": {
     "bootstrap-vue": "2.22.0",

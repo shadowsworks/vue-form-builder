@@ -6,13 +6,16 @@
         <div v-if='type_option=="tile"'>
           <b-row class="mx-1">
             <b-col cols="6" class="item mx-0 px-0" v-for="(type_info) in bind_data.type_info" :key="type_info.item_type">
-              <sw-item-type :type_info="type_info" :type_option="type_option" @add_item_method="add_item_method" />
+              <sw-item-type class="m-1" :type_info="type_info" :type_option="type_option" @add_item_method="add_item_method" />
             </b-col>
           </b-row>
         </div>
         <div v-if='type_option=="list"'>
           <div class="item m-1" v-for="(type_info) in bind_data.type_info" :key="type_info.item_type">
-            <sw-item-type :type_info="type_info" :type_option="type_option" @add_item_method="add_item_method" />
+            <sw-item-type 
+              :type_info="type_info" 
+              :type_option="type_option" 
+              @add_item_method="add_item_method" />
           </div>
         </div>
       </b-col>
@@ -20,18 +23,28 @@
         <div class="text-secondary mx-1 mt-0 mb-2 small border-bottom" >{{ lang('item_setting') }}</div>
         <draggable v-model="bind_data.form_info.item_info" group="myGroup2">
           <div class="item m-1" v-for="(item_info,index) in bind_data.form_info.item_info" :key="item_info.item_uuid">
-            <sw-item-editor :item_info="item_info" :item_key_option="bind_data.item_key_option" :item_condition_option="bind_data.item_condition_option" 
-              v-model="bind_data.form_info.item_info[index]" @copy_item_method="copy_item_method" @delete_item_method="delete_item_method" />
+            <sw-item-editor 
+              :item_info="item_info" 
+              :item_key_option="bind_data.item_key_option" 
+              :item_condition_option="bind_data.item_condition_option" 
+              v-model="bind_data.form_info.item_info[index]" 
+              :font_info="bind_data.font_info" 
+              @copy_item_method="copy_item_method" 
+              @delete_item_method="delete_item_method" />
           </div>
         </draggable>
       </b-col>
       <b-col cols="4" class="border-left">
         <div class="text-secondary mx-1 mt-0 mb-2 small border-bottom" >{{ lang('preview') }}</div>
         <div v-for="(item_info,index) in bind_data.form_info.item_info" :key="item_info.item_uuid">
-          <sw-item-inputter debug :item_info="item_info" v-model="local_data.item_data[index]" />
+          <sw-item-inputter
+            :item_info="item_info" 
+            :font_info="bind_data.form_info.font_info" 
+            v-model="local_data.item_data[index]" />
         </div>
       </b-col>
     </b-row>
+    <div v-if="debug">{{ JSON.stringify(bind_data.form_info,null,2) }}</div>
   </div>
 </template>
 
@@ -55,22 +68,14 @@ export default {
   props: {
     // 編集の時は Item情報 を指定
     form_info: {
-      type:  Object,
-      default: null
+      type: Object,
+      default: () => null
     },
-    //
-    type_info: [ 
-      {
-        type: String,
-        default: ""
-      },{
-        type: Array,
-        default: [],
-      } ,{
-        type: Number,
-        default: 0,
-      }
-    ],
+    // 複数指定の時はカンマ区切りで
+    type_info: {
+      type: String,
+      default: ""
+    },
     //
     type_option: {
       type:  String,
@@ -85,6 +90,15 @@ export default {
       type:  String,
       default: "false"
     },
+    font_info: {
+      type:  String,
+      default: "small"
+    },
+    // デバッグ情報
+    debug: {
+      type: Boolean,
+      default: false
+    }
   },
   // ローカルデータ変数
   data () {
@@ -98,6 +112,7 @@ export default {
           version: require('../../package.json').version,
           update: require('../../package.json').update,
           desc: "",
+          font_info: "small",
           item_info: [],
         },
         item_key_option: "false",
@@ -113,7 +128,7 @@ export default {
           { item_type: "number", type_desc: lang[locale].numeric, icon_name: "dice-6", level: 1 },
           { item_type: "radio", type_desc: lang[locale].radio, icon_name: "check-circle", level: 1 },
           { item_type: "checkbox", type_desc: lang[locale].checkbox, icon_name: "check-square", level: 1 },
-          { item_type: "boolean", type_desc: lang[locale].switch, icon_name: "toggle-on", level: 1 },
+          { item_type: "toggle", type_desc: lang[locale].switch, icon_name: "toggle-on", level: 1 },
           { item_type: "date", type_desc: lang[locale].date, icon_name: "calendar-date", level: 1 },
           { item_type: "time", type_desc: lang[locale].time, icon_name: "clock", level: 1 },
           { item_type: "datetime", type_desc: lang[locale].datetime, icon_name: "calendar-plus", level: 1 },
@@ -163,6 +178,9 @@ export default {
     type_option(){
       this.bind_data.type_option = this.type_option;
     },
+    font_info(){
+      this.bind_data.form_info.font_info = this.font_info;
+    },
   },
   // インスタンス初期化後
   created(){
@@ -174,6 +192,7 @@ export default {
   mounted(){
     this.bind_data.item_key_option = this.item_key_option;
     this.bind_data.item_condition_option = this.item_condition_option;
+    this.bind_data.form_info.font_info = this.font_info;
     if( this.form_info !== null ){
       this.bind_data.form_info = this.form_info;
     }
@@ -227,26 +246,31 @@ export default {
     set_type_info: function(){
       //console.log("FormEditor:set_type_info="+this.type_info);
       this.bind_data.type_info = [];
-      if( this.type_info === undefined ){
-        this.bind_data.type_info = this.local_data.type_info;
-      } else {
-        if( this.isNum(this.type_info) ){
-          for( let j=0;j<this.local_data.type_info.length;j++ ){
-            if( this.local_data.type_info[j].level <= this.type_info ){
-              //console.log("FormEditor:this.local_data.type_info[j]="+this.local_data.type_info[j]);
-              this.bind_data.type_info.push(this.local_data.type_info[j]);
-            }
+      let level = 0;
+      if( this.type_info === "" ){
+        level = 1;
+      } else if( this.type_info === "all" ){
+        level = 3;
+      } else if( this.type_info === "basic" ){
+        level = 1;
+      } else if( this.type_info === "standard" ){
+        level = 2;
+      } else if( this.type_info === "pro" ){
+        level = 3;
+      }
+      if( level > 0 ){
+        for( let j=0;j<this.local_data.type_info.length;j++ ){
+          if( this.local_data.type_info[j].level <= level ){
+            //console.log("FormEditor:this.local_data.type_info[j]="+this.local_data.type_info[j]);
+            this.bind_data.type_info.push(this.local_data.type_info[j]);
           }
         }
-        if( this.type_info === "ALL" ){
-          this.bind_data.type_info = this.local_data.type_info;
-        }
-        if( Array.isArray(this.type_info) ){
-          for( let i=0;i<this.type_info.length;i++ ){
-            for( let j=0;j<this.local_data.type_info.length;j++ ){
-              if( this.type_info[i] === this.local_data.type_info[j].item_type ){
-                this.bind_data.type_info.push(this.local_data.type_info[j]);
-              }
+      } else {
+        let type_info_array = this.type_info.split(",");
+        for( let i=0;i<type_info_array.length;i++ ){
+          for( let j=0;j<this.local_data.type_info.length;j++ ){
+            if( type_info_array[i] === this.local_data.type_info[j].item_type ){
+              this.bind_data.type_info.push(this.local_data.type_info[j]);
             }
           }
         }

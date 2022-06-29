@@ -33,13 +33,21 @@ export default {
   components: {
   },
   props: {
+    // マークダウンテキスト初期値（編集時）
+    md_text: {
+      type: String,
+      default: ""
+    },
     // 行数
 		rows: {
       type: Number,
       default: 0
     },
     // 最大文字数
-    max_length: [ Number, String ],
+    max_length: {
+      type: Number,
+      default: 30,
+    },
     // 必須
     must: {
       type: Boolean,
@@ -92,6 +100,9 @@ export default {
   },
   // 監視
   watch: {
+    md_text: function(){
+      this.state_textarea = this.md_text;
+    },
     rows: function(){
       this.state_rows = this.rows;
     },
@@ -120,6 +131,7 @@ export default {
   },
   // インスタンスマウント後
   mounted(){
+    this.state_textarea = this.md_text;
     this.state_rows = this.rows;
     this.state_max_length = this.max_length;
     this.state_must = this.must;

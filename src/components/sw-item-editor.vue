@@ -78,8 +78,17 @@
             </b-form>
           </div>
 
-          <!-- 必須選択 ラジオボタン チェックボックス スイッチ 表-->
-          <template v-if='bind_data.item_type!=="radio" && bind_data.item_type!=="checkbox" && bind_data.item_type!=="boolean" 
+          <!-- 必須選択 ラジオボタン チェックボックス スイッチ プルダウン -->
+          <template v-if='bind_data.item_type=="radio" || bind_data.item_type=="checkbox" || bind_data.item_type=="toggle" 
+            || bind_data.item_type=="pulldown"'>
+            <label class="text-secondary mt-2 mb-0 small">{{ lang('required') }}</label>
+            <div v-if="bind_data.item_must" class="float-right mt-1">
+              <br><b-form-checkbox v-model="bind_data.item_must_badge" value="checked" unchecked-value="unchecked">{{ lang('badge') }}</b-form-checkbox>
+            </div>
+            <div class="text-secondary mt-0 mb-0 fsize">必須</div>
+          </template>
+          <!-- 必須選択 ラジオボタン チェックボックス スイッチ プルダウン 表 ラベル 以外-->
+          <template v-if='bind_data.item_type!=="radio" && bind_data.item_type!=="checkbox" && bind_data.item_type!=="toggle" 
             && bind_data.item_type!=="table" && bind_data.item_type!=="pulldown" && bind_data.item_type!=="label"'>
             <label class="text-secondary mt-2 mb-0 small">{{ lang('required') }}</label>
             <div v-if="bind_data.item_must" class="float-right mt-1">
@@ -165,7 +174,7 @@
           </template>
 
           <!-- スイッチ -->
-          <template v-if='bind_data.item_type=="boolean"'>
+          <template v-if='bind_data.item_type=="toggle"'>
             <!-- 値 -->
             <b-row>
               <b-col cols="6">
@@ -358,7 +367,10 @@ export default {
   props: {
     // 新規の時は item_no を指定
     // 編集の時は Item情報 を指定
-    item_info: Object, 
+    item_info: {
+      type: Object, 
+      default: () => null
+    },
     // No
 		item_no: {
       type: Number,
@@ -422,7 +434,7 @@ export default {
             item_condition_key: "", //条件付き表示
             item_condition_value: "", //条件付き表示
             item_must: false, 
-            item_must_badge: false,
+            item_must_badge: "unchecked",
             item_length: 20,      //文字数初期値
             item_length_min: 1,   //文字数最小値
             item_length_max: 100, //文字数最大値
@@ -479,7 +491,7 @@ export default {
             item_condition_use: false, //条件付き表示
             item_condition_key: "", //条件付き表示
             item_condition_value: "", //条件付き表示
-            item_must: false,
+            item_must: true,
             item_must_badge: "unchecked",
             item_options: [],
             item_stacked: false,
@@ -496,14 +508,14 @@ export default {
             item_condition_use: false, //条件付き表示
             item_condition_key: "", //条件付き表示
             item_condition_value: "", //条件付き表示
-            item_must: false, 
-            item_must_badge: false,
+            item_must: true, 
+            item_must_badge: "unchecked",
             item_options: [],
             item_stacked: false,
             item_uuid: "",
             item_seq: 0,
           },{ 
-            item_type: 'boolean', 
+            item_type: 'toggle', 
             item_state: false,
             item_name: lang[locale].switch, 
             item_desc: lang[locale].switch, 
@@ -513,7 +525,7 @@ export default {
             item_condition_use: false, //条件付き表示
             item_condition_key: "", //条件付き表示
             item_condition_value: "", //条件付き表示
-            item_must: false, 
+            item_must: true, 
             item_must_badge: "unchecked",
             item_checked_value: "true",
             item_unchecked_value: "false",
@@ -568,7 +580,7 @@ export default {
             item_condition_key: "", //条件付き表示
             item_condition_value: "", //条件付き表示
             item_must: false,
-            item_must_badge: false,
+            item_must_badge: "unchecked",
             item_uuid: "",
             item_seq: 0,
           },{ 
@@ -599,7 +611,7 @@ export default {
             item_condition_value: "", //条件付き表示
             item_cols: "12", //6:縦向き 12:横向き
             item_must: false,
-            item_must_badge: false,
+            item_must_badge: "unchecked",
             item_uuid: "",
             item_seq: 0,
           },{ 
@@ -678,10 +690,6 @@ export default {
             item_length_min: 8,   //文字数最小値
             item_length_max: 128, //文字数最大値
             item_selected: ["lowercase","uppercase","numbers","symbols"], 
-            item_lowercase: true,  //英字（小文字）
-            item_is_uppercase: true,  //英字（大文字） 
-            item_is_numbers: true,  //数字
-            item_is_symbols: false, //記号なし 記号あり
             item_uuid: "",
             item_seq: 0,
           },{ 
@@ -711,7 +719,7 @@ export default {
             item_condition_use: false, //条件付き表示
             item_condition_key: "", //条件付き表示
             item_condition_value: "", //条件付き表示
-            item_must: false,
+            item_must: true,
             item_must_badge: "unchecked",
             item_options: [],
             item_method:"static", //設定方法 static or dynamic
@@ -1107,5 +1115,8 @@ export default {
 }
 a,a:hover,a:visited{
   color: inherit;
+}
+.fsize {
+  font-size: 0.95rem;
 }
 </style>

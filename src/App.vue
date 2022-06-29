@@ -22,8 +22,8 @@
       </div>
 
       <div v-if='selected==="sw-form-editor"'>
-        <sw-form-editor 
-          type_option="list"
+        <sw-form-editor debug
+          type_option="tile"
           :form_info="bind_data.sw_form_editor.init_info" 
           :type_info="bind_data.sw_form_editor.type_info" 
           :item_key_option="bind_data.sw_form_editor.item_key_option" 
@@ -32,14 +32,16 @@
       </div>
 
       <div v-if='selected==="sw-form-inputter"'>
-        <sw-form-inputter debug
+        <sw-form-inputter debug 
+          :line_space="bind_data.sw_form_inputter.line_space"
           :form_info="bind_data.sw_form_inputter.form_info" 
           :form_list_info="bind_data.sw_form_inputter.form_list_info"
+          :form_data="bind_data.sw_form_inputter.form_data2"
           v-model="bind_data.sw_form_inputter.form_data" />
       </div>
 
       <div v-if='selected==="sw-form-viewer"'>
-        <sw-form-viewer
+        <sw-form-viewer debug :line_space="bind_data.sw_form_viewer.line_space" 
           :form_data="bind_data.sw_form_viewer.form_data" 
           pdf_output pdf_output_button="PDF出力" pdf_output_placement="top" />
       </div>
@@ -66,17 +68,20 @@
           sw_form_editor: {
             init_info: null,
             form_info: null,
-            type_info: "ALL",
+            type_info: "all",
             item_key_option: "true",
             item_condition_option: "true",
           },
           sw_form_inputter: {
             form_info: null,
             form_data: null,
+            form_data2: null,
             form_list_info: null,
+            line_space: 1,
           },
           sw_form_viewer: {
             form_data: null,
+            line_space: 1,
           },
         },
         state_data: {
@@ -151,6 +156,13 @@
     methods: {
       button_click(data){
         this.selected = data;
+
+        if( data == "sw-form-inputter" ){
+          //console.log("button_click="+JSON.stringify(this.bind_data.sw_form_inputter.form_data));
+          if( this.bind_data.sw_form_inputter.form_data !== null ){
+            this.bind_data.sw_form_inputter.form_data2 = JSON.parse(JSON.stringify(this.bind_data.sw_form_inputter.form_data));
+          }
+        }
       },
     }
   }

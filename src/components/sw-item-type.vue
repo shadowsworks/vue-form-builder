@@ -30,7 +30,10 @@ export default {
   },
   props: {
     // ItemType情報
-    type_info: Object, 
+    type_info: {
+      type: Object, 
+      default: () => null
+    },
     // 
     type_option: {
       type: String,
@@ -97,7 +100,7 @@ export default {
   text-align: left;
   padding: 4px;
 }
-/* .fsize {
-  font-size: 0.7rem;
-} */
+.fsize {
+  font-size: 0.8rem;
+}
 </style>
