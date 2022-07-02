@@ -1,9 +1,6 @@
 # ライブラリとしてビルド
 npm run build-bundle
 
-# ファイル名を変更
-mv dist/vue-form-producer.umd.min.js dist/vue-form-producer.umd.js
-
 # npm へアップ
 npm login
 npm publish

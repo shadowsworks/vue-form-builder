@@ -86,7 +86,7 @@ vue-form-producer は、以下の3つのコンポーネントで構成されて�
 |type_option|String|"list"|［追加する項目タイプ］の表示方法を指定する。"list":リスト形式 or "tile":タイル形式 を指定する。|
 |item_key_option|String|"false"|［項目キー］の入力フィールドの使用/不使用を指定する。"true":使用 or "false":不使用 を指定すること。|
 |item_condition_option|String|"false"|［条件付き表示］の入力フィールドの使用/不使用を指定する。"true":使用 or "false":不使用 を指定すること。|
-
+|font_info|String|"small"|項目名のフォント情報を指定する。"small","font-weight-bold" など|
 
 ### v-model
 
