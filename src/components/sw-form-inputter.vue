@@ -7,8 +7,12 @@
           :item_info="item_info" 
           :item_data="bind_data.form_data.item_data[index]" 
           :list_info="bind_data.form_list_info" 
-          v-model="bind_data.form_data.item_data[index]" />
+          v-model="bind_data.form_data.item_data[index]" 
+          @focusin="focusin" />
       </div>
+    </div>
+    <div class="mt-2">
+      <b-alert v-model="state_data.alert" variant="danger">{{ lang('blank_items_or_invalid_items') }}</b-alert>
     </div>
     <div v-if="debug">form_info {{ JSON.stringify(bind_data.form_info,null,2) }}</div>
     <div v-if="debug"><hr></div>
@@ -23,13 +27,19 @@ import lang from './lang.json';
 // ブラウザからデフォルトの言語を取得する
 let locale = navigator.language;
 if( locale != "ja" && locale != "en" ) locale = "en";
+import swutils from './swutils.js';
 
 import swItemInputter from '@/components/sw-item-inputter';
+import { v4 as uuidv4 } from 'uuid';
+import moment from 'moment-timezone';
+
 export default {
   name: 'sw-form-inputter',
   components: {
     swItemInputter
   },
+  // 共通関数
+  mixins: [swutils],
   props: {
     // Form情報
     form_info: {
@@ -64,16 +74,22 @@ export default {
         form_info: null,
         form_list_info: null,
         form_data: {
-          version: "", 
-          update: "", 
-          desc: "", 
+          form_version: "", 
+          form_update: "", 
+          form_desc: "",
+          form_uuid: "",
+          form_created: "",
           font_info: "small",
+          data_uuid: "",
+          data_created: "",
           item_data: []
         },
         line_space: "mt-0",
       },
       state_data: {
         loaded: false,
+        focus: false,
+        alert: false,
       },
     }
   },
@@ -106,7 +122,11 @@ export default {
     },
     'bind_data.form_data': {
       handler: function(){
+        this.bind_data.form_data.data_created = moment().format("YYYY-MM-DD HH:mm:ss");
         this.$emit('input',this.bind_data.form_data);
+        if( this.state_data.focus ){
+          this.state_data.alert = !this.get_state_required( this.bind_data.form_info, this.bind_data.form_data );
+        }
       },
       deep: true,
     },
@@ -132,6 +152,7 @@ export default {
       this.bind_data.form_list_info = this.form_list_info;
     }
     this.bind_data.line_space = "mt-"+String(this.line_space);
+    this.state_data.alert = false;
     //this.bind_data.font_info = this.font_info;
     this.data_set();
     this.reset();
@@ -142,13 +163,21 @@ export default {
     lang: function( param ){
       return lang[locale][param];
     },
+    focusin: function(){
+      this.state_data.focus = true;
+      this.state_data.alert = !this.get_state_required( this.bind_data.form_info, this.bind_data.form_data );
+    },
     data_set: function(){
       if( this.form_info != null ){
         this.bind_data.form_info = JSON.parse(JSON.stringify(this.form_info));
-        this.bind_data.form_data.version = this.bind_data.form_info.version;
-        this.bind_data.form_data.update = this.bind_data.form_info.update;
-        this.bind_data.form_data.desc = this.bind_data.form_info.desc;
+        this.bind_data.form_data.form_version = this.bind_data.form_info.form_version;
+        this.bind_data.form_data.form_update = this.bind_data.form_info.form_update;
+        this.bind_data.form_data.form_desc = this.bind_data.form_info.form_desc;
+        this.bind_data.form_data.form_uuid = this.bind_data.form_info.form_uuid;
+        this.bind_data.form_data.form_created = this.bind_data.form_info.form_created;
         this.bind_data.form_data.font_info = this.bind_data.form_info.font_info;
+        this.bind_data.form_data.data_uuid = uuidv4();
+        this.bind_data.form_data.data_created = moment().format("YYYY-MM-DD HH:mm:ss");
         this.bind_data.form_data.item_data = [];
         if( this.form_data != null ){
           //console.log("FormInputter:methods:data_set1:");

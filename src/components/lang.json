@@ -90,6 +90,10 @@
     "form_viewer":"データ表示コンポーネント",
     "viewer_display":"表示する",
     "markdown_use":"使用する",
+    "hyphen":"ハイフン",
+    "include":"含む",
+    "international":"国際電話識別番号",
+    "support":"対応する",
 
     "enter_your_choice":"選択肢を入力してください",
     "click_add_item":"クリックして項目を追加する",
@@ -109,7 +113,8 @@
     "enter_max_height":"最大高さ（pixel）を入力してください",
     "set_initial_selection":"初期選択を設定する",
     "set_pulldown_item_key":"項目キーを設定し、コンポーネントにデータを設定してください。詳しくはドキュメントを参照してください。",
-    "enter_label_characters":"ラベルとして設定する文字を入力してください。"
+    "enter_label_characters":"ラベルとして設定する文字を入力してください。",
+    "blank_items_or_invalid_items":"未入力の項目、または、無効な項目があります。"
   },
   "en": {
     "item1": "item1",
@@ -199,6 +204,10 @@
     "form_viewer":"sw-form-viewer",
     "viewer_display":"Show",
     "markdown_use":"Use",
+    "hyphen":"hyphen",
+    "include":"include",
+    "international":"International Call",
+    "support":"support",
 
     "enter_your_choice":"Please enter your choice",
     "click_add_item":"Click to add an item",
@@ -218,6 +227,7 @@
     "enter_max_height":"Please enter the maximum height (pixel)",
     "set_initial_selection":"Set initial selection",
     "set_pulldown_item_key":"Set the item key and set the data in the component. See the documentation for more details.",
-    "enter_label_characters":"Enter the characters you want to set as the label."
+    "enter_label_characters":"Enter the characters you want to set as the label.",
+    "blank_items_or_invalid_items":"There are blank items or invalid items."
   }
 }

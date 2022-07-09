@@ -59,6 +59,7 @@ import swItemEditor from '@/components/sw-item-editor';
 import swItemInputter from '@/components/sw-item-inputter';
 import swItemType from '@/components/sw-item-type';
 import { v4 as uuidv4 } from 'uuid';
+import moment from 'moment-timezone';
 
 export default {
   name: 'sw-form-editor',
@@ -109,9 +110,11 @@ export default {
         type_option: "",
         item_data: [],
         form_info: {
-          version: require('../../package.json').version,
-          update: require('../../package.json').update,
-          desc: "",
+          form_version: require('../../package.json').version,
+          form_update: require('../../package.json').update,
+          form_desc: "",
+          form_uuid: "",
+          form_created: "",
           font_info: "small",
           item_info: [],
         },
@@ -195,6 +198,12 @@ export default {
     this.bind_data.form_info.font_info = this.font_info;
     if( this.form_info !== null ){
       this.bind_data.form_info = this.form_info;
+    }
+    if( this.bind_data.form_info.form_uuid == "" ){
+      this.bind_data.form_info.form_uuid = uuidv4();
+    }
+    if( this.bind_data.form_info.form_created == "" ){
+      this.bind_data.form_info.form_created = moment().format("YYYY-MM-DD HH:mm:ss");
     }
     this.set_type_info();
     this.$nextTick(function() {

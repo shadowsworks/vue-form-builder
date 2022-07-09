@@ -3,7 +3,8 @@
     <div v-if='!state_preview_mode'>
       <b-form-textarea v-model="state_textarea" :placeholder="state_placeholder" 
         :rows="state_rows" :maxlength="state_max_length"
-        :state="state_item(state_textarea,state_must)" />
+        :state="state_item(state_textarea,state_must)" 
+        @blur="state_focus()" />
     </div>
     <div v-if='!state_preview_mode' class="mt-1 ml-2 float-right">
       <b-button variant="outline-secondary" size="sm" @click="mode_change">{{ lang('preview') }}</b-button>
@@ -15,7 +16,7 @@
       <b-button variant="outline-secondary" size="sm" @click="mode_change">{{ lang('back') }}</b-button>
     </div>
     <div class="text-secondary mt-1 mb-0 small">{{ state_description }}</div>
-    
+    <br>
   </div>
 </template>
 
@@ -75,16 +76,21 @@ export default {
       state_description: "",
       state_preview_mode: false,  //プレビューモード
       state_textarea: "",
-      state_result: "TEXT"
+      state_result: "",
+      state_data_focus: false
     }
   },
   // 既定計算
   computed: {
     state_item: function() {
-      return function(item_data,item_must){
-        if( item_must ){
+      return function(item_data,item_required){
+        if( item_required ){
           if( item_data === "" || item_data === null ){
-            return false;
+            if( this.state_data_focus ){
+              return false;
+            } else {
+              return null;
+            }
           } else {
             return true;
           }
@@ -143,9 +149,16 @@ export default {
     lang: function( param ){
       return lang[locale][param];
     },
+    state_focus: function(){
+      this.state_data_focus = true;
+    },
     mode_change: function(){
       this.state_preview_mode = !this.state_preview_mode;
-      this.state_result = this.markdownit.render(this.state_textarea);
+      if( this.state_textarea == null || this.state_textarea == "" ){
+        this.state_result = "";
+      } else {
+        this.state_result = this.markdownit.render(this.state_textarea);
+      }
     }
   }
 };

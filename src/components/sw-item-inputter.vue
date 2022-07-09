@@ -17,7 +17,7 @@
       bind_data.item_info.item_type=="email" ||
       bind_data.item_info.item_type=="pulldown"' >
       <label class="text-secondary mt-2 mb-0" v-bind:class="bind_data.font_info">{{ bind_data.item_info.item_name }}</label>
-      <b-badge v-if='bind_data.item_info.item_must && bind_data.item_info.item_must_badge=="checked"' variant="danger" class="mx-2">{{ lang('mandatory') }}</b-badge>
+      <b-badge v-if='bind_data.item_info.item_required && bind_data.item_info.item_required_badge=="checked"' variant="danger" class="mx-2">{{ lang('mandatory') }}</b-badge>
     </template>
 
     <!-- 短文テキスト -->
@@ -58,13 +58,19 @@
 
     <!-- ラジオボタン -->
     <template v-if='bind_data.item_info.item_type=="radio"'>
-      <b-form-radio-group v-model="bind_data.item_data" :options="bind_data.item_info.item_options" :stacked="bind_data.item_info.item_stacked" />
+      <b-form-radio-group v-model="bind_data.item_data" 
+          :options="bind_data.item_info.item_options" 
+          :stacked="bind_data.item_info.item_stacked" />
       <div class="text-secondary mt-1 mb-0 small">{{ bind_data.item_info.item_description }}</div>
     </template>
 
     <!-- チェックボックス -->
     <template v-if='bind_data.item_info.item_type=="checkbox"'>
-      <b-form-checkbox-group v-model="bind_data.item_data" :options="bind_data.item_info.item_options" :stacked="bind_data.item_info.item_stacked" />
+      <b-form-checkbox-group v-model="bind_data.item_data" 
+          :options="bind_data.item_info.item_options" 
+          :stacked="bind_data.item_info.item_stacked" 
+          :state="state_item(bind_data.item_data,bind_data.item_info)" 
+          @input="state_focus()" />
       <div class="text-secondary mt-1 mb-0 small">{{ bind_data.item_info.item_description }}</div>
     </template>
 
@@ -72,7 +78,9 @@
     <template v-if='bind_data.item_info.item_type=="toggle"'>
       <b-form-checkbox v-model="bind_data.item_data" switch size="lg"
         :value="bind_data.item_info.item_checked_value" 
-        :unchecked-value="bind_data.item_info.item_unchecked_value">
+        :unchecked-value="bind_data.item_info.item_unchecked_value"
+        :state="state_item(bind_data.item_data,bind_data.item_info)" 
+        @input="state_focus()" >
         <span class="small">{{ bind_data.item_info.item_placeholder }}</span>
       </b-form-checkbox>
       <div class="text-secondary mt-1 mb-0 small">{{ bind_data.item_info.item_description }}</div>
@@ -83,11 +91,11 @@
       <b-row>
         <b-col v-for="n in 2" :key="n" cols="6">
           <label class="text-secondary mt-2 mb-0" v-bind:class="bind_data.font_info">{{ bind_data.item_info.item_name[n-1] }}</label>
-          <b-badge v-if='bind_data.item_info.item_must && bind_data.item_info.item_must_badge=="checked"' variant="danger" class="mx-2">{{ lang('mandatory') }}</b-badge>
+          <b-badge v-if='bind_data.item_info.item_required && bind_data.item_info.item_required_badge=="checked"' variant="danger" class="mx-2">{{ lang('mandatory') }}</b-badge>
           <b-form-input type="text" v-model="bind_data.item_data[n-1]" class="mt-0 mb-0" 
             :placeholder="bind_data.item_info.item_placeholder[n-1]" 
             :maxlength="bind_data.item_info.item_length"
-            :state="state_item(bind_data.item_data[n-1],bind_data.item_info)" 
+            :state="state_item(bind_data.item_data,bind_data.item_info)" 
             @blur="state_focus()" />
         </b-col>
       </b-row>
@@ -96,15 +104,20 @@
 
     <!-- 電話番号 -->
     <template v-if='bind_data.item_info.item_type=="telephone"' >
-      <b-row>
+      <!-- <b-row>
         <b-col v-for="n in 3" :key="n" cols="4">
           <b-form-input type="text" v-model="bind_data.item_data[n-1]" class="mt-0 mb-0" 
             :placeholder="bind_data.item_info.item_placeholder[n-1]" 
             :maxlength="bind_data.item_info.item_length"
-            :state="state_item(bind_data.item_data[n-1],bind_data.item_info)"
+            :state="state_item(bind_data.item_data,bind_data.item_info)"
             @blur="state_focus()" />
         </b-col>
-      </b-row>
+      </b-row> -->
+      <b-form-input type="tel" v-model="bind_data.item_data" class="mt-0 mb-0" 
+        :placeholder="bind_data.item_info.item_placeholder" 
+        :maxlength="bind_data.item_info.item_length" 
+        :state="state_item(bind_data.item_data,bind_data.item_info)" 
+        @blur="state_focus()" />
       <div class="text-secondary mt-1 mb-0 small">{{ bind_data.item_info.item_description }}</div>
     </template>
 
@@ -114,7 +127,7 @@
         <b-form-datepicker v-model="bind_data.item_data" class="mb-0" :placeholder="bind_data.item_info.item_placeholder" locale="ja"
             :date-format-options="{ year: 'numeric', month: '2-digit', day: '2-digit', weekday: 'short' }" 
             :state="state_item(bind_data.item_data,bind_data.item_info)" 
-            @blur="state_focus()" />
+            @hidden="state_focus()" />
         <b-input-group-append is-text style="height:38px;">
           <b-icon icon="eraser" class="mt-0 item-curosr" @click="erase_item_data()"></b-icon>
         </b-input-group-append>
@@ -128,7 +141,7 @@
         <b-form-timepicker v-model="bind_data.item_data" class="mb-0" :placeholder="bind_data.item_info.item_placeholder" 
             now-button label-now-button="現在" now-button-variant="outline-secondary" label-close-button="閉じる" label-no-time-selected="未設定"
             :state="state_item(bind_data.item_data,bind_data.item_info)" 
-            @blur="state_focus()" />
+            @hidden="state_focus()" />
         <b-input-group-append is-text style="height:38px;">
           <b-icon icon="eraser" class="mt-0 item-curosr" @click="erase_item_data()" ></b-icon>
         </b-input-group-append>
@@ -143,8 +156,8 @@
           <b-input-group>
             <b-form-datepicker v-model="bind_data.item_data[0]" class="mb-2" :placeholder="bind_data.item_info.item_placeholder[0]" locale="ja"
                 :date-format-options="{ year: 'numeric', month: '2-digit', day: '2-digit', weekday: 'short' }" 
-                :state="state_item(bind_data.item_data[0],bind_data.item_info)" 
-                @blur="state_focus()" />
+                :state="state_item(bind_data.item_data,bind_data.item_info)" 
+                @hidden="state_focus()" />
             <b-input-group-append is-text style="height:38px;">
               <b-icon icon="eraser" class="mt-0 item-curosr" @click="erase_item_data(0)" ></b-icon>
             </b-input-group-append>
@@ -154,8 +167,8 @@
           <b-input-group>
             <b-form-timepicker v-model="bind_data.item_data[1]" class="mb-0" :placeholder="bind_data.item_info.item_placeholder[1]" 
                 now-button label-now-button="現在" now-button-variant="outline-secondary" label-close-button="閉じる" label-no-time-selected="未設定"
-                :state="state_item(bind_data.item_data[1],bind_data.item_info)" 
-                @blur="state_focus()" />
+                :state="state_item(bind_data.item_data,bind_data.item_info)" 
+                @hidden="state_focus()" />
             <b-input-group-append is-text style="height:38px;">
               <b-icon icon="eraser" class="mt-0 item-curosr" @click="erase_item_data(1)" ></b-icon>
             </b-input-group-append>
@@ -181,7 +194,7 @@
       <sw-markdown-editor :md_text="bind_data.item_data" 
           :rows="bind_data.item_info.item_rows"
           :max_length="bind_data.item_info.item_length" 
-          :must="bind_data.item_info.item_must"
+          :must="bind_data.item_info.item_required"
           :placeholder="bind_data.item_info.item_placeholder" 
           :description="bind_data.item_info.item_description" 
           v-model="bind_data.item_data" />
@@ -197,7 +210,7 @@
           :placeholder="bind_data.item_info.item_placeholder"
           :drop-placeholder="lang('drop_here')" accept=".jpg,.png,.JPG,.PNG" 
           :state="state_item(bind_data.item_data,bind_data.item_info)"
-          @blur="state_focus()"  />
+          @change="state_focus()"  />
         <b-input-group-append>
           <b-button variant="info" @click="item_image_clear">Clear</b-button>
         </b-input-group-append>
@@ -321,29 +334,10 @@ export default {
   computed: {
     state_item: function() {
       return function(item_data,item_info){
-        if( item_info.item_must ){
-          if( ( item_data === "" || item_data === null ) && this.state_data.focus ){
-            return false;
-          } else {
-            return null;
-          }
-        }
-        // 短いテキスト 電話番号
-        if( item_info.item_type == "text" || item_info.item_type == "telephone" ){
-          return this.is_allowed_type(item_data,item_info);
-        }
-        // パスワード
-        if( item_info.item_type == "password" ){
-          return this.is_password_type(item_data,item_info);
-        }
-        // メールアドレス
-        if( item_info.item_type == "email" ){
-          return this.is_email_type(item_data,item_info);
-        }
-        if( item_data === "" || item_data === null ){
-          return null;
+        if( item_info.item_required ){
+          return this.required_state_item(item_data,item_info,this.state_data);
         } else {
-          return true;
+          return this.any_state_item(item_data,item_info);
         }
       }
     },
@@ -385,9 +379,8 @@ export default {
         if( this.bind_data.item_info.item_type == "number" ){
           this.number_data_set();
         }
-        let ret = this.get_ret_data();
         //console.log("ItemInputter:watch"+JSON.stringify(ret));
-        this.$emit('input',ret);
+        this.$emit('input',this.get_ret_data());
       },
       deep: true,
     },
@@ -396,9 +389,8 @@ export default {
         if( this.bind_data.item_info.item_type == "number" ){
           this.number_data_set();
         }
-        let ret = this.get_ret_data();
         //console.log("ItemInputter:watch"+JSON.stringify(ret));
-        this.$emit('input',ret);
+        this.$emit('input',this.get_ret_data());
       },
       deep: true,
     },
@@ -443,6 +435,7 @@ export default {
     },
     state_focus: function(){
       this.state_data.focus = true;
+      this.$emit('focusin',true);
     },
     item_check: function(){
       if( this.bind_data.item_data === null ){
@@ -453,51 +446,94 @@ export default {
         this.state_data.state = this.bind_data.item_info.item_state;
       });
     },
-    get_state_item: function(item_data,item_info){
-      if( item_info.item_must ){
-        if( typeof item_data === "string" ){
-          if( item_data === "" ){
-            return false;
-          }
-        } else if( Array.isArray(item_data) ){
-          for( let i=0;i<item_data.length;i++ ){
-            if( item_data[i] === "" || item_data[i] === null ){
-              return false;
-            }
-          }
-        } else {
-          if( item_data === null ){
-            return false;
-          }
+    //
+    // 必須項目の時の状態チェック
+    //
+    required_state_item: function(item_data,item_info,state_data){
+      //console.log(item_info.item_type+":"+item_data+":"+state_data.focus);
+      if( state_data.focus ){
+        // 短いテキスト
+        if( item_info.item_type == "text" ){
+          return ( this.is_allowed_type(item_data,item_info) ? true : false );
         }
+        // パスワード
+        if( item_info.item_type == "password" ){
+          return ( this.is_password_type(item_data,item_info) ? true : false );
+        }
+        // メールアドレス
+        if( item_info.item_type == "email" ){
+          return ( this.is_email_type(item_data,item_info) ? true : false );
+        }
+        // スイッチ
+        if( item_info.item_type == "toggle" ){
+          return ( this.is_toggle_type(item_data,item_info) ? true : false );
+        }
+        // チェックボックス 氏名 日時
+        if( item_info.item_type == "checkbox" || item_info.item_type == "name" || item_info.item_type == "datetime" ){
+          return ( this.is_array_type( item_data ) ? true : false );
+        }
+        // 長いテキスト 数値 日付 時刻 写真
+        if( item_info.item_type == "texts" || item_info.item_type == "number" || item_info.item_type == "date" 
+            || item_info.item_type == "time" || item_info.item_type == "markdown" || item_info.item_type == "image" ){
+          return ( this.is_string_type( item_data ) ? true : false );
+        }
+        // ラジオボタン プルダウン 表
+        if( item_info.item_type == "radio" || item_info.item_type == "pulldown" || item_info.item_type == "table" 
+            || item_info.item_type == "label" ){
+          return true;
+        }
+        // 電話番号
+        if( item_info.item_type == "telephone" ){
+          return ( this.is_telephone_type( item_data,item_info ) ? true : false );
+        }
+        // その他
+        return false;
+      } else {
+        // 短いテキスト
+        if( item_info.item_type == "text" ){
+          return this.is_allowed_type(item_data,item_info);
+        }
+        // パスワード
+        if( item_info.item_type == "password" ){
+          return this.is_password_type(item_data,item_info);
+        }
+        // メールアドレス
+        if( item_info.item_type == "email" ){
+          return this.is_email_type(item_data,item_info);
+        }
+        // スイッチ
+        if( item_info.item_type == "toggle" ){
+          return this.is_toggle_type(item_data,item_info);
+        }
+        // チェックボックス 氏名 日時
+        if( item_info.item_type == "checkbox" || item_info.item_type == "name" || item_info.item_type == "datetime" ){
+          return this.is_array_type( item_data );
+        }
+        // 長いテキスト 数値 日付 時刻 写真
+        if( item_info.item_type == "texts" || item_info.item_type == "number" || item_info.item_type == "date" 
+            || item_info.item_type == "time" || item_info.item_type == "markdown" || item_info.item_type == "image" ){
+          return this.is_string_type( item_data );
+        }
+        // ラジオボタン プルダウン 表
+        if( item_info.item_type == "radio" || item_info.item_type == "pulldown" || item_info.item_type == "table" 
+            || item_info.item_type == "label" ){
+          return true;
+        }
+        // 電話番号
+        if( item_info.item_type == "telephone" ){
+          return this.is_telephone_type( item_data,item_info );
+        }
+        // その他
+        return null;      
       }
-      //return this.is_allowed_type(item_data,item_info);
+    },
+    //
+    // 任意項目の時の状態チェック
+    //
+    any_state_item: function(item_data,item_info){
       // 短いテキスト
       if( item_info.item_type == "text" ){
         return this.is_allowed_type(item_data,item_info);
-      }
-      // 氏名 日時
-      if( item_info.item_type == "name" || item_info.item_type == "datetime" ){
-        if( item_data[0] == "" && item_data[1] == "" ){
-          return null;
-        }
-        if( item_data[0] !== "" && item_data[1] !== "" ){
-          return true;
-        }
-        return false;
-      }
-      // 電話番号
-      if( item_info.item_type == "telephone" ){
-        if( item_data[0] == "" && item_data[1] == "" && item_data[2] == "" ){
-          return null;
-        }
-        let ret = true;
-        for( let i=0;i<item_data.length;i++ ){
-          if( !this.is_allowed_type(item_data[i],item_info) ){
-            ret = false;
-          }
-        }
-        return ret;
       }
       // パスワード
       if( item_info.item_type == "password" ){
@@ -507,16 +543,37 @@ export default {
       if( item_info.item_type == "email" ){
         return this.is_email_type(item_data,item_info);
       }
-      if( typeof item_data === "string" ){
-        if( item_data === "" ){
-          return null;
-        }
-      } else {
-        if( item_data === null ){
-          return null;
-        }
+      // スイッチ
+      if( item_info.item_type == "toggle" ){
+        return this.is_toggle_type(item_data,item_info);
       }
-      return true;
+      // チェックボックス 氏名 日時
+      if( item_info.item_type == "checkbox" || item_info.item_type == "name" || item_info.item_type == "datetime" ){
+        return this.is_array_type( item_data );
+      }
+      // 長いテキスト 数値 日付 時刻 写真
+      if( item_info.item_type == "texts" || item_info.item_type == "number" || item_info.item_type == "date" 
+          || item_info.item_type == "time" || item_info.item_type == "markdown" || item_info.item_type == "image" ){
+        return this.is_string_type( item_data );
+      }
+      // ラジオボタン プルダウン 表 ラベル
+      if( item_info.item_type == "radio" || item_info.item_type == "pulldown" || item_info.item_type == "table" 
+          || item_info.item_type == "label" ){
+        return true;
+      }
+      // 電話番号
+      if( item_info.item_type == "telephone" ){
+        return this.is_telephone_type( item_data,item_info );
+      }
+      // その他
+      return null;
+    },
+    get_state_item: function(item_data,item_info){
+      if( item_info.item_required ){
+        return this.required_state_item(item_data,item_info,this.state_data);
+      } else {
+        return this.any_state_item(item_data,item_info);
+      }  
     },
     get_ret_data: function(){
       //console.log("ItemInputter:get_ret_data="+JSON.stringify(this.bind_data.item_info,null,2));
@@ -555,6 +612,7 @@ export default {
       this.$nextTick(function() {
         this.state_data.state = this.bind_data.item_info.item_state;
       });
+      this.$emit('input',this.get_ret_data());
     },
     number_data_set: function(){
       if( this.bind_data.item_data.length > 0 ){
@@ -755,6 +813,82 @@ export default {
         return validator.isEmail(item_data);
       }
     },
+    is_toggle_type: function( item_data, item_info ){
+      if( item_data === "" || item_data === null ){
+        return null;
+      }
+      if( item_data == item_info.item_checked_value ){
+        return true;
+      }
+      return null;
+    },
+    is_telephone_type: function( item_data, item_info ){
+      // let ret1 = this.is_array_type( item_data );
+      // if( ret1 ){
+      //   for( let i=0;i<item_data.length;i++ ){
+      //     let ret2 = this.is_allowed_type(item_data[i],item_info);
+      //     if( !ret2 ){
+      //       return ret2;
+      //     }
+      //   }
+      //   return true;
+      // } else {
+      //   return ret1;
+      // }
+      if( item_data === "" || item_data === null ){
+        return null;
+      }
+      if( item_info.item_hyphen && !item_info.item_international ){
+        // ハイフンあり
+        if( item_data.match(/^0\d{1,4}-\d{1,4}-\d{1,5}$/) ) {
+          return true;
+        } else {
+          return false;
+        }
+      } else if( !item_info.item_hyphen && !item_info.item_international ){
+        // ハイフンなし
+        if( item_data.match(/^0\d{9,14}$/) ) {
+          return true;
+        } else {
+          return false;
+        }
+      } else if( item_info.item_hyphen && item_info.item_international ){
+        // 国際電話識別番号対応ハイフンあり
+        if( item_data.match(/^[+][-0-9]{10,18}$/) ) {
+          return true;
+        } else {
+          return false;
+        }
+      } else { //if( !item_info.item_hyphen && item_info.item_international ){
+        // 国際電話識別番号対応国際ハイフンなし
+        if( item_data.match(/^[+][0-9]{10,14}$/) ) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+    },
+    is_array_type: function( item_data ){
+      if( !Array.isArray(item_data) ){
+        return null;
+      }
+      if( item_data.length > 0 ){
+        for( let i=0;i<item_data.length;i++ ){
+          if( item_data[i] == "" || item_data[i] == null ){
+            return null;
+          }
+        }
+        return true;
+      } else {
+        return null;
+      }
+    },
+    is_string_type: function( item_data ){
+      if( item_data == "" || item_data == null ){
+        return null;
+      }
+      return true;
+    },
     is_show: function(){
       let rect = this.$el.getBoundingClientRect();
       //console.log("is_show="+JSON.stringify(rect));
@@ -773,7 +907,7 @@ export default {
     },
     init_item_data: function(){
       if( this.bind_data.item_info.item_type == "text" || this.bind_data.item_info.item_type == "texts" ||
-          this.bind_data.item_info.item_type == "number" || 
+          this.bind_data.item_info.item_type == "number" || this.bind_data.item_info.item_type == "telephone" || 
           this.bind_data.item_info.item_type == "date" || this.bind_data.item_info.item_type == "time" ){
         this.bind_data.item_data = "";
       }
@@ -802,9 +936,9 @@ export default {
       if( this.bind_data.item_info.item_type == "name" || this.bind_data.item_info.item_type == "datetime" ){
         this.bind_data.item_data = ["",""];
       }
-      if( this.bind_data.item_info.item_type == "telephone" ){
-        this.bind_data.item_data = ["","",""];
-      }
+      // if( this.bind_data.item_info.item_type == "telephone" ){
+      //   this.bind_data.item_data = ["","",""];
+      // }
     }
   }
 };
