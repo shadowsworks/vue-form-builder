@@ -40,7 +40,7 @@ Vue.use(IconsPlugin)
 # Setup
 
 ```
-import { swFormEditor, swFormInputter, swFormViewer } from sw-form-producer
+import { swFormEditor, swFormInputter, swFormViewer } from 'vue-form-producer'
 ```
 
 # Usage
@@ -65,7 +65,7 @@ vue-form-producer は、以下の3つのコンポーネントで構成されて�
 </template>
 
 <script>
-  import { swFormEditor } from sw-form-producer
+  import { swFormEditor } from 'vue-form-producer'
 
   export default {
     data() {
@@ -133,7 +133,7 @@ vue-form-producer は、以下の3つのコンポーネントで構成されて�
 </template>
 
 <script>
-  import { swFormInputter } from sw-form-producer
+  import { swFormInputter } from 'vue-form-producer'
 
   export default {
     data() {
@@ -189,7 +189,7 @@ vue-form-producer は、以下の3つのコンポーネントで構成されて�
 </template>
 
 <script>
-  import { swFormViewer } from sw-form-producer
+  import { swFormViewer } from 'vue-form-producer'
   
   export default {
     data() {
