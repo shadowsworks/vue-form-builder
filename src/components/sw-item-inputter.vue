@@ -421,6 +421,10 @@ export default {
         this.pulldown_data_set();
       }
     }
+    if( this.bind_data.item_info.item_type == "image" ){
+      this.image_data_set();
+    }
+    
     this.item_check();
     this.state_data.loaded = false;
     this.$nextTick(function() {
@@ -672,6 +676,15 @@ export default {
             this.bind_data.pulldown_list = this.list_info[i].item_options;
             //console.log("pulldown_data_set3="+JSON.stringify(this.bind_data.pulldown_list,null,2));
             this.bind_data.item_data = this.bind_data.pulldown_list[0].value;
+          }
+        }
+      }
+    },
+    image_data_set: function(){
+      if( this.bind_data.item_data !== null ){
+        if( this.bind_data.item_data.length > 0 ){
+          if( this.bind_data.item_data.startsWith("data:image/") ){
+            this.bind_data.image_preview_src = this.bind_data.item_data;
           }
         }
       }
