@@ -1,8 +1,8 @@
 // ----------------------------------------------------------------
 // 共通関数 
 // ----------------------------------------------------------------
-export default {
 
+export default {
   methods: {
 
     //
@@ -104,9 +104,6 @@ export default {
         return false;
       }
       if( Array.isArray(form_info.item_info) && Array.isArray(form_data.item_data) ){
-
-
-
         for( let i=0;i<form_info.item_info.length;i++ ){
           //console.log("get_state_required_data="+JSON.stringify(form_info.item_info[i]));
           if( form_info.item_info[i] !== null ){

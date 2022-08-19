@@ -11,6 +11,7 @@
           @focusin="focusin" />
       </div>
     </div>
+
     <div class="mt-2">
       <b-alert v-model="state_data.alert" variant="danger">{{ lang('blank_items_or_invalid_items') }}</b-alert>
     </div>
@@ -27,7 +28,7 @@ import lang from './lang.json';
 // ブラウザからデフォルトの言語を取得する
 let locale = navigator.language;
 if( locale != "ja" && locale != "en" ) locale = "en";
-import swutils from './swutils.js';
+import swFormUtils from './sw-form-utils.js';
 
 import swItemInputter from '@/components/sw-item-inputter';
 import { v4 as uuidv4 } from 'uuid';
@@ -39,7 +40,7 @@ export default {
     swItemInputter
   },
   // 共通関数
-  mixins: [swutils],
+  mixins: [swFormUtils],
   props: {
     // Form情報
     form_info: {
@@ -176,10 +177,11 @@ export default {
         this.bind_data.form_data.form_uuid = this.bind_data.form_info.form_uuid;
         this.bind_data.form_data.form_created = this.bind_data.form_info.form_created;
         this.bind_data.form_data.font_info = this.bind_data.form_info.font_info;
-        this.bind_data.form_data.data_uuid = uuidv4();
+        //this.bind_data.form_data.data_uuid = uuidv4();
         this.bind_data.form_data.data_created = moment().format("YYYY-MM-DD HH:mm:ss");
         this.bind_data.form_data.item_data = [];
         if( this.form_data != null ){
+          this.bind_data.form_data.data_uuid = this.form_data.data_uuid;
           //console.log("FormInputter:methods:data_set1:");
           for( let i=0;i<this.bind_data.form_info.item_info.length;i++ ){
             //if( this.debug ) console.log("FormInputter:methods:this.form_data=:"+JSON.stringify(this.form_data));
@@ -191,6 +193,7 @@ export default {
             }
           }
         } else {
+          this.bind_data.form_data.data_uuid = uuidv4();
           //console.log("FormInputter:methods:data_set2:");
           for( let i=0;i<this.bind_data.form_info.item_info.length;i++ ){
             this.bind_data.form_data.item_data.push(null);

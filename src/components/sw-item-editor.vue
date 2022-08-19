@@ -871,7 +871,7 @@ export default {
       if( this.bind_data.item_key !== undefined ){
         if( this.bind_data.item_key !== "" ){
           //if( validator.isAlpha(this.bind_data.item_key,['en-US'],{'ignore':'_'}) ){
-          if( validator.isAlphanumeric(this.bind_data.item_key,['en-US'],{'ignore':'-'}) ){
+          if( validator.isAlphanumeric(this.bind_data.item_key,['en-US'],{'ignore':'-_'}) ){
             return true;
           } else {
             return false;
