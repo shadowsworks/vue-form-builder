@@ -19,7 +19,7 @@
 
     <!-- 長文テキスト -->
     <template v-if='bind_data.item_data.item_type=="texts"'>
-      <div class="ml-3 mr-2 long_text">{{ bind_data.item_data.item_data }}</div>
+      <div class="ml-3 mr-2 long_text" v-html="set_br_code(escape_html(bind_data.item_data.item_data))"></div>
     </template>
 
     <!-- 数値 -->
@@ -234,6 +234,13 @@ export default {
     },
     set_br_code( data ){
       return data.replace(/\r?\n/g, '<br>');
+    },
+    escape_html( data ){
+      return data.replace(/&/g, '&lt;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, "&#x27;");
     }
   }
 };
