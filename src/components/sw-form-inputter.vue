@@ -237,9 +237,17 @@ export default {
                 if( item_info.item_condition_value == form_data.item_data[i].item_data[j] ){
                   return true;
                 }
+                if( item_info.item_condition_value.toLowerCase() == "notempty" &&
+                    form_data.item_data[i].item_data[j] !== "" && form_data.item_data[i].item_data[j] !== null ){
+                  return true;
+                }
               }
             } else {
               if( item_info.item_condition_value == form_data.item_data[i].item_data ){
+                return true;
+              }
+              if( item_info.item_condition_value.toLowerCase() == "notempty" &&
+                  form_data.item_data[i].item_data !== "" && form_data.item_data[i].item_data !== null ){
                 return true;
               }
             }
