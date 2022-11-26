@@ -1,7 +1,7 @@
 {
   "name": "vue-form-producer",
-  "version": "0.6.2",
-  "update": "2022-08-27",
+  "version": "0.7.0",
+  "update": "2022-11-26",
   "private": false,
   "description": "業務アプリケーションに必要とされるフォームの作成から、フォームを使った入力画面、データ表示画面までをJSONデータで連携し、Vue.js / Bootstrap-Vue でのフロントエンド開発におけるフォーム開発の生産性を飛躍的に向上するコンポーネントです。",
   "main": "dist/vue-form-producer.umd.min.js",

@@ -15,7 +15,8 @@
       bind_data.item_info.item_type=="image" ||
       bind_data.item_info.item_type=="password" ||
       bind_data.item_info.item_type=="email" ||
-      bind_data.item_info.item_type=="pulldown"' >
+      bind_data.item_info.item_type=="pulldown" ||
+      bind_data.item_info.item_type=="url"' >
       <label class="text-secondary mt-2 mb-0" v-bind:class="bind_data.font_info">{{ bind_data.item_info.item_name }}</label>
       <b-badge v-if='bind_data.item_info.item_required && bind_data.item_info.item_required_badge=="checked"' variant="danger" class="mx-2">{{ lang('mandatory') }}</b-badge>
     </template>
@@ -258,6 +259,16 @@
       <div v-else class="text-secondary mt-1 mb-0 long_text">{{ bind_data.item_info.item_description }}</div>
     </template>
 
+    <!-- URL -->
+    <template v-if='bind_data.item_info.item_type=="url"' >
+      <b-form-input type="text" v-model="bind_data.item_data" class="mt-0 mb-0" 
+        :placeholder="bind_data.item_info.item_placeholder" 
+        :maxlength="bind_data.item_info.item_length" 
+        :state="state_item(bind_data.item_data,bind_data.item_info)" 
+        @blur="state_focus()" />
+      <div class="text-secondary mt-1 mb-0 small">{{ bind_data.item_info.item_description }}</div>
+    </template>
+
     <div v-if="state_data.debug" class="text-left">{{ JSON.stringify(bind_data,null,2) }}</div>
   </div>
   <div v-else>
@@ -490,6 +501,10 @@ export default {
         if( item_info.item_type == "telephone" ){
           return ( this.is_telephone_type( item_data,item_info ) ? true : false );
         }
+        // URL
+        if( item_info.item_type == "url" ){
+          return ( this.is_url_type(item_data,item_info) ? true : false );
+        }
         // その他
         return false;
       } else {
@@ -526,6 +541,10 @@ export default {
         // 電話番号
         if( item_info.item_type == "telephone" ){
           return this.is_telephone_type( item_data,item_info );
+        }
+        // URL
+        if( item_info.item_type == "url" ){
+          return ( this.is_url_type(item_data,item_info) ? true : false );
         }
         // その他
         return null;      
@@ -569,6 +588,10 @@ export default {
       if( item_info.item_type == "telephone" ){
         return this.is_telephone_type( item_data,item_info );
       }
+      // URL
+      if( item_info.item_type == "url" ){
+        return this.is_url_type(item_data,item_info);
+      }
       // その他
       return null;
     },
@@ -602,6 +625,9 @@ export default {
         ret.item_data.item_markdown_checked = this.bind_data.item_info.item_markdown_checked;
         ret.item_data.item_display_checked = this.bind_data.item_info.item_display_checked;
         ret.item_data.item_description = this.bind_data.item_info.item_description;
+      }
+      if( this.bind_data.item_info.item_type == "url" ){
+        ret.item_link_when_view = this.bind_data.item_info.item_link_when_view;
       }
       ret.item_state = this.get_state_item(this.bind_data.item_data,this.bind_data.item_info);
       return ret;
@@ -825,6 +851,12 @@ export default {
       } else {
         return validator.isEmail(item_data);
       }
+    },
+    is_url_type: function( item_data ){
+      if( item_data === "" || item_data === null ){
+        return null;
+      }
+      return validator.isURL(item_data);
     },
     is_toggle_type: function( item_data, item_info ){
       if( item_data === "" || item_data === null ){

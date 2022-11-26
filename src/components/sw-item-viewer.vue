@@ -5,7 +5,7 @@
       bind_data.item_data.item_type=="toggle" || bind_data.item_data.item_type=="telephone" || bind_data.item_data.item_type=="date" ||
       bind_data.item_data.item_type=="time" || bind_data.item_data.item_type=="datetime" || bind_data.item_data.item_type=="table" ||
       bind_data.item_data.item_type=="markdown" || bind_data.item_data.item_type=="image" || bind_data.item_data.item_type=="password" ||
-      bind_data.item_data.item_type=="email" || bind_data.item_data.item_type=="pulldown" ' >
+      bind_data.item_data.item_type=="email" || bind_data.item_data.item_type=="pulldown" || bind_data.item_data.item_type=="url" ' >
       <label class="text-secondary mt-2 mb-0 ml-3" v-bind:class="font_info">{{ bind_data.item_data.item_name }}</label>
     </template>
     
@@ -119,6 +119,18 @@
           </div>
         </div>
         <div v-else class="text-secondary mt-1 mb-0 ml-3 mr-2 long_text">{{ bind_data.item_data.item_data.item_description }}</div>
+      </template>
+    </template>
+
+    <!-- URL -->
+    <template v-if='bind_data.item_data.item_type=="url"' >
+      <template v-if='bind_data.item_data.item_link_when_view=="true"'>
+        <div class="ml-3 mr-2">
+          <a :href="bind_data.item_data.item_data" target="_blank">{{ bind_data.item_data.item_data }}</a>
+        </div>
+      </template>
+      <template v-else >
+        <div class="ml-3 mr-2">{{ bind_data.item_data.item_data }}</div>
       </template>
     </template>
 

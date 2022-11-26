@@ -39,6 +39,7 @@
     "password":"パスワード",
     "pulldown":"プルダウン",
     "label":"ラベル",
+    "url":"URL",
 
     "preview": "プレビュー",
     "back": "戻る",
@@ -94,6 +95,8 @@
     "include":"含む",
     "international":"国際電話識別番号",
     "support":"対応する",
+    "link_when_view":"表示する時リンクにする",
+    "link":"リンク",
 
     "enter_your_choice":"選択肢を入力してください",
     "click_add_item":"クリックして項目を追加する",
@@ -156,6 +159,7 @@
     "password":"Password",
     "pulldown":"List",
     "label":"Label",
+    "url":"URL",
 
     "preview": "Preview",
     "back": "Back",
@@ -208,6 +212,8 @@
     "include":"include",
     "international":"International Call",
     "support":"support",
+    "link_when_view":"Link when view",
+    "link":"Link",
 
     "enter_your_choice":"Please enter your choice",
     "click_add_item":"Click to add an item",

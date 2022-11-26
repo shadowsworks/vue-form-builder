@@ -330,7 +330,19 @@
               :unchecked-value="bind_data.item_unchecked_value">
               <span class="small">{{ lang('viewer_display') }}</span>
             </b-form-checkbox>
-          
+          </template>
+
+          <!-- URL -->
+          <template v-if='bind_data.item_type=="url"'>
+            <!-- 表示する時リンクにする -->
+            <label class="text-secondary mt-2 mb-0 small">{{ lang('link_when_view') }}</label>
+            <div class="mt-1">
+              <b-form-checkbox v-model="bind_data.item_link_when_view" size="lg"
+              :value="bind_data.item_checked_value" 
+              :unchecked-value="bind_data.item_unchecked_value">
+              <span class="small">{{ lang('link') }}</span>
+            </b-form-checkbox>
+            </div>
           </template>
 
         </b-card-body>
@@ -759,7 +771,25 @@ export default {
             item_unchecked_value:"false",
             item_uuid: "",
             item_seq: 0,
-          }
+          },{ 
+            item_type: 'url', 
+            item_state: false,
+            item_name: lang[locale].url, 
+            item_desc: lang[locale].url,
+            item_placeholder: "", //説明
+            item_description: "", //補足説明
+            item_key: "", //項目キー
+            item_condition_use: false, //条件付き表示
+            item_condition_key: "", //条件付き表示
+            item_condition_value: "", //条件付き表示
+            item_required: false,
+            item_required_badge: "unchecked",
+            item_link_when_view: "false",//表示する時、リンクにする
+            item_checked_value:"true",
+            item_unchecked_value:"false",
+            item_uuid: "",
+            item_seq: 0,
+          },
         ],
       },
       // 状態データ

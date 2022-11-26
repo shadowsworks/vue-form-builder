@@ -144,6 +144,7 @@ export default {
           { item_type: "label", type_desc: lang[locale].label, icon_name: "sticky", level: 3 },
           { item_type: "table", type_desc: lang[locale].table, icon_name: "table", level: 3 },
           { item_type: "markdown", type_desc: lang[locale].markdown, icon_name: "markdown", level: 3 },
+          { item_type: "url", type_desc: lang[locale].url, icon_name: "hdd-network", level: 3 },
         ],
         item_data: [],
       }
